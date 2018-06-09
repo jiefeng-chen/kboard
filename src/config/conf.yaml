@@ -1,0 +1,25 @@
+
+# server
+server:
+ address: "127.0.0.1:8080"
+ tls:
+  cert: "cert.pem"
+  key: "key.pem"
+
+# database
+database:
+ host: "localhost"
+ port: 3306
+ username: "neyo"
+ password: "neyo123"
+
+redis:
+ host: "127.0.0.1"
+ port: 6379
+
+
+memcache:
+ host: "127.0.0.1"
+ port: 11211
+
+
