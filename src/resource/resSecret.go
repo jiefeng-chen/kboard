@@ -21,7 +21,7 @@ type ResSecret struct {
 	ApiVersion string `yaml:"apiVersion"`
 	Type       string
 	MetaData   struct {
-		Name string
+		Name      string
 		Namespace string
 	}
 	Data map[string]string

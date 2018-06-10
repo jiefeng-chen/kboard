@@ -11,13 +11,13 @@ const (
 	RESOURCE_PERSISTENT_VOLUME       = "PersistentVolume"
 	RESOURCE_SECRET                  = "Secret"
 	RESOURCE_STORAGE_CLASS           = "StorageClass"
-	RESOURCE_SERVICE				 = "Service"
-	RESOURCE_POD					 = "Pod"
-	RESOURCE_REPLICATION_CONTROLLER	 = "ReplicationController"
-	RESOURCE_NAMESPACE				 = "Namespace"
-	RESOURCE_NODE					 = "Node"
-	RESOURCE_STATEFULE				 = "Stateful"
-	RESOURCE_RESOURCE_QUOTA			 = "ResourceQuota"
+	RESOURCE_SERVICE                 = "Service"
+	RESOURCE_POD                     = "Pod"
+	RESOURCE_REPLICATION_CONTROLLER  = "ReplicationController"
+	RESOURCE_NAMESPACE               = "Namespace"
+	RESOURCE_NODE                    = "Node"
+	RESOURCE_STATEFULE               = "Stateful"
+	RESOURCE_RESOURCE_QUOTA          = "ResourceQuota"
 )
 
 // 显示名称
@@ -28,13 +28,13 @@ func GetKinds() map[string]string {
 		RESOURCE_PERSISTENT_VOLUME:       "PersistentVolume",
 		RESOURCE_SECRET:                  "Secret",
 		RESOURCE_STORAGE_CLASS:           "StorageClass",
-		RESOURCE_SERVICE:				  "Service",
-		RESOURCE_POD:					  "Pod",
+		RESOURCE_SERVICE:                 "Service",
+		RESOURCE_POD:                     "Pod",
 		RESOURCE_REPLICATION_CONTROLLER:  "ReplicationController",
-		RESOURCE_NAMESPACE: 			  "Namespace",
-		RESOURCE_NODE:					  "Node",
-		RESOURCE_STATEFULE:				  "Stateful",
-		RESOURCE_RESOURCE_QUOTA:		  "ResourceQuota",
+		RESOURCE_NAMESPACE:               "Namespace",
+		RESOURCE_NODE:                    "Node",
+		RESOURCE_STATEFULE:               "Stateful",
+		RESOURCE_RESOURCE_QUOTA:          "ResourceQuota",
 	}
 }
 

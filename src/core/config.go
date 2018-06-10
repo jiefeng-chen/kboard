@@ -1,19 +1,26 @@
 package core
 
 import (
-	"io/ioutil"
+	"dashboard/core"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
 type IConfig interface {
-	LoadConfigFile(path string) error
+	LoadConfigFile(path string) *Config
 	SetTSL(tsl *ServerTSL) error
-	GetAddress() (string, error)
+	GetTSL() *ServerTSL
+	GetAddress() string
+	IsHttps() bool
+	IsLog() bool
+	IsAuth() bool
+	IsHttp2() bool
+	GetHttpVersion() string
 }
 
 type ServerTSL struct {
 	Cert string
-	Key string
+	Key  string
 }
 
 type Config struct {
@@ -22,24 +29,37 @@ type Config struct {
 }
 
 type YamlConfigData struct {
-	Server struct{
-		Address string
-		TLS struct{
+	Server struct {
+		Host        string
+		Port        int
+		Https       bool
+		Log         bool   // 日志记录
+		Auth        bool   // 鉴权
+		HttpVersion string `yaml:"httpVersion"` // 1.0, 1.1, 2
+		TLS         struct {
 			Cert string
-			Key string
+			Key  string
 		}
 	}
-	Database struct{
-		Host string
-		Port int
+	Database struct {
+		Host     string
+		Port     int
 		Username string
 		Password string
 	}
-	Memcache struct{
+	Memcache struct {
 		Host string
 		Port int
 	}
-	Redis struct{
+	Redis struct {
+		Host string
+		Port int
+	}
+	Kubernetes struct {
+		Host string
+		Port int
+	}
+	Etcd struct {
 		Host string
 		Port int
 	}
@@ -52,11 +72,10 @@ func NewConfig() *Config {
 	}
 }
 
-
 // error code 1000 ~ 1200
-func (c *Config) LoadConfigFile(path string) error {
+func (c *Config) LoadConfigFile(path string) *Config {
 	if path == "" {
-		return NewError("path to config file is empty")
+		CheckError(NewError("path to config file is empty"), 1000)
 	}
 	c.Path = path
 
@@ -66,7 +85,7 @@ func (c *Config) LoadConfigFile(path string) error {
 	err = yaml.Unmarshal(yamlFile, c.Data)
 	CheckError(err, 1002)
 
-	return nil
+	return c
 }
 
 func (c *Config) SetTSL(tsl *ServerTSL) error {
@@ -78,9 +97,59 @@ func (c *Config) SetTSL(tsl *ServerTSL) error {
 	return nil
 }
 
-func (c *Config) GetAddress() (string, error) {
-	if c.Data.Server.Address == "" {
-		return "", NewError("server address is empty")
+func (c *Config) GetAddress() string {
+	if c.Data.Server.Host == "" {
+		CheckError(NewError("server host is empty"), 1004)
 	}
-	return c.Data.Server.Address, nil
+	port := c.Data.Server.Port
+	if port <= 0 || port > 65535 {
+		CheckError(NewError("server port is invalid"), 1004)
+	}
+	return c.Data.Server.Host + ":" + core.ToString(port)
+}
+
+func (c *Config) GetTSL() *ServerTSL {
+	cert := c.Data.Server.TLS.Cert
+	key := c.Data.Server.TLS.Key
+	if cert == "" || key == "" {
+		CheckError(NewError("cert or key is empty"), 1005)
+	}
+	return &ServerTSL{
+		Cert: cert,
+		Key:  key,
+	}
+}
+
+func (c *Config) IsHttps() bool {
+	return c.Data.Server.Https
+}
+
+func (c *Config) IsLog() bool {
+	return c.Data.Server.Log
+}
+
+func (c *Config) IsAuth() bool {
+	return c.Data.Server.Auth
+}
+
+func (c *Config) IsHttp2() bool {
+	if c.Data.Server.HttpVersion == "2.0" {
+		return true
+	}
+	return false
+}
+
+func (c *Config) GetHttpVersion() string {
+	var httpVersion string
+	switch c.Data.Server.HttpVersion {
+	case "1.0":
+		fallthrough
+	case "1.1":
+		fallthrough
+	case "2.0":
+		httpVersion = c.Data.Server.HttpVersion
+	default:
+		httpVersion = "1.1"
+	}
+	return "HTTP/" + httpVersion
 }

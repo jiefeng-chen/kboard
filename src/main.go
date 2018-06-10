@@ -1,10 +1,11 @@
-package src
+package main
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
-	"log"
 	"core"
+	"golang.org/x/net/http2"
+	"log"
+	"net/http"
+	"time"
 )
 
 var (
@@ -12,15 +13,30 @@ var (
 )
 
 func init() {
-
+	// init config
+	Config = core.NewConfig().LoadConfigFile("config/conf.yaml")
 }
 
+func main() {
+	r := core.NewRouter(Config).InitRouter()
+	log.Println("Listen On", Config.GetAddress())
+	server := http.Server{
+		Addr:         Config.GetAddress(),
+		Handler:      r.Router,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
 
-func main(){
-	r := mux.NewRouter()
-	r.HandleFunc("/index/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("root path"))
-	})
+	// turn http/2 on
+	if Config.IsHttp2() {
+		http2.ConfigureServer(&server, &http2.Server{})
+	}
+	log.Println(Config.GetHttpVersion())
 
-	log.Fatal("Listen On ")
+	if Config.IsHttps() {
+		ca := Config.GetTSL()
+		log.Fatal(server.ListenAndServeTLS(ca.Cert, ca.Key))
+	} else {
+		log.Fatal(server.ListenAndServe())
+	}
 }

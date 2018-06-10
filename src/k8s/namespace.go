@@ -1,10 +1,10 @@
 package k8s
 
 import (
-	"resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
+	"resource"
 )
 
 type INamespace interface {
@@ -16,14 +16,13 @@ type Namespace struct {
 	K8sCore
 }
 
-
 func NewNamespace(Config *config.Context) *Namespace {
 	return &Namespace{
 		K8sCore{
 			Config: Config,
-			Kind: resource.RESOURCE_POD,
+			Kind:   resource.RESOURCE_POD,
 			Urls: Urls{
-				Read: "/api/v1/namespaces/%s",
+				Read:   "/api/v1/namespaces/%s",
 				Create: "/api/v1/namespaces",
 			},
 		},
@@ -47,13 +46,13 @@ func (l *Namespace) WriteToEtcd(name string, data []byte) *HttpError {
 		}
 	}
 	return &HttpError{
-		Code: 200,
+		Code:    200,
 		Message: "Success",
-		Status: "unknown",
+		Status:  "unknown",
 	}
 }
 
-func (l *Namespace) Create(data []byte) (*HttpError) {
+func (l *Namespace) Create(data []byte) *HttpError {
 	url := fmt.Sprintf(l.Urls.Create)
 	jsonData := l.post(url, data)
 	httpResult := GetHttpCode(jsonData)
@@ -69,7 +68,7 @@ func (l *Namespace) Create(data []byte) (*HttpError) {
 	return err
 }
 
-func (l *Namespace) Replace(ns string, data []byte) (*HttpError) {
+func (l *Namespace) Replace(ns string, data []byte) *HttpError {
 	url := fmt.Sprintf(l.Urls.Read, ns)
 	jsonData := l.put(url, data)
 	httpResult := GetHttpCode(jsonData)
@@ -89,10 +88,10 @@ func (l *Namespace) Read(ns string) (*simplejson.Json, *HttpError) {
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
-	if httpResult.Kind == l.Kind{
+	if httpResult.Kind == l.Kind {
 		err.Code = 200
 		err.Message = "Success"
-	}else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {
+	} else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {
 		err.Code = 200
 		err.Message = httpResult.Status + ":" + httpResult.Message
 	}
@@ -100,7 +99,7 @@ func (l *Namespace) Read(ns string) (*simplejson.Json, *HttpError) {
 	return jsonData, err
 }
 
-func (l *Namespace) Delete(name string) (*HttpError) {
+func (l *Namespace) Delete(name string) *HttpError {
 	url := fmt.Sprintf(l.Urls.Read, name)
 	jsonData := l.del(url)
 	httpResult := GetHttpCode(jsonData)
@@ -116,7 +115,6 @@ func (l *Namespace) Delete(name string) (*HttpError) {
 	return err
 }
 
-
 func (l *Namespace) List(ns string) (*simplejson.Json, *HttpError) {
 	url := fmt.Sprintf(l.Urls.Read, ns)
 	jsonData := l.get(url)
@@ -131,5 +129,3 @@ func (l *Namespace) List(ns string) (*simplejson.Json, *HttpError) {
 	}
 	return jsonData, err
 }
-
-

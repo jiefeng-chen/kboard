@@ -1,13 +1,13 @@
 package k8s
 
 import (
+	"core"
+	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
-	"fmt"
-	"resource"
-	"net/http"
 	"io/ioutil"
-	"core"
+	"net/http"
+	"resource"
 )
 
 type IPod interface {
@@ -20,20 +20,18 @@ type Pod struct {
 	K8sCore
 }
 
-
 func NewPod(Config *config.Context) *Pod {
 	return &Pod{
 		K8sCore{
 			Config: Config,
-			Kind: resource.RESOURCE_POD,
+			Kind:   resource.RESOURCE_POD,
 			Urls: Urls{
-				Read: "/api/v1/namespaces/%s/pods/%s",
+				Read:   "/api/v1/namespaces/%s/pods/%s",
 				Create: "/api/v1/namespaces/%s/pods",
 			},
 		},
 	}
 }
-
 
 func (l *Pod) List(ns string) (*simplejson.Json, *HttpError) {
 	url := fmt.Sprintf(l.Urls.Create, ns)
@@ -50,7 +48,7 @@ func (l *Pod) List(ns string) (*simplejson.Json, *HttpError) {
 	return jsonData, err
 }
 
-func (l *Pod) Log(ns string, name string) []byte  {
+func (l *Pod) Log(ns string, name string) []byte {
 	url := l.baseApi() + fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/log", ns, name)
 	//log.Println(url)
 	response, err := http.Get(url)

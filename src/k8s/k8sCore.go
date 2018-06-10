@@ -1,14 +1,14 @@
 package k8s
 
 import (
-	"core"
-	"github.com/bitly/go-simplejson"
-	"io/ioutil"
-	"net/http"
 	"bytes"
-	"log"
-	"github.com/revel/config"
+	"core"
 	"fmt"
+	"github.com/bitly/go-simplejson"
+	"github.com/revel/config"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 type ResultData struct {
@@ -26,8 +26,8 @@ func NewResultData() *ResultData {
 }
 
 const (
-	STATUS_SUCCESS = "Success"
-	STATUS_FAILURE = "Failure"
+	STATUS_SUCCESS  = "Success"
+	STATUS_FAILURE  = "Failure"
 	STATUS_NOTFOUND = "NotFound"
 )
 
@@ -40,16 +40,16 @@ type IK8sCore interface {
 }
 
 type K8sCore struct {
-	Config    *config.Context
-	Kind        string
-	Urls		Urls
+	Config *config.Context
+	Kind   string
+	Urls   Urls
 }
 
 func (k *K8sCore) baseApi() string {
 	return k.Config.StringDefault("k8s", "http://192.168.52.227:8080")
 }
 
-func (l *K8sCore) Create(ns string, data []byte) (*HttpError) {
+func (l *K8sCore) Create(ns string, data []byte) *HttpError {
 	url := fmt.Sprintf(l.Urls.Create, ns)
 	jsonData := l.post(url, data)
 	httpResult := GetHttpCode(jsonData)
@@ -65,7 +65,7 @@ func (l *K8sCore) Create(ns string, data []byte) (*HttpError) {
 	return err
 }
 
-func (l *K8sCore) Replace(ns string, name string, data []byte) (*HttpError) {
+func (l *K8sCore) Replace(ns string, name string, data []byte) *HttpError {
 	url := fmt.Sprintf(l.Urls.Read, ns, name)
 	jsonData := l.put(url, data)
 	httpResult := GetHttpCode(jsonData)
@@ -95,7 +95,7 @@ func (l *K8sCore) Read(ns string, name string) (*simplejson.Json, *HttpError) {
 	return jsonData, err
 }
 
-func (l *K8sCore) Delete(ns string, name string) (*HttpError) {
+func (l *K8sCore) Delete(ns string, name string) *HttpError {
 	url := fmt.Sprintf(l.Urls.Read, ns, name)
 	jsonData := l.del(url)
 	httpResult := GetHttpCode(jsonData)
@@ -128,9 +128,9 @@ func (l *K8sCore) WriteToEtcd(ns string, name string, data []byte) *HttpError {
 		}
 	}
 	return &HttpError{
-		Code:200,
+		Code:    200,
 		Message: "Success",
-		Status: "Unknown",
+		Status:  "Unknown",
 	}
 }
 
@@ -154,7 +154,6 @@ func (k *K8sCore) post(url string, data []byte) *simplejson.Json {
 	return json
 }
 
-// error code 0~100
 func (k *K8sCore) get(url string) *simplejson.Json {
 	url = k.baseApi() + url
 	//log.Println(url)
@@ -221,16 +220,15 @@ func (k *K8sCore) patch(url string, data []byte) *simplejson.Json {
 	return json
 }
 
-
 type Urls struct {
-	Read string
+	Read   string
 	Create string
 }
 
 type HttpError struct {
-	Code int64
+	Code    int64
 	Message string
-	Status string
+	Status  string
 }
 
 type HttpResult struct {
@@ -274,8 +272,8 @@ func GetHttpCode(jsons *simplejson.Json) *HttpResult {
 
 func GetHttpErr(result *HttpResult) *HttpError {
 	return &HttpError{
-		Code:result.Code,
+		Code:    result.Code,
 		Message: "reason: " + result.Reason + ", message: " + result.Message,
-		Status:result.Status,
+		Status:  result.Status,
 	}
 }

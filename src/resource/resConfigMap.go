@@ -15,7 +15,7 @@ type IResConfigMap interface {
 
 type ResConfigMap struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
+	Kind       string
 	Metadata   struct {
 		Name      string
 		Namespace string
@@ -26,7 +26,7 @@ type ResConfigMap struct {
 func NewConfigMap() *ResConfigMap {
 	return &ResConfigMap{
 		ApiVersion: "v1",
-		Kind:"ConfigMap",
+		Kind:       "ConfigMap",
 		Metadata: struct {
 			Name      string
 			Namespace string

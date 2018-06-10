@@ -1,8 +1,8 @@
 package k8s
 
 import (
-	"resource"
 	"github.com/revel/config"
+	"resource"
 )
 
 type IPersistentVolumeClaim interface {
@@ -14,13 +14,12 @@ func NewPersistentVolumeClaim(Config *config.Context) *PersistentVolumeClaim {
 	return &PersistentVolumeClaim{
 		K8sCore{
 			Config: Config,
-			Kind: resource.RESOURCE_PERSISTENT_VOLUME_CLAIM,
+			Kind:   resource.RESOURCE_PERSISTENT_VOLUME_CLAIM,
 			Urls: Urls{
-				Read: "/api/v1/namespaces/%s/persistentvolumeclaims/%s",
+				Read:   "/api/v1/namespaces/%s/persistentvolumeclaims/%s",
 				Create: "/api/v1/namespaces/%s/persistentvolumeclaims",
 			},
 		},
-
 	}
 }
 

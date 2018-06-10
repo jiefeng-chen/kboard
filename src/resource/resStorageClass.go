@@ -3,8 +3,8 @@ package resource
 import (
 	"core"
 	"errors"
-	"strings"
 	"gopkg.in/yaml.v2"
+	"strings"
 )
 
 type IResStorageClass interface {
