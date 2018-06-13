@@ -15,6 +15,9 @@ var (
 func init() {
 	// init config
 	Config = core.NewConfig().LoadConfigFile("config/conf.yaml")
+
+	// init db、cache、control and so on
+
 }
 
 func main() {

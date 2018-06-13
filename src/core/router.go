@@ -27,8 +27,8 @@ func (r *Router) InitRouter() *Router {
 	// static files
 	r.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir(dir))))
 
-	// mux router
-	r.Router.HandleFunc("/login", LoginHandler)
+	// match url
+	r.Router.HandleFunc("/login/{action:[a-z]+}", LoginHandler)
 
 
 	// logs
@@ -49,7 +49,4 @@ func (r *Router) InitRouter() *Router {
 	return r
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
-	w.Write([]byte("login"))
-}
