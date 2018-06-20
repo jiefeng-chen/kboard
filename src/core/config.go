@@ -1,7 +1,6 @@
 package core
 
 import (
-	"dashboard/core"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 )
@@ -105,7 +104,7 @@ func (c *Config) GetAddress() string {
 	if port <= 0 || port > 65535 {
 		CheckError(NewError("server port is invalid"), 1004)
 	}
-	return c.Data.Server.Host + ":" + core.ToString(port)
+	return c.Data.Server.Host + ":" + ToString(port)
 }
 
 func (c *Config) GetTSL() *ServerTSL {
