@@ -15,7 +15,7 @@ server:
 database:
  host: "localhost"
  port: 3306
- username: "neyo"
+ username: "root"
  password: "neyo123"
 
 # redis
