@@ -3,6 +3,7 @@ package control
 import (
 	"kboard/core"
 	"fmt"
+	"log"
 )
 
 type IControl interface {
@@ -31,17 +32,16 @@ func (c *Control) Register(action string, f func()) *Control {
 
 func (c *Control) Index() {
 	fmt.Fprintln(c.TplEngine.W, "hello world, this is default index")
-	return
 }
 
 
 func (c *Control) Run(action string) {
 	if c.Actions[action] == nil {
-		c.Index()
 		//
 		fmt.Fprintln(c.TplEngine.W, "404 page not found!")
-		return
+		log.Println("404")
+	}else{
+		// run action
+		c.Actions[action]()
 	}
-	// run action
-	c.Actions[action]()
 }
