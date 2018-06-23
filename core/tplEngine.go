@@ -33,6 +33,7 @@ func NewTplEngine(w http.ResponseWriter, r *http.Request) *TplEngine  {
 	return &TplEngine{
 		W: w,
 		R: r,
+		TplData: make(map[string]interface{}),
 	}
 }
 
@@ -88,6 +89,13 @@ func (t *TplEngine) Assign(key string, data interface{}) *TplEngine {
 
 func (t *TplEngine) Display(tpl string) {
 	err := t.ParseFiles(tpl).tpl.Execute(t.W, t.TplData)
+	CheckError(err, 2004)
+}
+
+func (t *TplEngine) DisplayMulti(tpl string, subTpl []string){
+	tpls := []string{tpl}
+	tpls = append(tpls, subTpl...)
+	err := t.ParseFiles(tpls...).tpl.Execute(t.W, t.TplData)
 	CheckError(err, 2004)
 }
 

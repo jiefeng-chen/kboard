@@ -1,0 +1,23 @@
+.pagination>li>a, .pagination>li>span {
+    color: #fff;
+}
+
+.pagination>li>a:hover {
+    color: #fff;
+    font-weight: bold;
+}
+
+.page-title {
+    line-height: 2.2;
+}
+
+.media > div.pagination.pull-left > div.btn-group > div.btn-group.m-b-10 > ul.dropdown-menu {
+    z-index: 1000;
+    position: relative;
+}
+
+#login .box.text-center {
+    position: relative;
+    margin-top: 120px;
+    left: 35%;
+}

@@ -13,8 +13,7 @@ func NewError(format string, args ...string) error {
 
 func CheckError(err error, code int) {
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		if code == 0 {
 			os.Exit(code)
 		}

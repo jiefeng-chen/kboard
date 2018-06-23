@@ -1,4 +1,4 @@
-{{define "menu_v2"}}
+{{define "menu"}}
 <ul class="list-unstyled side-menu">
     <li class="active">
         <a class=""  href="/">
@@ -17,7 +17,7 @@
         <ul class="list-unstyled menu-item">
         {{range $subMenu := $menu.Actions}}
         {{if eq $subMenu.Show "1"}}
-        {{if eq $.GTplAction $subMenu.Key}}<li  class="active" >{{else}}<li >{{end}}
+        {{if eq $.GAction $subMenu.Key}}<li  class="active" >{{else}}<li >{{end}}
             <a href="{{$subMenu.Url}}">{{$subMenu.Title}}</a>
         </li>
         {{end}}

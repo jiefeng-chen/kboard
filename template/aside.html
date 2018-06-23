@@ -1,4 +1,4 @@
-{{define "aside_v2"}}
+{{define "aside"}}
 <div class="side-widgets overflow">
     <!-- Profile Menu -->
 
@@ -23,25 +23,25 @@
                 </li>
                 <li class="divider" style="background:#bdbdbd; border: 1px solid #bdbdbd;margin-bottom: 10px;"></li>
 
-                <li class="li-item" {{if eq .GTplAction "config.admin"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "config.admin"}} class="active" {{end}}>
                     <a href="/config/admin"> 集群配置管理</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "ns.admin"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "ns.admin"}} class="active" {{end}}>
                     <a href="/ns/admin" > 所有主机</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "services.admin"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "services.admin"}} class="active" {{end}}>
                     <a href="/services/admin" > 所有服务</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "port.admin"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "port.admin"}} class="active" {{end}}>
                     <a href="/port/admin" > 所有外网端口管理</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "app.admin"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "app.admin"}} class="active" {{end}}>
                     <a href="/app/admin" > 所有应用</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "watch.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "watch.list"}} class="active" {{end}}>
                     <a href="/watch/list" > 监控日志</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "storage.storageClass"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "storage.storageClass"}} class="active" {{end}}>
                     <a href="/storage/storageClass"> 挂载卷类型</a>
                 </li>
             {{end}}
@@ -76,13 +76,13 @@
                 </ul>
             </div>
             <ul  class="list-unstyled menu-item" style="padding: 15px;">
-                <li class="li-item" {{if eq .GTplAction "ns.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "ns.list"}} class="active" {{end}}>
                     <a href="/ns/list"> 我的主机</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "market.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "market.list"}} class="active" {{end}}>
                     <a href="/market/list"> 主机市场</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "app.share"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "app.share"}} class="active" {{end}}>
                     <a href="/app/share?ns_id={{.GTplCurNsId}}"> 共享</a>
                 </li>
 
@@ -92,10 +92,10 @@
                 <i class="icon left">&#61932;</i> 工作负载
             </span>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "app.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "app.list"}} class="active" {{end}}>
                     <a href="/app/list?ns_id={{.GTplCurNsId}}"> 应用</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "services.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "services.list"}} class="active" {{end}}>
                     <a href="/services/list?ns_id={{.GTplCurNsId}}"> 服务</a>
                 </li>
                 <li class="divider" style="background:#bdbdbd;border: 1px solid #7f7f7f;margin: 10px 5px!important;"></li>
@@ -105,13 +105,13 @@
             </span>
                 </li>
                 <li class="divider"></li>
-                <li class="li-item" {{if eq .GTplAction "storage.pvc"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "storage.pvc"}} class="active" {{end}}>
                     <a href="/storage/pvc?ns_id={{.GTplCurNsId}}"> 持久存储卷申请</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "storage.secret"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "storage.secret"}} class="active" {{end}}>
                     <a href="/storage/secret?ns_id={{.GTplCurNsId}}"> 密钥</a>
                 </li>
-                <li class="li-item" {{if eq .GTplAction "storage.configMap"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "storage.configMap"}} class="active" {{end}}>
                     <a href="/storage/configMap?ns_id={{.GTplCurNsId}}"> 应用配置</a>
                 </li>
                 <li class="divider" style="background:#bdbdbd;border: 1px solid #7f7f7f;margin: 10px 5px!important;"></li>
@@ -121,7 +121,7 @@
         </span>
                 </li>
                 <li class="divider"></li>
-                <li class="li-item" {{if eq .GTplAction "ingress.list"}} class="active" {{end}}>
+                <li class="li-item" {{if eq .GAction "ingress.list"}} class="active" {{end}}>
                     <a href="/ingress/list?ns_id={{.GTplCurNsId}}"> 边缘路由</a>
                 </li>
 

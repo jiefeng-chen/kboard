@@ -36,10 +36,22 @@ func (c *Control) Index() {
 
 
 func (c *Control) Run(action string) {
+	// 注册全局变量
+	if c.TplEngine.TplData["GModule"] == nil || c.TplEngine.TplData["GModule"] == "" {
+		c.TplEngine.TplData["GModule"] = c.Control
+	}
+	if c.TplEngine.TplData["GAction"] == nil || c.TplEngine.TplData["GAction"] == "" {
+		c.TplEngine.TplData["GAction"] = action
+	}
+	// 检查action方法是否存在
 	if c.Actions[action] == nil {
-		//
-		fmt.Fprintln(c.TplEngine.W, "404 page not found!")
-		log.Println("404")
+		if c.Actions["index"] == nil {
+			fmt.Fprintln(c.TplEngine.W, "404 page not found!")
+			log.Println("404")
+		}else{
+			c.TplEngine.TplData["GAction"] = "index"
+			c.Actions["index"]()
+		}
 	}else{
 		// run action
 		c.Actions[action]()

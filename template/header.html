@@ -1,4 +1,4 @@
-{{define "header_v2"}}
+{{define "header"}}
 <!DOCTYPE html>
 <!--[if IE 8]>
    <html lang="en" class="ie8"> <![endif]-->
@@ -9,34 +9,34 @@
 <head>
     <!-- BEGIN HEAD -->
     <meta charset="utf-8"/>
-    <title>Docker管理平台</title>
-    <meta content="Docker管理平台" name="description"/>
-    <meta content="平台开发部" name="author"/>
-    <meta name="keywords" content="4399,docker,kubernetes">
+    <title>kubernetes dashboard</title>
+    <meta content="kubernetes dashboard" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="keywords" content="docker,kubernetes">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="format-detection" content="telephone=no">
 
 
     <!-- CSS -->
-    <link href="/static/theme/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/theme/css/animate.min.css" rel="stylesheet">
-    <link href="/static/theme/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/theme/css/form.css" rel="stylesheet">
-    <link href="/static/theme/css/calendar.css" rel="stylesheet">
-    <link href="/static/theme/css/style.css" rel="stylesheet">
-    <link href="/static/theme/css/icons.css" rel="stylesheet">
-    <link href="/static/theme/css/generics.css" rel="stylesheet">
-    <link href="/static/theme/css/main.css" rel="stylesheet">
+    <link href="/assets/theme/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/theme/css/animate.min.css" rel="stylesheet">
+    <link href="/assets/theme/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/theme/css/form.css" rel="stylesheet">
+    <link href="/assets/theme/css/calendar.css" rel="stylesheet">
+    <link href="/assets/theme/css/style.css" rel="stylesheet">
+    <link href="/assets/theme/css/icons.css" rel="stylesheet">
+    <link href="/assets/theme/css/generics.css" rel="stylesheet">
+    <link href="/assets/theme/css/main.css" rel="stylesheet">
 
 
-    <link rel="shortcut icon" href="/static/media/image/favicon.ico"/>
+    <link rel="shortcut icon" href="/assets/favicon.ico"/>
 </head>
 <body id="skin-blur-lights">
 
 <header id="header" class="media">
     <a href="" id="menu-toggle"></a>
-    <a class="logo pull-left" href="index.html">4399 Kubernetes v1.0</a>
+    <a class="logo pull-left" href="index.html">KBoard v1.0</a>
 
     <div class="media-body">
         <div class="media" id="top-menu">
@@ -53,7 +53,7 @@
             </div>
             <div class="m-b-5 dropdown pull-right ">
                 <a href="" data-toggle="dropdown">
-                    <img style="width: 32px;height: 32px;" class="profile-pic animated" src="/static/theme/img/profile-pic.jpg" alt="">
+                    <img style="width: 32px;height: 32px;" class="profile-pic animated" src="/assets/theme/img/profile-pic.jpg" alt="">
                     <h5 class="m-0" style="display: inline-block">Hello，{{.GTplUsername}}</h5>
                 </a>
 
@@ -73,8 +73,8 @@
             <div class="media-body">
                 <ol class="breadcrumb hidden-xs">
                     <li>Home</li>
-                    <li>{{.GTplModule}}</li>
-                    <li class="active">{{.GTplAction}}</li>
+                    <li>{{.GModule}}</li>
+                    <li class="active">{{.GAction}}</li>
                 </ol>
             </div>
         </div>
@@ -89,9 +89,9 @@
     <aside id="sidebar">
 
         <!-- Sidbar Widgets -->
-    {{template "aside_v2" .}}
+    {{template "aside" .}}
         <!-- Side Menu -->
-    {{template "menu_v2" .}}
+    {{template "menu" .}}
 
     </aside>
 
