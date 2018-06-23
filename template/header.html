@@ -1,0 +1,105 @@
+{{define "header_v2"}}
+<!DOCTYPE html>
+<!--[if IE 8]>
+   <html lang="en" class="ie8"> <![endif]-->
+
+<!--[if IE 9]>
+<html lang="en" class="ie9"> <![endif]-->
+
+<head>
+    <!-- BEGIN HEAD -->
+    <meta charset="utf-8"/>
+    <title>Docker管理平台</title>
+    <meta content="Docker管理平台" name="description"/>
+    <meta content="平台开发部" name="author"/>
+    <meta name="keywords" content="4399,docker,kubernetes">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no">
+
+
+    <!-- CSS -->
+    <link href="/static/theme/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/theme/css/animate.min.css" rel="stylesheet">
+    <link href="/static/theme/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/theme/css/form.css" rel="stylesheet">
+    <link href="/static/theme/css/calendar.css" rel="stylesheet">
+    <link href="/static/theme/css/style.css" rel="stylesheet">
+    <link href="/static/theme/css/icons.css" rel="stylesheet">
+    <link href="/static/theme/css/generics.css" rel="stylesheet">
+    <link href="/static/theme/css/main.css" rel="stylesheet">
+
+
+    <link rel="shortcut icon" href="/static/media/image/favicon.ico"/>
+</head>
+<body id="skin-blur-lights">
+
+<header id="header" class="media">
+    <a href="" id="menu-toggle"></a>
+    <a class="logo pull-left" href="index.html">4399 Kubernetes v1.0</a>
+
+    <div class="media-body">
+        <div class="media" id="top-menu">
+
+            <div id="time" class="pull-right">
+                <span id="hours"></span>
+                :
+                <span id="min"></span>
+                :
+                <span id="sec"></span>
+            </div>
+            <div class="btn-group m-b-5 pull-right">
+
+            </div>
+            <div class="m-b-5 dropdown pull-right ">
+                <a href="" data-toggle="dropdown">
+                    <img style="width: 32px;height: 32px;" class="profile-pic animated" src="/static/theme/img/profile-pic.jpg" alt="">
+                    <h5 class="m-0" style="display: inline-block">Hello，{{.GTplUsername}}</h5>
+                </a>
+
+                <ul class="dropdown-menu animated bounceIn">
+                    <li>
+                        <a data-container="container" data-href="/my/edit" href="javascript:void(0)" class="dialogDo">
+                            <i class="icon left">&#61873;</i> 个人资料
+                        </a>
+                    </li>
+                    <li><a href="/auth/logout"><i class="icon left">&#61723;</i> 退出</a></li>
+                </ul>
+            </div>
+            {{/*<div class="media-body">*/}}
+                {{/*<input type="text" class="main-search">*/}}
+            {{/*</div>*/}}
+            <!-- Breadcrumb -->
+            <div class="media-body">
+                <ol class="breadcrumb hidden-xs">
+                    <li>Home</li>
+                    <li>{{.GTplModule}}</li>
+                    <li class="active">{{.GTplAction}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="clearfix"></div>
+
+<section id="main" class="p-relative" role="main">
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+
+        <!-- Sidbar Widgets -->
+    {{template "aside_v2" .}}
+        <!-- Side Menu -->
+    {{template "menu_v2" .}}
+
+    </aside>
+
+    <!-- Content -->
+    <section id="content" class="container">
+
+        <!-- Messages Drawer -->
+
+        <!-- Notification Drawer -->
+
+        {{end}}

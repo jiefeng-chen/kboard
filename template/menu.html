@@ -1,0 +1,30 @@
+{{define "menu_v2"}}
+<ul class="list-unstyled side-menu">
+    <li class="active">
+        <a class=""  href="/">
+            <i class="icon left">&#61713;</i>
+            <span class="menu-item">首页</span>
+        </a>
+    </li>
+
+{{range $menu := .GTplMenu}}
+{{if eq $menu.Show "1"}}
+    <li  class="dropdown {{$menu.Active}} ">
+        <a href="javascript:void(0);">
+            <i class="{{$menu.Icon}}"></i>
+            <span class="menu-item">{{$menu.Title}}</span>
+        </a>
+        <ul class="list-unstyled menu-item">
+        {{range $subMenu := $menu.Actions}}
+        {{if eq $subMenu.Show "1"}}
+        {{if eq $.GTplAction $subMenu.Key}}<li  class="active" >{{else}}<li >{{end}}
+            <a href="{{$subMenu.Url}}">{{$subMenu.Title}}</a>
+        </li>
+        {{end}}
+        {{end}}
+        </ul>
+    </li>
+{{end}}
+{{end}}
+</ul>
+{{end}}
