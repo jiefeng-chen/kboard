@@ -1,7 +1,7 @@
 {{define "menu"}}
 <ul class="list-unstyled side-menu">
     <li class="active">
-        <a class=""  href="/">
+        <a class="text-center"  href="/">
             <i class="icon left">&#61713;</i>
             <span class="menu-item">首页</span>
         </a>
@@ -10,7 +10,7 @@
 {{range $menu := .GTplMenu}}
 {{if eq $menu.Show "1"}}
     <li  class="dropdown {{$menu.Active}} ">
-        <a href="javascript:void(0);">
+        <a href="javascript:void(0);" class="text-center">
             <i class="{{$menu.Icon}}"></i>
             <span class="menu-item">{{$menu.Title}}</span>
         </a>
