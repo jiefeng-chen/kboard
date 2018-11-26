@@ -7,14 +7,11 @@ import (
 	"net/http"
 	"time"
 	"kboard/control"
-	"os"
-	"syscall"
-	"os/signal"
 )
 
 var (
 	Config *core.Config
-	NotifyReloadConfig chan os.Signal
+	NotifyReloadConfig chan int
 )
 
 func init() {
@@ -22,8 +19,7 @@ func init() {
 	Config = core.NewConfig().LoadConfigFile("config/conf.toml")
 
 	// watch config file to reload
-	NotifyReloadConfig = make(chan os.Signal, 1)
-	signal.Notify(NotifyReloadConfig, syscall.SIGQUIT)
+	NotifyReloadConfig = make(chan int, 1)
 	go func() {
 		for {
 			<-NotifyReloadConfig

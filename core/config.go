@@ -91,6 +91,7 @@ func (c *Config) LoadConfigFile(path string) *Config {
 		}
 	})
 
+
 	return c
 }
 
