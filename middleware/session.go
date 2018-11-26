@@ -17,18 +17,18 @@ func NewSession() *Session {
 }
 
 // Initialize it somewhere
-func (sess *Session) Populate() {
-	sess.tokenUsers["00000000"] = "user0"
-	sess.tokenUsers["aaaaaaaa"] = "userA"
-	sess.tokenUsers["05f717e5"] = "randomUser"
-	sess.tokenUsers["deadbeef"] = "user0"
+func (s *Session) Populate() {
+	s.tokenUsers["00000000"] = "user0"
+	s.tokenUsers["aaaaaaaa"] = "userA"
+	s.tokenUsers["05f717e5"] = "randomUser"
+	s.tokenUsers["deadbeef"] = "user0"
 }
 
-func (sess *Session) Middleware(next http.Handler) http.Handler {
+func (s *Session) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("X-Session-Token")
 
-		if user, found := sess.tokenUsers[token]; found {
+		if user, found := s.tokenUsers[token]; found {
 			log.Printf("Authenticated user %s\n", user)
 			// Pass down the request to the next middleware (or final handler)
 			next.ServeHTTP(w, r)
@@ -39,7 +39,7 @@ func (sess *Session) Middleware(next http.Handler) http.Handler {
 	})
 }
 
-func (sess *Session) SetCookie(w http.ResponseWriter, r *http.Request) {
+func (s *Session) SetCookie(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "hello",
 		Value:    "hello",
