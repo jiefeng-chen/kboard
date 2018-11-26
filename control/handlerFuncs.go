@@ -6,6 +6,7 @@ import (
 	"kboard/core"
 )
 
+// 注册路由
 func UrlRegister(r *Router) {
 	r.Router.HandleFunc("/login/{action:[a-z]+}", LoginHandler(r.Config))
 

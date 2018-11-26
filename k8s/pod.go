@@ -1,13 +1,13 @@
 package k8s
 
 import (
-	"kboard/core"
+	"dashboard/core"
+	"dashboard/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
 	"io/ioutil"
 	"net/http"
-	"kboard/resource"
 )
 
 type IPod interface {
@@ -38,7 +38,7 @@ func (l *Pod) List(ns string) (*simplejson.Json, *HttpError) {
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
-	if httpResult.Kind == l.Kind {
+	if httpResult.Kind == l.Kind + "List" {
 		err.Code = 200
 		err.Message = "Success"
 	} else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {
@@ -49,7 +49,7 @@ func (l *Pod) List(ns string) (*simplejson.Json, *HttpError) {
 }
 
 func (l *Pod) Log(ns string, name string) []byte {
-	url := l.baseApi() + fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/log", ns, name)
+	url := l.baseApi() + fmt.Sprintf("/api/v1/namespaces/%s/pods/%s/log?pretty=true&tailLines=500", ns, name)
 	//log.Println(url)
 	response, err := http.Get(url)
 	if err != nil {

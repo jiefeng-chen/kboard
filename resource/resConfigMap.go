@@ -26,7 +26,7 @@ type ResConfigMap struct {
 func NewConfigMap() *ResConfigMap {
 	return &ResConfigMap{
 		ApiVersion: "v1",
-		Kind:       "ConfigMap",
+		Kind:       RESOURCE_CONFIG_MAP,
 		Metadata: struct {
 			Name      string
 			Namespace string

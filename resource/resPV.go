@@ -12,7 +12,7 @@ type IResPersistentVolume interface {
 	SetPersistentVolumeReclaimPolicy(string) bool
 	SetStorageClassName(string) bool
 	SetRbd(*Rbd) bool
-	SetClaimRef(*ClaimRef) bool
+	SetClaimRef(*PersistentVolumeClaimRef) bool
 }
 
 type ResPersistentVolume struct {
@@ -31,11 +31,11 @@ type ResPersistentVolume struct {
 		PersistentVolumeReclaimPolicy string   `yaml:"persistentVolumeReclaimPolicy"`
 		StorageClassName              string   `yaml:"storageClassName"`
 		Rbd                           *Rbd
-		ClaimRef                      *ClaimRef `yaml:"claimRef"`
+		ClaimRef                      *PersistentVolumeClaimRef `yaml:"claimRef"`
 	}
 }
 
-type ClaimRef struct {
+type PersistentVolumeClaimRef struct {
 	Kind       string
 	Namespace  string
 	Name       string
@@ -59,7 +59,7 @@ type Rbd struct {
 func NewPersistentVolume() *ResPersistentVolume {
 	return &ResPersistentVolume{
 		ApiVersion: "v1",
-		Kind:       "PersistentVolume",
+		Kind:       RESOURCE_PERSISTENT_VOLUME,
 	}
 }
 
@@ -111,7 +111,7 @@ func (r *ResPersistentVolume) SetRbd(rbd *Rbd) bool {
 	return true
 }
 
-func (r *ResPersistentVolume) SetClaimRef(ref *ClaimRef) bool {
+func (r *ResPersistentVolume) SetClaimRef(ref *PersistentVolumeClaimRef) bool {
 	r.Spec.ClaimRef = ref
 	return true
 }

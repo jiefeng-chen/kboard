@@ -9,6 +9,7 @@ type IResPersistentVolumeClaim interface {
 	SetAccessMode(string) bool
 	SetStorage(string) bool
 	SetVolumeName(string) bool
+	SetVolumeMode(string) bool
 	SetStorageClassName(string) bool
 }
 
@@ -19,14 +20,15 @@ type ResPersistentVolumeClaim struct {
 		Namespace string
 	}
 	Spec struct {
-		AccessModes []string `yaml:"accessModes"`
+		AccessModes []string `yaml:"accessModes" json:"accessModes"`
 		Resources   struct {
 			Requests struct {
 				Storage string
 			}
 		}
-		StorageClassName string `yaml:"storageClassName"`
-		VolumeName       string `yaml:"volumeName"`
+		VolumeMode       string `yaml:"volumeMode" json:"volumeMode"`
+		StorageClassName string `yaml:"storageClassName" json:"storageClassName"`
+		VolumeName       string `yaml:"volumeName" json:"VolumeName"`
 	}
 	Kind string
 }
@@ -34,7 +36,7 @@ type ResPersistentVolumeClaim struct {
 func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 	return &ResPersistentVolumeClaim{
 		ApiVersion: "v1",
-		Kind:       "PersistentVolumeClaim",
+		Kind:       RESOURCE_PERSISTENT_VOLUME_CLAIM,
 	}
 }
 
@@ -84,6 +86,11 @@ func (r *ResPersistentVolumeClaim) SetStorage(storage string) bool {
 
 func (r *ResPersistentVolumeClaim) SetVolumeName(vName string) bool {
 	r.Spec.VolumeName = vName
+	return true
+}
+
+func (r *ResPersistentVolumeClaim) SetVolumeMode(vName string) bool {
+	r.Spec.VolumeMode = vName
 	return true
 }
 

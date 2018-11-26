@@ -1,9 +1,9 @@
 package k8s
 
 import (
+	"dashboard/resource"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
-	"kboard/resource"
 )
 
 type INode interface {

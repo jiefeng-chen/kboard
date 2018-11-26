@@ -1,10 +1,10 @@
 package k8s
 
 import (
+	"dashboard/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
-	"kboard/resource"
 )
 
 type IReplicationController interface {

@@ -1,10 +1,10 @@
 package k8s
 
 import (
+	"dashboard/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
-	"kboard/resource"
 )
 
 type IStorageClass interface {
@@ -33,15 +33,16 @@ func (l *StorageClass) WriteToEtcd(ns string, data []byte) *HttpError {
 	_, err := l.Read(ns)
 	if err.Code == 404 {
 		// 不存在，创建
-		err := l.Create(ns, data)
+		err := l.Create(data)
 		if err != nil {
 			return err
 		}
 	} else {
-		// 已存在，直接覆盖
-		err := l.Replace(ns, data)
-		if err != nil {
-			return err
+		// 已存在，返回错误
+		return &HttpError{
+			Code:    409,
+			Message: "Exist",
+			Status:  "Unknown",
 		}
 	}
 	return &HttpError{
@@ -51,8 +52,8 @@ func (l *StorageClass) WriteToEtcd(ns string, data []byte) *HttpError {
 	}
 }
 
-func (l *StorageClass) Create(ns string, data []byte) *HttpError {
-	url := fmt.Sprintf(l.Urls.Create, ns)
+func (l *StorageClass) Create(data []byte) *HttpError {
+	url := fmt.Sprintf(l.Urls.Create)
 	jsonData := l.post(url, data)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)

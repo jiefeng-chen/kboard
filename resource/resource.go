@@ -6,18 +6,25 @@ type IResource interface {
 
 // 资源类型
 const (
-	RESOURCE_CONFIG_MAP              = "ConfigMap"
-	RESOURCE_PERSISTENT_VOLUME_CLAIM = "PersistentVolumeClaim"
-	RESOURCE_PERSISTENT_VOLUME       = "PersistentVolume"
-	RESOURCE_SECRET                  = "Secret"
-	RESOURCE_STORAGE_CLASS           = "StorageClass"
-	RESOURCE_SERVICE                 = "Service"
-	RESOURCE_POD                     = "Pod"
-	RESOURCE_REPLICATION_CONTROLLER  = "ReplicationController"
-	RESOURCE_NAMESPACE               = "Namespace"
-	RESOURCE_NODE                    = "Node"
-	RESOURCE_STATEFULE               = "Stateful"
-	RESOURCE_RESOURCE_QUOTA          = "ResourceQuota"
+	RESOURCE_CONFIG_MAP                = "ConfigMap"
+	RESOURCE_PERSISTENT_VOLUME_CLAIM   = "PersistentVolumeClaim"
+	RESOURCE_PERSISTENT_VOLUME         = "PersistentVolume"
+	RESOURCE_SECRET                    = "Secret"
+	RESOURCE_STORAGE_CLASS             = "StorageClass"
+	RESOURCE_SERVICE                   = "Service"
+	RESOURCE_POD                       = "Pod"
+	RESOURCE_REPLICATION_CONTROLLER    = "ReplicationController"
+	RESOURCE_NAMESPACE                 = "Namespace"
+	RESOURCE_NODE                      = "Node"
+	RESOURCE_STATEFULE                 = "Stateful"
+	RESOURCE_RESOURCE_QUOTA            = "ResourceQuota"
+	RESOURCE_JOB                       = "Job"
+	RESOURCE_CRON_JOB                  = "CronJob"
+	RESOURCE_INGRESS                   = "Ingress"
+	RESOURCE_DAEMONSET                 = "DaemonSet"
+	RESOURCE_DEPLOYMENT                = "Deployment"
+	RESOURCE_INGRESS_CONTROLLER        = "IngressController"
+	RESOURCE_HORIZONTAL_POD_AUTOSCALER = "HorizontalPodAutoscaler"
 )
 
 // 显示名称
@@ -35,6 +42,11 @@ func GetKinds() map[string]string {
 		RESOURCE_NODE:                    "Node",
 		RESOURCE_STATEFULE:               "Stateful",
 		RESOURCE_RESOURCE_QUOTA:          "ResourceQuota",
+		RESOURCE_JOB:                     "Job",
+		RESOURCE_CRON_JOB:                "CronJob",
+		RESOURCE_INGRESS:                 "Ingress",
+		RESOURCE_DAEMONSET:               "DaemonSet",
+		RESOURCE_DEPLOYMENT:              "Deployment",
 	}
 }
 
@@ -54,8 +66,8 @@ func GetAccessModes() map[string]string {
 
 func GetVolumeModes() map[string]string {
 	return map[string]string{
-		"Block": "raw block devices(原始块设备)", // 原始块设备
-		//"Filesystem": "Filesystem(文件系统)",		// 文件系统
+		"Block":      "raw block devices(原始块设备)", // 原始块设备
+		"Filesystem": "Filesystem(文件系统)",         // 文件系统
 	}
 }
 

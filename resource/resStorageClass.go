@@ -1,7 +1,7 @@
 package resource
 
 import (
-	"kboard/core"
+	"dashboard/core"
 	"errors"
 	"gopkg.in/yaml.v2"
 	"strings"
@@ -35,7 +35,7 @@ type ResStorageClass struct {
 
 func NewStorageClass() *ResStorageClass {
 	return &ResStorageClass{
-		Kind:                 "StorageClass",
+		Kind:                 RESOURCE_STORAGE_CLASS,
 		ApiVersion:           "storage.k8s.io/v1",
 		AllowVolumeExpansion: true,
 	}
@@ -145,7 +145,13 @@ func (r *CephRbd) SetMonitors(monitors string) bool {
 		return false
 	}
 	for _, v := range monis {
-		if !core.IsIP(v) {
+		// 检查ip:port格式
+		url := strings.Split(v, ":")
+		if !core.IsIP(url[0]) {
+			return false
+		}
+		// 端口检查
+		if len(url) <= 1 || url[1] == "" || core.ToInt(url[1]) <= 0 {
 			return false
 		}
 	}

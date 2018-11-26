@@ -29,7 +29,7 @@ type ResSecret struct {
 
 func NewSecret() *ResSecret {
 	return &ResSecret{
-		Kind:       "Secret",
+		Kind:       RESOURCE_SECRET,
 		ApiVersion: "v1",
 		Type:       "Opaque",
 		MetaData: struct {

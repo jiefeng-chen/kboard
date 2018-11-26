@@ -1,8 +1,8 @@
 package k8s
 
 import (
+	"dashboard/resource"
 	"github.com/revel/config"
-	"kboard/resource"
 )
 
 type IConfigMap interface {
