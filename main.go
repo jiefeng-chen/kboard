@@ -7,15 +7,29 @@ import (
 	"net/http"
 	"time"
 	"kboard/control"
+	"os"
+	"syscall"
+	"os/signal"
 )
 
 var (
 	Config *core.Config
+	NotifyReloadConfig chan os.Signal
 )
 
 func init() {
 	// init config
-	Config = core.NewConfig().LoadConfigFile("config/conf.yaml")
+	Config = core.NewConfig().LoadConfigFile("config/conf.toml")
+
+	// watch config file to reload
+	NotifyReloadConfig = make(chan os.Signal, 1)
+	signal.Notify(NotifyReloadConfig, syscall.SIGQUIT)
+	go func() {
+		for {
+			<-NotifyReloadConfig
+			Config.ReloadConfigFile()
+		}
+	}()
 
 	// init db、cache、control and so on
 

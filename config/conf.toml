@@ -1,0 +1,39 @@
+# server
+[server]
+ host = "dev.docker" # string
+ port = 8005 # int
+ https = false # bool
+ log = true # bool 日志记录
+ auth = false # bool 鉴权
+ httpVersion = "2.0" # string 1.0,1.1,2.0
+ [server.tls]
+  cert = "config/cert.pem" # relative to src dir
+  key = "config/key.pem"
+
+# database
+[database]
+ host = "localhost"
+ port = 3306
+ username = "root"
+ password = "neyo123"
+
+# redis
+[redis]
+ host = "127.0.0.2"
+ port = 6379 # int
+
+# memcache
+[memcache]
+ host = "127.0.0.1"
+ port = 11211
+
+# kubernetes cluster
+[kubernetes]
+ host = "" # string
+ port = 0 # int
+
+# etcd cluster
+[etcd]
+ host = "" # string
+ port = 0 # int
+

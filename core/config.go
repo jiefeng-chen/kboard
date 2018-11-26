@@ -1,8 +1,9 @@
 package core
 
 import (
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"github.com/BurntSushi/toml"
+	"sync"
+	"fmt"
 )
 
 type IConfig interface {
@@ -24,17 +25,19 @@ type ServerTSL struct {
 
 type Config struct {
 	Path string
-	Data *YamlConfigData
+	Data TomlConfigData
+	Once sync.Once // 实现单例模式
+	Lock sync.RWMutex
 }
 
-type YamlConfigData struct {
+type TomlConfigData struct {
 	Server struct {
 		Host        string
 		Port        int
 		Https       bool
 		Log         bool   // 日志记录
 		Auth        bool   // 鉴权
-		HttpVersion string `yaml:"httpVersion"` // 1.0, 1.1, 2.0
+		HttpVersion string `toml:"httpVersion"` // 1.0, 1.1, 2.0
 		TLS         struct {
 			Cert string
 			Key  string
@@ -64,27 +67,45 @@ type YamlConfigData struct {
 	}
 }
 
+// load config file
+// singleton
 func NewConfig() *Config {
 	return &Config{
 		Path: "",
-		Data: &YamlConfigData{},
+		Data: TomlConfigData{},
+		Once: sync.Once{},
+		Lock: sync.RWMutex{},
 	}
 }
 
 // error code 1000 ~ 1200
 func (c *Config) LoadConfigFile(path string) *Config {
-	if path == "" {
-		CheckError(NewError("path to config file is empty"), 1000)
-	}
-	c.Path = path
-
-	yamlFile, err := ioutil.ReadFile(path)
-	CheckError(err, 1001)
-
-	err = yaml.Unmarshal(yamlFile, c.Data)
-	CheckError(err, 1002)
+	fmt.Println("loading config file...")
+	c.Once.Do(func() {
+		if path == "" {
+			CheckError(NewError("path to config file is empty"), 1000)
+		}
+		c.Path = path
+		if _, err := toml.DecodeFile(path, &c.Data); err != nil {
+			CheckError(err, 1001)
+		}
+	})
 
 	return c
+}
+
+// 重新加载配置文件
+func (c *Config) ReloadConfigFile() {
+	fmt.Println("reloading config file...")
+	c.Lock.RLock()
+	defer c.Lock.RUnlock()
+	c.Once.Do(func() {
+		c.Lock.Lock()
+		defer c.Lock.Unlock()
+		if _, err := toml.DecodeFile(c.Path, &c.Data); err != nil {
+			CheckError(err, 1001)
+		}
+	})
 }
 
 func (c *Config) SetTSL(tsl *ServerTSL) error {
