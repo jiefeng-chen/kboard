@@ -8,7 +8,7 @@ import (
 )
 
 // log
-func SafeHandlerMiddleware(next http.Handler) http.Handler {
+func SafeHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if e, ok := recover().(error); ok {

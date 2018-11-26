@@ -34,18 +34,18 @@ func (r *Router) InitRouter() *Router {
 
 	// logs
 	if r.Config.IsLog() {
-		r.Router.Use(middleware.LoggerMiddleware)
+		r.Router.Use(middleware.Logger)
 	}
 
 	// authentication
 	if r.Config.IsAuth() {
-		amw := middleware.NewAuthenticationMiddleware()
+		amw := middleware.NewAuthentication()
 		amw.Populate()
 		r.Router.Use(amw.Middleware)
 	}
 
 	// safe handler
-	r.Router.Use(middleware.SafeHandlerMiddleware)
+	r.Router.Use(middleware.SafeHandler)
 
 	return r
 }

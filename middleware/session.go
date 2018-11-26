@@ -6,25 +6,25 @@ import (
 	"time"
 )
 
-type SessionMiddleware struct {
+type Session struct {
 	tokenUsers map[string]string
 }
 
-func NewSessionMiddleware() *SessionMiddleware {
-	return &SessionMiddleware{
+func NewSession() *Session {
+	return &Session{
 		tokenUsers: make(map[string]string),
 	}
 }
 
 // Initialize it somewhere
-func (sess *SessionMiddleware) Populate() {
+func (sess *Session) Populate() {
 	sess.tokenUsers["00000000"] = "user0"
 	sess.tokenUsers["aaaaaaaa"] = "userA"
 	sess.tokenUsers["05f717e5"] = "randomUser"
 	sess.tokenUsers["deadbeef"] = "user0"
 }
 
-func (sess *SessionMiddleware) Middleware(next http.Handler) http.Handler {
+func (sess *Session) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("X-Session-Token")
 
@@ -39,7 +39,7 @@ func (sess *SessionMiddleware) Middleware(next http.Handler) http.Handler {
 	})
 }
 
-func (sess *SessionMiddleware) SetCookie(w http.ResponseWriter, r *http.Request) {
+func (sess *Session) SetCookie(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "hello",
 		Value:    "hello",

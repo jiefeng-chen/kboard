@@ -5,18 +5,18 @@ import (
 	"net/http"
 )
 
-type AuthenticationMiddleware struct {
+type Authentication struct {
 	tokenUsers map[string]string
 }
 
-func NewAuthenticationMiddleware() *AuthenticationMiddleware {
-	return &AuthenticationMiddleware{
+func NewAuthentication() *Authentication {
+	return &Authentication{
 		tokenUsers: make(map[string]string),
 	}
 }
 
 // Initialize it somewhere
-func (amw *AuthenticationMiddleware) Populate() {
+func (amw *Authentication) Populate() {
 	amw.tokenUsers["00000000"] = "user0"
 	amw.tokenUsers["aaaaaaaa"] = "userA"
 	amw.tokenUsers["05f717e5"] = "randomUser"
@@ -24,7 +24,7 @@ func (amw *AuthenticationMiddleware) Populate() {
 }
 
 // Middleware function, which will be called for each request
-func (amw *AuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
+func (amw *Authentication) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("X-Session-Token")
 
