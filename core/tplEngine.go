@@ -50,7 +50,7 @@ func (t *TplEngine) Parse(content string) *TplEngine {
 }
 
 func getDefinedTpl(file string) []string {
-	file = "template/" + file + ".html"
+	file = "front/" + file + ".html"
 	tpls := []string{
 		file,
 	}
@@ -61,7 +61,7 @@ func getDefinedTpl(file string) []string {
 func (t *TplEngine) ParseFiles(tplName ...string) *TplEngine {
 	commFiles := getDefinedTpl(tplName[0])
 	for _, f := range tplName {
-		ff := "template/" + f + ".html"
+		ff := "front/" + f + ".html"
 		commFiles = append(commFiles, ff)
 	}
 	var err error
