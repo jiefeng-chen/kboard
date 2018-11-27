@@ -53,11 +53,6 @@ func getDefinedTpl(file string) []string {
 	file = "template/" + file + ".html"
 	tpls := []string{
 		file,
-		"template/header.html",
-		"template/menu.html",
-		"template/footer.html",
-		"template/pager.html",
-		"template/aside.html",
 	}
 
 	return tpls
