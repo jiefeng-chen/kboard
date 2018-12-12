@@ -43,7 +43,8 @@ func main() {
 
 	// turn http/2.0 on
 	if Config.IsHttp2() {
-		http2.ConfigureServer(&server, &http2.Server{})
+		err := http2.ConfigureServer(&server, &http2.Server{})
+		core.CheckError(err, 11)
 	}
 	log.Println(Config.GetHttpVersion())
 

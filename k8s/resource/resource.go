@@ -16,7 +16,7 @@ const (
 	RESOURCE_REPLICATION_CONTROLLER    = "ReplicationController"
 	RESOURCE_NAMESPACE                 = "Namespace"
 	RESOURCE_NODE                      = "Node"
-	RESOURCE_STATEFULE                 = "Stateful"
+	RESOURCE_STATEFULE_SET             = "StatefulSet"
 	RESOURCE_RESOURCE_QUOTA            = "ResourceQuota"
 	RESOURCE_JOB                       = "Job"
 	RESOURCE_CRON_JOB                  = "CronJob"
@@ -25,6 +25,7 @@ const (
 	RESOURCE_DEPLOYMENT                = "Deployment"
 	RESOURCE_INGRESS_CONTROLLER        = "IngressController"
 	RESOURCE_HORIZONTAL_POD_AUTOSCALER = "HorizontalPodAutoscaler"
+	RESOURCE_REPLICASET			       = "ReplicaSet"
 )
 
 // 显示名称
@@ -40,13 +41,16 @@ func GetKinds() map[string]string {
 		RESOURCE_REPLICATION_CONTROLLER:  "ReplicationController",
 		RESOURCE_NAMESPACE:               "Namespace",
 		RESOURCE_NODE:                    "Node",
-		RESOURCE_STATEFULE:               "Stateful",
+		RESOURCE_STATEFULE_SET:           "StatefulSet",
 		RESOURCE_RESOURCE_QUOTA:          "ResourceQuota",
 		RESOURCE_JOB:                     "Job",
 		RESOURCE_CRON_JOB:                "CronJob",
 		RESOURCE_INGRESS:                 "Ingress",
 		RESOURCE_DAEMONSET:               "DaemonSet",
 		RESOURCE_DEPLOYMENT:              "Deployment",
+		RESOURCE_REPLICASET:			  "ReplicaSet",
+		RESOURCE_HORIZONTAL_POD_AUTOSCALER: "HorizontalPodAutoscaler",
+		RESOURCE_INGRESS_CONTROLLER:		"IngressController",
 	}
 }
 
@@ -60,7 +64,7 @@ func GetAccessModes() map[string]string {
 	return map[string]string{
 		"ReadWriteOnce": "ReadWriteOnce(单点读写)", // 单节点读写 RWO
 		"ReadOnlyMany":  "ReadOnlyMany(多点只读)",  // 多节点只读	 ROX
-		"ReadWriteMany": "ReadWriteMany(多点读写)", // 多节点读写 RWX ceph rbd 不支持
+		//"ReadWriteMany": "ReadWriteMany(多点读写)", // 多节点读写 RWX ceph rbd 不支持
 	}
 }
 
@@ -92,3 +96,6 @@ func GetReclaimPolicy() map[string]string {
 		"Retain": "Retain",
 	}
 }
+
+
+

@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"dashboard/resource"
+	"kboard/k8s/resource"
 	"github.com/revel/config"
 	"github.com/bitly/go-simplejson"
 	"fmt"

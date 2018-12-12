@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"dashboard/resource"
+	"kboard/k8s/resource"
 	"encoding/json"
 	"fmt"
 	"github.com/revel/config"

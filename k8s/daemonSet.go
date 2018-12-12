@@ -3,7 +3,7 @@ package k8s
 
 import (
 	"github.com/revel/config"
-	"dashboard/resource"
+	"kboard/k8s/resource"
 )
 
 type IDaemonSet interface {
@@ -19,7 +19,7 @@ func NewDaemonSet(Config *config.Context) *DaemonSet {
 	return &DaemonSet{
 		K8sCore{
 			Config: Config,
-			Kind: resource.RESOURCE_INGRESS,
+			Kind: resource.RESOURCE_DAEMONSET,
 			Urls: Urls{
 				Read: "/apis/apps/v1beta2/namespaces/%s/daemonsets/%s",
 				Create: "/apis/apps/v1beta2/namespaces/%s/daemonsets",

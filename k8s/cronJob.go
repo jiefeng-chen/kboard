@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"github.com/revel/config"
-	"dashboard/resource"
+	"kboard/k8s/resource"
 )
 
 type ICronJob interface {
@@ -26,3 +26,5 @@ func NewCronJob(Config *config.Context) *CronJob {
 		},
 	}
 }
+
+

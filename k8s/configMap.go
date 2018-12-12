@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"dashboard/resource"
+	"kboard/k8s/resource"
 	"github.com/revel/config"
 )
 
@@ -25,3 +25,5 @@ func NewConfigMap(Config *config.Context) *ConfigMap {
 		},
 	}
 }
+
+

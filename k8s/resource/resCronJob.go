@@ -23,7 +23,7 @@ type ResCronJob struct {
 
 func NewCronJob() *ResCronJob {
 	return &ResCronJob{
-		Kind:       RESOURCE_INGRESS,
+		Kind:       RESOURCE_CRON_JOB,
 		ApiVersion: "extensions/v1beta1",
 		MetaData: struct {
 			Name      string

@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"dashboard/resource"
+	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
@@ -28,9 +28,9 @@ func NewStorageClass(Config *config.Context) *StorageClass {
 	}
 }
 
-func (l *StorageClass) WriteToEtcd(ns string, data []byte) *HttpError {
+func (l *StorageClass) WriteToEtcd(name string, data []byte) *HttpError {
 	// 1. 检查是否已存在
-	_, err := l.Read(ns)
+	_, err := l.Read(name)
 	if err.Code == 404 {
 		// 不存在，创建
 		err := l.Create(data)
@@ -68,8 +68,8 @@ func (l *StorageClass) Create(data []byte) *HttpError {
 	return err
 }
 
-func (l *StorageClass) Replace(ns string, data []byte) *HttpError {
-	url := fmt.Sprintf(l.Urls.Read, ns)
+func (l *StorageClass) Replace(name string, data []byte) *HttpError {
+	url := fmt.Sprintf(l.Urls.Read, name)
 	jsonData := l.put(url, data)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
@@ -83,8 +83,8 @@ func (l *StorageClass) Replace(ns string, data []byte) *HttpError {
 	return err
 }
 
-func (l *StorageClass) Read(ns string) (*simplejson.Json, *HttpError) {
-	url := fmt.Sprintf(l.Urls.Read, ns)
+func (l *StorageClass) Read(name string) (*simplejson.Json, *HttpError) {
+	url := fmt.Sprintf(l.Urls.Read, name)
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
@@ -114,3 +114,5 @@ func (l *StorageClass) Delete(name string) *HttpError {
 	}
 	return err
 }
+
+

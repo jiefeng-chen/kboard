@@ -2,8 +2,8 @@ package k8s
 
 import (
 	"bytes"
-	"dashboard/core"
-	"dashboard/model"
+	"kboard/core"
+	"log"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
@@ -80,10 +80,9 @@ func (l *K8sCore) Replace(ns string, name string, data []byte) *HttpError {
 	return err
 }
 
-func (l *K8sCore) Read(ns string, name string) (*simplejson.Json, *HttpError) {
-	url := fmt.Sprintf(l.Urls.Read, ns, name)
+func (l *K8sCore) Read(nsName string, name string) (*simplejson.Json, *HttpError) {
+	url := fmt.Sprintf(l.Urls.Read, nsName, name)
 	jsonData := l.get(url)
-
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
 	if httpResult.Kind == l.Kind {
@@ -141,13 +140,16 @@ func (k *K8sCore) post(url string, data []byte) *simplejson.Json {
 	//log.Println(string(data))
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
-	model.TryCatch(err)
+	if err != nil {
+		log.Panic(err)
+	}
 	req.Header.Set("Content-Type", "application/yaml; charset=utf-8")
 	resp, err := client.Do(req)
-	model.TryCatch(err)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	model.TryCatch(err)
+	if err != nil {
+		log.Panic(err)
+	}
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
 }
@@ -156,9 +158,7 @@ func (k *K8sCore) get(url string) *simplejson.Json {
 	url = k.baseApi() + url
 	//log.Println(url)
 	response, err := http.Get(url)
-	if err != nil {
-		core.ERROR.Println(err)
-	}
+	core.CheckError(err, 80)
 
 	defer response.Body.Close()
 	body, _ := ioutil.ReadAll(response.Body)
@@ -172,13 +172,16 @@ func (k *K8sCore) put(url string, data []byte) *simplejson.Json {
 	//log.Println(string(data))
 	client := &http.Client{}
 	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(data))
-	model.TryCatch(err)
+	if err != nil {
+		log.Panic(err)
+	}
 	req.Header.Set("Content-Type", "application/yaml; charset=utf-8")
 	resp, err := client.Do(req)
-	model.TryCatch(err)
+	core.CheckError(err, 82)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	model.TryCatch(err)
+	core.CheckError(err, 82)
+
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
 }
@@ -188,12 +191,14 @@ func (k *K8sCore) del(url string) *simplejson.Json {
 	//log.Println(url)
 	client := &http.Client{}
 	req, err := http.NewRequest("DELETE", url, nil)
-	model.TryCatch(err)
+	core.CheckError(err, 81)
+
 	resp, err := client.Do(req)
-	model.TryCatch(err)
+	core.CheckError(err, 81)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	model.TryCatch(err)
+	core.CheckError(err, 81)
+
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
 }
@@ -204,13 +209,13 @@ func (k *K8sCore) patch(url string, data []byte) *simplejson.Json {
 	//log.Println(string(data))
 	client := &http.Client{}
 	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(data))
-	model.TryCatch(err)
+	core.CheckError(err, 83)
 	req.Header.Set("Content-Type", "application/strategic-merge-patch+json")
 	resp, err := client.Do(req)
-	model.TryCatch(err)
+	core.CheckError(err, 83)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	model.TryCatch(err)
+	core.CheckError(err, 83)
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
 }
