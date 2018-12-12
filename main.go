@@ -7,16 +7,17 @@ import (
 	"net/http"
 	"time"
 	"kboard/control"
+	"kboard/config"
 )
 
 var (
-	Config *core.Config
+	Config *config.Config
 	NotifyReloadConfig chan int
 )
 
 func init() {
 	// init config
-	Config = core.NewConfig().LoadConfigFile("config/conf.toml")
+	Config = config.NewConfig().LoadConfigFile("config/conf.toml")
 
 	// watch config file to reload
 	NotifyReloadConfig = make(chan int, 1)
