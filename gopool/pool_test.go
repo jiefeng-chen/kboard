@@ -6,7 +6,17 @@ import (
 )
 
 func TestNewPool(t *testing.T) {
-	pool := NewPool(1000)
+
+	//go func() {
+	//	http.HandleFunc("/goroutines", func(w http.ResponseWriter, r *http.Request) {
+	//		num := strconv.FormatInt(int64(runtime.NumGoroutine()), 10)
+	//		w.Write([]byte(num))
+	//	})
+	//	http.ListenAndServe("localhost:6060", nil)
+	//	glog.Info("goroutine stats and pprof listen on 6060")
+	//}()
+
+	pool := NewPool(100)
 
 	go func() {
 		for i := 0; i < 100000; i++{
@@ -16,16 +26,18 @@ func TestNewPool(t *testing.T) {
 
 	pool.Run()
 
-	pool.GetRunTime()
+	fmt.Printf("%v", pool.GetResult())
+	fmt.Printf("program total run time is %f seconds", pool.GetRunTime())
+
 }
 
 func taskFunc(args interface{}) (error, interface{}) {
-	fmt.Printf("task %d completed", args)
+	fmt.Println("task ", args, "completed")
 	return nil, args
 }
 
 func callbackFunc(result interface{}) (error, interface{}) {
 	// 处理
-	fmt.Printf("callback completed [%d]", result)
+	fmt.Println("callback completed [", result, "]")
 	return nil, result
 }
