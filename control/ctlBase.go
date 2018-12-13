@@ -2,6 +2,7 @@ package control
 
 import (
 	"kboard/core"
+	"kboard/config"
 	"fmt"
 	"log"
 )
@@ -12,7 +13,7 @@ type IControl interface {
 }
 
 type Control struct {
-	Config *core.Config
+	Config *config.Config
 	TplEngine *core.TplEngine
 	Control string
 	Actions map[string]func()

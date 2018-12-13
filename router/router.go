@@ -1,19 +1,19 @@
-package control
+package router
 
 import (
 	"flag"
 	"github.com/gorilla/mux"
 	"kboard/middleware"
 	"net/http"
-	"kboard/core"
+	"kboard/config"
 )
 
 type Router struct {
 	Router *mux.Router
-	Config *core.Config
+	Config *config.Config
 }
 
-func NewRouter(Config *core.Config) *Router {
+func NewRouter(Config *config.Config) *Router {
 	return &Router{
 		Router: mux.NewRouter(),
 		Config: Config,

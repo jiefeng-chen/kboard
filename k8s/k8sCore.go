@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"bytes"
-	"kboard/core"
+	"kboard/exception"
 	"log"
 	"fmt"
 	"github.com/bitly/go-simplejson"
@@ -158,7 +158,7 @@ func (k *K8sCore) get(url string) *simplejson.Json {
 	url = k.baseApi() + url
 	//log.Println(url)
 	response, err := http.Get(url)
-	core.CheckError(err, 80)
+	exception.CheckError(err, 80)
 
 	defer response.Body.Close()
 	body, _ := ioutil.ReadAll(response.Body)
@@ -177,10 +177,10 @@ func (k *K8sCore) put(url string, data []byte) *simplejson.Json {
 	}
 	req.Header.Set("Content-Type", "application/yaml; charset=utf-8")
 	resp, err := client.Do(req)
-	core.CheckError(err, 82)
+	exception.CheckError(err, 82)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	core.CheckError(err, 82)
+	exception.CheckError(err, 82)
 
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
@@ -191,13 +191,13 @@ func (k *K8sCore) del(url string) *simplejson.Json {
 	//log.Println(url)
 	client := &http.Client{}
 	req, err := http.NewRequest("DELETE", url, nil)
-	core.CheckError(err, 81)
+	exception.CheckError(err, 81)
 
 	resp, err := client.Do(req)
-	core.CheckError(err, 81)
+	exception.CheckError(err, 81)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	core.CheckError(err, 81)
+	exception.CheckError(err, 81)
 
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
@@ -209,13 +209,13 @@ func (k *K8sCore) patch(url string, data []byte) *simplejson.Json {
 	//log.Println(string(data))
 	client := &http.Client{}
 	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(data))
-	core.CheckError(err, 83)
+	exception.CheckError(err, 83)
 	req.Header.Set("Content-Type", "application/strategic-merge-patch+json")
 	resp, err := client.Do(req)
-	core.CheckError(err, 83)
+	exception.CheckError(err, 83)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	core.CheckError(err, 83)
+	exception.CheckError(err, 83)
 	json, _ := simplejson.NewJson([]byte(body))
 	return json
 }

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"kboard/core"
 	"golang.org/x/net/http2"
 	"log"
 	"net/http"
 	"time"
-	"kboard/control"
 	"kboard/config"
+	"kboard/router"
+	"kboard/exception"
 )
 
 var (
@@ -33,7 +33,7 @@ func init() {
 }
 
 func main() {
-	r := control.NewRouter(Config).InitRouter()
+	r := router.NewRouter(Config).InitRouter()
 	log.Println("Listen On", Config.GetAddress())
 	server := http.Server{
 		Addr:         Config.GetAddress(),
@@ -45,7 +45,7 @@ func main() {
 	// turn http/2.0 on
 	if Config.IsHttp2() {
 		err := http2.ConfigureServer(&server, &http2.Server{})
-		core.CheckError(err, 11)
+		exception.CheckError(err, 11)
 	}
 	log.Println(Config.GetHttpVersion())
 

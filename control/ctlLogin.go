@@ -2,6 +2,7 @@ package control
 
 import (
 	"net/http"
+	"kboard/config"
 	"kboard/core"
 )
 
@@ -9,7 +10,7 @@ type CtlLogin struct {
 	Control
 }
 
-func NewCtlLogin(config *core.Config, w http.ResponseWriter, r *http.Request) *CtlLogin {
+func NewCtlLogin(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlLogin {
 	return &CtlLogin{
 		Control{
 			Config: config,

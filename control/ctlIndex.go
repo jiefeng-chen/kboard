@@ -4,13 +4,14 @@ package control
 import (
 	"net/http"
 	"kboard/core"
+	"kboard/config"
 )
 
 type CtlIndex struct {
 	Control
 }
 
-func NewCtlIndex(config *core.Config, w http.ResponseWriter, r *http.Request) *CtlIndex {
+func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlIndex {
 	return &CtlIndex{
 		Control{
 			Config: config,

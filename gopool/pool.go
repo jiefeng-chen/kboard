@@ -1,11 +1,11 @@
 package gopool
 
 import (
-	"kboard/core"
 	"time"
 	"sync"
 	"context"
 	"log"
+	"kboard/exception"
 )
 
 const (
@@ -76,7 +76,7 @@ func (p *Pool) DefaultInit() {
 // 添加任务到任务队列
 func (p *Pool) AddTask(task *Task) error {
 	if task == nil {
-		return core.NewError("add task error: task is nil")
+		return exception.NewError("add task error: task is nil")
 	}
 	p.TaskQueue <- task
 	p.taskNum++
