@@ -86,6 +86,7 @@ func (p *Pool) AddTask(task *Task) error {
 // 运行一个goroutine协程
 func (p *Pool) runWorker(workId int, ctx context.Context) {
 	for task := range p.JobQueue {
+		// @todo 死锁问题
 		worker := NewWorker(workId, task)
 		worker.Run()
 		// 返回处理结果
@@ -123,6 +124,7 @@ func (p *Pool) Run() {
 	p.init()
 
 	for task := range p.TaskQueue {
+		// @todo 死锁问题
 		p.JobQueue <- task
 	}
 
