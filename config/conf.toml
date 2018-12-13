@@ -4,7 +4,7 @@
  port = 8005 # int
  https = false # bool
  log = true # bool 日志记录
- auth = false # bool 鉴权
+ auth = true # bool 鉴权
  httpVersion = "2.0" # string 1.0,1.1,2.0
  [server.tls]
   cert = "config/cert.pem" # relative to src dir
