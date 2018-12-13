@@ -14,11 +14,11 @@ import (
 var (
 	Config *config.Config
 	NotifyReloadConfig chan int
+	configPath string
 )
 
 func init() {
 	// 启动参数处理
-	var configPath string
 	// 配置文件路径
 	flag.StringVar(&configPath, "config-path", "config/conf.toml", "special config file path;default path is config/conf.toml")
 	flag.Parse()
