@@ -8,6 +8,7 @@ import (
 	"kboard/config"
 	"kboard/router"
 	"kboard/exception"
+	"flag"
 )
 
 var (
@@ -16,8 +17,14 @@ var (
 )
 
 func init() {
+	// 启动参数处理
+	var configPath string
+	// 配置文件路径
+	flag.StringVar(&configPath, "config-path", "config/conf.toml", "special config file path;default path is config/conf.toml")
+	flag.Parse()
+
 	// init config
-	Config = config.NewConfig().LoadConfigFile("config/conf.toml")
+	Config = config.NewConfig().LoadConfigFile(configPath)
 
 	// watch config file to reload
 	NotifyReloadConfig = make(chan int, 1)

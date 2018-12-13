@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"kboard/exception"
 	"kboard/utils"
+	"io/ioutil"
 )
 
 type IConfig interface {
@@ -82,12 +83,17 @@ func NewConfig() *Config {
 
 // error code 1000 ~ 1200
 func (c *Config) LoadConfigFile(path string) *Config {
-	fmt.Println("loading config file...")
+	fmt.Println("loading config file [path: ", path, "]")
 	c.Once.Do(func() {
 		if path == "" {
-			exception.CheckError(exception.NewError("path to config file is empty"), 1000)
+			exception.CheckError(exception.NewError("config-path is empty"), 1000)
 		}
 		c.Path = path
+		// 检查文件是否存在
+		fileData, err := ioutil.ReadFile(path)
+		if err != nil || len(fileData) <= 0 {
+			exception.CheckError(exception.NewError("read config file error"), 0)
+		}
 		if _, err := toml.DecodeFile(path, &c.Data); err != nil {
 			exception.CheckError(err, 1001)
 		}
