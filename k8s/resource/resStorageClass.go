@@ -1,10 +1,10 @@
 package resource
 
 import (
-	"kboard/core"
 	"errors"
 	"gopkg.in/yaml.v2"
 	"strings"
+	"kboard/utils"
 )
 
 type IResStorageClass interface {
@@ -147,11 +147,11 @@ func (r *CephRbd) SetMonitors(monitors string) bool {
 	for _, v := range monis {
 		// 检查ip:port格式
 		url := strings.Split(v, ":")
-		if !core.IsIP(url[0]) {
+		if !utils.IsIP(url[0]) {
 			return false
 		}
 		// 端口检查
-		if len(url) <= 1 || url[1] == "" || core.ToInt(url[1]) <= 0 {
+		if len(url) <= 1 || url[1] == "" || utils.ToInt(url[1]) <= 0 {
 			return false
 		}
 	}

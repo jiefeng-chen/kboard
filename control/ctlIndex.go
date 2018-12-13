@@ -3,8 +3,8 @@ package control
 
 import (
 	"net/http"
-	"kboard/core"
 	"kboard/config"
+	"kboard/template"
 )
 
 type CtlIndex struct {
@@ -15,8 +15,8 @@ func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) 
 	return &CtlIndex{
 		Control{
 			Config: config,
-			TplEngine: core.NewTplEngine(w, r),
-			Control: "index",
+			TplEngine: template.NewTplEngine(w, r),
+			Module: "index",
 			Actions: map[string]func(){},
 		},
 	}

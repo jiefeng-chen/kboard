@@ -5,17 +5,35 @@ import (
 	"github.com/gorilla/mux"
 	"kboard/config"
 	"kboard/control"
+	"kboard/api"
 )
 
 // 注册路由
 func UrlRegister(r *Router) {
-	r.Router.HandleFunc("/login/{action:[a-z]+}", LoginHandler(r.Config))
+	// api的路由特殊处理
+	r.Router.HandleFunc("/api/user/{action:[a-z]+}", I_UserHandler(r.Config))
 
-	r.Router.HandleFunc("/index/{action:[a-z]+}", IndexHandler(r.Config))
+	// control下的路由
+	r.Router.HandleFunc("/login/{action:[a-z]+}", C_LoginHandler(r.Config))
+	r.Router.HandleFunc("/index/{action:[a-z]+}", C_IndexHandler(r.Config))
 
 }
 
-func LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+// api下的路由处理handler在此处理
+func I_UserHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+	handler := func (w http.ResponseWriter, r *http.Request) {
+		action := mux.Vars(r)["action"]
+		i := api.NewIIndex(c, w, r)
+		i.Register("index", i.Index).Run(action)
+	}
+
+	return handler
+}
+
+
+
+// control下的路由处理handler在此处理
+func C_LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func (w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		c := control.NewCtlLogin(c, w, r)
@@ -25,7 +43,7 @@ func LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request))
 	return handler
 }
 
-func IndexHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func C_IndexHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func (w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		c := control.NewCtlIndex(c, w, r)

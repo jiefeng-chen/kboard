@@ -1,9 +1,9 @@
 package resource
 
 import (
-	"kboard/core"
 	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/utils"
 )
 
 type IResIngress interface {
@@ -119,7 +119,7 @@ func (r *ResIngress) SetRules(host string, rules []map[string]string) error {
 			}
 			path.Backend = IngressBackend{
 				ServiceName: v["serviceName"],
-				ServicePort: core.ToInt(v["servicePort"]),
+				ServicePort: utils.ToInt(v["servicePort"]),
 			}
 			rule.Http.Paths = append(rule.Http.Paths, *path)
 		}

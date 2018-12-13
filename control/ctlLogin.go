@@ -3,7 +3,7 @@ package control
 import (
 	"net/http"
 	"kboard/config"
-	"kboard/core"
+	"kboard/template"
 )
 
 type CtlLogin struct {
@@ -14,8 +14,8 @@ func NewCtlLogin(config *config.Config, w http.ResponseWriter, r *http.Request) 
 	return &CtlLogin{
 		Control{
 			Config: config,
-			TplEngine: core.NewTplEngine(w, r),
-			Control: "login",
+			TplEngine: template.NewTplEngine(w, r),
+			Module: "login",
 			Actions: map[string]func(){},
 		},
 	}

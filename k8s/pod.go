@@ -1,13 +1,14 @@
 package k8s
 
 import (
-	"kboard/core"
+
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
 	"github.com/revel/config"
 	"io/ioutil"
 	"net/http"
+	"log"
 )
 
 type IPod interface {
@@ -53,7 +54,7 @@ func (l *Pod) Log(ns string, name string) []byte {
 	//log.Println(url)
 	response, err := http.Get(url)
 	if err != nil {
-		core.ERROR.Println(err)
+		log.Println(err)
 	}
 
 	defer response.Body.Close()
