@@ -4,6 +4,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"sync"
 	"fmt"
+	"kboard/core"
 )
 
 type IConfig interface {
@@ -83,11 +84,11 @@ func (c *Config) LoadConfigFile(path string) *Config {
 	fmt.Println("loading config file...")
 	c.Once.Do(func() {
 		if path == "" {
-			CheckError(NewError("path to config file is empty"), 1000)
+			core.CheckError(core.NewError("path to config file is empty"), 1000)
 		}
 		c.Path = path
 		if _, err := toml.DecodeFile(path, &c.Data); err != nil {
-			CheckError(err, 1001)
+			core.CheckError(err, 1001)
 		}
 	})
 
@@ -104,14 +105,14 @@ func (c *Config) ReloadConfigFile() {
 		c.Lock.Lock()
 		defer c.Lock.Unlock()
 		if _, err := toml.DecodeFile(c.Path, &c.Data); err != nil {
-			CheckError(err, 1001)
+			core.CheckError(err, 1001)
 		}
 	})
 }
 
 func (c *Config) SetTSL(tsl *ServerTSL) error {
 	if tsl.Cert == "" || tsl.Key == "" {
-		return NewError("server tsl contain invalid value")
+		return core.NewError("server tsl contain invalid value")
 	}
 	c.Data.Server.TLS.Key = tsl.Key
 	c.Data.Server.TLS.Cert = tsl.Cert
@@ -120,20 +121,20 @@ func (c *Config) SetTSL(tsl *ServerTSL) error {
 
 func (c *Config) GetAddress() string {
 	if c.Data.Server.Host == "" {
-		CheckError(NewError("server host is empty"), 1004)
+		core.CheckError(core.NewError("server host is empty"), 1004)
 	}
 	port := c.Data.Server.Port
 	if port <= 0 || port > 65535 {
-		CheckError(NewError("server port is invalid"), 1004)
+		core.CheckError(core.NewError("server port is invalid"), 1004)
 	}
-	return c.Data.Server.Host + ":" + ToString(port)
+	return c.Data.Server.Host + ":" + core.ToString(port)
 }
 
 func (c *Config) GetTSL() *ServerTSL {
 	cert := c.Data.Server.TLS.Cert
 	key := c.Data.Server.TLS.Key
 	if cert == "" || key == "" {
-		CheckError(NewError("cert or key is empty"), 1005)
+		core.CheckError(core.NewError("cert or key is empty"), 1005)
 	}
 	return &ServerTSL{
 		Cert: cert,
