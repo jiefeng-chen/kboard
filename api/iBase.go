@@ -87,4 +87,6 @@ func (i *Api) Run(action string) {
 	}
 }
 
-
+func (c *Api) Index() {
+	fmt.Fprintln(c.TplEngine.W, "hello world, this is default index")
+}

@@ -25,11 +25,18 @@ func NewINode(config *config.Config, w http.ResponseWriter, r *http.Request) *IN
 }
 
 func (this *INode) Index() {
-	//var node *resource.ResNode
-	//	//node = resource.NewResNode("")
 	// 获取node状态
 	node := this.GetString("name")
 	lib := k8s.NewNode(this.Config)
-	this.TplEngine.Response(100, "", "数据")
+	if node == ""{
+		this.TplEngine.Response(101, "", "缺少节点名称")
+		return
+	}
+	data, httpErr := lib.Read(node)
+	if httpErr.Code == 200 {
+		this.TplEngine.Response(100, data, httpErr.Message)
+		return
+	}
+	this.TplEngine.Response(99, "", httpErr.Message)
 }
 
