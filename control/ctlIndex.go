@@ -18,6 +18,8 @@ func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) 
 			TplEngine: template.NewTplEngine(w, r),
 			Module: "index",
 			Actions: map[string]func(){},
+			R: r,
+			W: w,
 		},
 	}
 }

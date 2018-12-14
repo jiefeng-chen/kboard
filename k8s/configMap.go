@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IConfigMap interface {
@@ -13,7 +13,7 @@ type ConfigMap struct {
 	K8sCore
 }
 
-func NewConfigMap(Config *config.Context) *ConfigMap {
+func NewConfigMap(Config *config.Config) *ConfigMap {
 	return &ConfigMap{
 		K8sCore{
 			Config: Config,

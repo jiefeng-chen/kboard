@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IReplicaSet interface {
@@ -13,7 +13,7 @@ type ReplicaSet struct {
 	K8sCore
 }
 
-func NewReplicaSet(Config *config.Context) *ReplicaSet {
+func NewReplicaSet(Config *config.Config) *ReplicaSet {
 	return &ReplicaSet{
 		K8sCore{
 			Config: Config,

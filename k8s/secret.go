@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type ISecret interface {
@@ -13,7 +13,7 @@ type Secret struct {
 	K8sCore
 }
 
-func NewSecret(Config *config.Context) *Secret {
+func NewSecret(Config *config.Config) *Secret {
 	return &Secret{
 		K8sCore{
 			Config: Config,

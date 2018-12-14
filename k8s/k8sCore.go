@@ -6,9 +6,10 @@ import (
 	"log"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
 	"io/ioutil"
 	"net/http"
+	"kboard/config"
+	"kboard/utils"
 )
 
 type ResultData struct {
@@ -40,13 +41,18 @@ type IK8sCore interface {
 }
 
 type K8sCore struct {
-	Config *config.Context
+	Config *config.Config
 	Kind   string
 	Urls   Urls
 }
 
 func (k *K8sCore) baseApi() string {
-	return k.Config.StringDefault("k8s", "http://192.168.52.227:8080")
+	url := k.Config.GetK8sHostName() + ":" + utils.ToString(k.Config.GetK8sPort())
+	if url == ":" {
+		// 异常退出
+		exception.CheckError(exception.NewError("kubernetes host is empty"), -1)
+	}
+	return url
 }
 
 func (l *K8sCore) Create(ns string, data []byte) *HttpError {

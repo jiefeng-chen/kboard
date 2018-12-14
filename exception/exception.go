@@ -14,7 +14,7 @@ func NewError(format string, args ...string) error {
 func CheckError(err error, code int) {
 	if err != nil {
 		log.Println(err.Error())
-		if code == 0 {
+		if code == 0 || code == -1 {
 			os.Exit(code)
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type INamespace interface {
@@ -16,7 +16,7 @@ type Namespace struct {
 	K8sCore
 }
 
-func NewNamespace(Config *config.Context) *Namespace {
+func NewNamespace(Config *config.Config) *Namespace {
 	return &Namespace{
 		K8sCore{
 			Config: Config,

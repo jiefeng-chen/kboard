@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IService interface {
@@ -13,7 +13,7 @@ type Service struct {
 	K8sCore
 }
 
-func NewService(Config *config.Context) *Service {
+func NewService(Config *config.Config) *Service {
 	return &Service{
 		K8sCore{
 			Config: Config,

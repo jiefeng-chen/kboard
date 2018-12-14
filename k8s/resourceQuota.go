@@ -4,7 +4,7 @@ import (
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IResourceQuota interface {
@@ -16,7 +16,7 @@ type ResourceQuota struct {
 	MetaName string
 }
 
-func NewResourceQuota(Config *config.Context) *ResourceQuota {
+func NewResourceQuota(Config *config.Config) *ResourceQuota {
 	return &ResourceQuota{
 		MetaName: "quota-v1",
 		K8sCore: K8sCore{

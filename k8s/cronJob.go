@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"github.com/revel/config"
+	"kboard/config"
 	"kboard/k8s/resource"
 )
 
@@ -14,7 +14,7 @@ type CronJob struct {
 }
 
 
-func NewCronJob(Config *config.Context) *CronJob {
+func NewCronJob(Config *config.Config) *CronJob {
 	return &CronJob{
 		K8sCore{
 			Config: Config,

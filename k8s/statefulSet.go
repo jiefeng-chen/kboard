@@ -3,7 +3,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IStatefulSet interface {
@@ -14,7 +14,7 @@ type StatefulSet struct {
 	K8sCore
 }
 
-func NewStatefulSet(Config *config.Context) *StatefulSet {
+func NewStatefulSet(Config *config.Config) *StatefulSet {
 	return &StatefulSet{
 		K8sCore{
 			Config: Config,

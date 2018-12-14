@@ -12,6 +12,8 @@ import (
 func UrlRegister(r *Router) {
 	// api的路由特殊处理
 	r.Router.HandleFunc("/api/user/{action:[a-z]+}", I_UserHandler(r.Config))
+	r.Router.HandleFunc("/api/node/{action:[a-z]+}", I_NodeHandler(r.Config))
+
 
 	// control下的路由
 	r.Router.HandleFunc("/login/{action:[a-z]+}", C_LoginHandler(r.Config))
@@ -23,12 +25,23 @@ func UrlRegister(r *Router) {
 func I_UserHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func (w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
-		i := api.NewIIndex(c, w, r)
+		i := api.NewIUser(c, w, r)
 		i.Register("index", i.Index).Run(action)
 	}
 
 	return handler
 }
+
+func I_NodeHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+	handler := func (w http.ResponseWriter, r *http.Request) {
+		action := mux.Vars(r)["action"]
+		i := api.NewINode(c, w, r)
+		i.Register("index", i.Index).Run(action)
+	}
+
+	return handler
+}
+
 
 
 

@@ -1,7 +1,7 @@
 package k8s
 
 import (
-	"github.com/revel/config"
+	"kboard/config"
 	"kboard/k8s/resource"
 )
 
@@ -14,7 +14,7 @@ type HorizontalPodAutoscaler struct {
 }
 
 
-func NewHorizontalPodAutoscaler(Config *config.Context) *HorizontalPodAutoscaler {
+func NewHorizontalPodAutoscaler(Config *config.Config) *HorizontalPodAutoscaler {
 	return &HorizontalPodAutoscaler{
 		K8sCore{
 			Config: Config,

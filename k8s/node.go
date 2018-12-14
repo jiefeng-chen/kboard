@@ -3,7 +3,7 @@ package k8s
 import (
 	"kboard/k8s/resource"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type INode interface {
@@ -15,7 +15,7 @@ type Node struct {
 	K8sCore
 }
 
-func NewNode(Config *config.Context) *Node {
+func NewNode(Config *config.Config) *Node {
 	return &Node{
 		K8sCore{
 			Config: Config,

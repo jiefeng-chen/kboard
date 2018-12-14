@@ -4,7 +4,7 @@ import (
 	"kboard/k8s/resource"
 	"encoding/json"
 	"fmt"
-	"github.com/revel/config"
+	"kboard/config"
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,7 +14,7 @@ type IPersistentVolumeClaim interface {
 	Patch(ns string, name string, data []byte) *HttpError
 }
 
-func NewPersistentVolumeClaim(Config *config.Context) *PersistentVolumeClaim {
+func NewPersistentVolumeClaim(Config *config.Config) *PersistentVolumeClaim {
 	return &PersistentVolumeClaim{
 		K8sCore{
 			Config: Config,

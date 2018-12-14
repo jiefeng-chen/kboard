@@ -5,7 +5,7 @@ import (
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 	"io/ioutil"
 	"net/http"
 	"log"
@@ -21,7 +21,7 @@ type Pod struct {
 	K8sCore
 }
 
-func NewPod(Config *config.Context) *Pod {
+func NewPod(Config *config.Config) *Pod {
 	return &Pod{
 		K8sCore{
 			Config: Config,

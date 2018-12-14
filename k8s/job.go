@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 	"kboard/k8s/resource"
 )
 
@@ -15,7 +15,7 @@ type Job struct {
 	K8sCore
 }
 
-func NewJob(Config *config.Context) *Job {
+func NewJob(Config *config.Config) *Job {
 	return &Job{
 		K8sCore{
 			Config: Config,

@@ -6,22 +6,24 @@ import (
 	"net/http"
 )
 
-type IIndex struct {
+type IUser struct {
 	Api
 }
 
-func NewIIndex(config *config.Config, w http.ResponseWriter, r *http.Request) *IIndex {
-	return &IIndex{
+func NewIUser(config *config.Config, w http.ResponseWriter, r *http.Request) *IUser {
+	return &IUser{
 		Api{
 			Config: config,
 			TplEngine: template.NewTplEngine(w, r),
 			Module: "index",
 			Actions: map[string]func(){},
+			R: r,
+			W: w,
 		},
 	}
 }
 
-func (this *IIndex) Index() {
+func (this *IUser) Index() {
 	this.TplEngine.Response(100, "", "数据")
 }
 

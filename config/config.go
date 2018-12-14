@@ -19,6 +19,8 @@ type IConfig interface {
 	IsAuth() bool // 是否开启鉴权
 	IsHttp2() bool
 	GetHttpVersion() string
+	GetK8sHostName() string
+	GetK8sPort() int
 }
 
 type ClusterTSL struct {
@@ -167,6 +169,15 @@ func (c *Config) IsHttp2() bool {
 	}
 	return false
 }
+
+func (c *Config) GetK8sHostName() string {
+	return c.Data.Kubernetes.Host
+}
+
+func (c *Config) GetK8sPort() int {
+	return c.Data.Kubernetes.Port
+}
+
 
 func (c *Config) GetHttpVersion() string {
 	var httpVersion string

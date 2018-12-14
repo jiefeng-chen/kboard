@@ -2,7 +2,7 @@ package k8s
 
 import (
 	"kboard/k8s/resource"
-	"github.com/revel/config"
+	"kboard/config"
 	"github.com/bitly/go-simplejson"
 	"fmt"
 )
@@ -15,7 +15,7 @@ type Ingress struct {
 	K8sCore
 }
 
-func NewIngress(Config *config.Context) *Ingress {
+func NewIngress(Config *config.Config) *Ingress {
 	return &Ingress{
 		K8sCore{
 			Config: Config,

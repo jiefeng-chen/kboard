@@ -6,6 +6,8 @@ import (
 	"kboard/exception"
 	"fmt"
 	"log"
+	"net/http"
+	"kboard/utils"
 )
 
 type IApi interface {
@@ -18,7 +20,37 @@ type Api struct {
 	TplEngine *template.TplEngine
 	Module string
 	Actions map[string]func()
+	W http.ResponseWriter
+	R *http.Request
 }
+
+func NewApi(config *config.Config, w http.ResponseWriter, r *http.Request) *Api {
+	return &Api{
+		Config: config,
+		TplEngine: template.NewTplEngine(w, r),
+		Module: "base",
+		Actions: map[string]func(){},
+		R: r,
+		W: w,
+	}
+}
+
+func (i *Api) GetString(name string) string {
+	return utils.ToString(i.R.URL.Query().Get(name))
+}
+
+func (i *Api) GetInt(name string) int {
+	return utils.ToInt(i.R.URL.Query().Get(name))
+}
+
+func (i *Api) PostString(name string) string {
+	return utils.ToString(i.R.FormValue(name))
+}
+
+func (i *Api) PostInt(name string) int {
+	return utils.ToInt(i.R.FormValue(name))
+}
+
 
 func (i *Api) Register(action string, f func()) *Api {
 	if i.Actions == nil {

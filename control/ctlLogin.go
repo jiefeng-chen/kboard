@@ -17,6 +17,8 @@ func NewCtlLogin(config *config.Config, w http.ResponseWriter, r *http.Request) 
 			TplEngine: template.NewTplEngine(w, r),
 			Module: "login",
 			Actions: map[string]func(){},
+			R: r,
+			W: w,
 		},
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IStorageClass interface {
@@ -15,7 +15,7 @@ type StorageClass struct {
 	K8sCore
 }
 
-func NewStorageClass(Config *config.Context) *StorageClass {
+func NewStorageClass(Config *config.Config) *StorageClass {
 	return &StorageClass{
 		K8sCore{
 			Config: Config,

@@ -4,7 +4,7 @@ import (
 	"kboard/k8s/resource"
 	"fmt"
 	"github.com/bitly/go-simplejson"
-	"github.com/revel/config"
+	"kboard/config"
 )
 
 type IReplicationController interface {
@@ -18,7 +18,7 @@ type ReplicationController struct {
 	K8sCore
 }
 
-func NewReplicationController(Config *config.Context) *ReplicationController {
+func NewReplicationController(Config *config.Config) *ReplicationController {
 	return &ReplicationController{
 		K8sCore{
 			Config: Config,

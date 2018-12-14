@@ -29,8 +29,8 @@
 
 # kubernetes cluster
 [kubernetes]
- host = "" # string
- port = 0 # int
+ host = "http://192.168.37.150" # string
+ port = 8080 # int
 
 # etcd cluster
 [etcd]

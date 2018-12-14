@@ -6,6 +6,8 @@ import (
 	"log"
 	"kboard/template"
 	"kboard/exception"
+	"net/http"
+	"kboard/utils"
 )
 
 type IControl interface {
@@ -18,8 +20,36 @@ type Control struct {
 	TplEngine *template.TplEngine
 	Module string
 	Actions map[string]func()
+	W http.ResponseWriter
+	R *http.Request
 }
 
+func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *Control {
+	return &Control{
+		Config: config,
+		TplEngine: template.NewTplEngine(w, r),
+		Module: "base",
+		Actions: map[string]func(){},
+		R: r,
+		W: w,
+	}
+}
+
+func (c *Control) GetString(name string) string {
+	return utils.ToString(c.R.URL.Query().Get(name))
+}
+
+func (c *Control) GetInt(name string) int {
+	return utils.ToInt(c.R.URL.Query().Get(name))
+}
+
+func (c *Control) PostString(name string) string {
+	return utils.ToString(c.R.FormValue(name))
+}
+
+func (c *Control) PostInt(name string) int {
+	return utils.ToInt(c.R.FormValue(name))
+}
 
 func (c *Control) Register(action string, f func()) *Control {
 	if c.Actions == nil {

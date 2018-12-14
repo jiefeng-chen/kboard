@@ -2,7 +2,7 @@ package k8s
 
 
 import (
-	"github.com/revel/config"
+	"kboard/config"
 	"kboard/k8s/resource"
 )
 
@@ -15,7 +15,7 @@ type DaemonSet struct {
 }
 
 
-func NewDaemonSet(Config *config.Context) *DaemonSet {
+func NewDaemonSet(Config *config.Config) *DaemonSet {
 	return &DaemonSet{
 		K8sCore{
 			Config: Config,
