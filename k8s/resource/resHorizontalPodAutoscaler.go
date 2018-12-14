@@ -2,7 +2,7 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"errors"
+	"kboard/exception"
 )
 
 type IResHorizontalPodAutoscaler interface {
@@ -106,7 +106,7 @@ func NewResHorizontalPodAutoscaler() *ResHorizontalPodAutoscaler {
 
 func (r *ResHorizontalPodAutoscaler) SetMetadataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 
 	r.Metadata.Name = name
@@ -116,7 +116,7 @@ func (r *ResHorizontalPodAutoscaler) SetMetadataName(name string) error {
 
 func (r *ResHorizontalPodAutoscaler) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.Metadata.Namespace = ns
 	return nil
@@ -131,7 +131,7 @@ func (r *ResHorizontalPodAutoscaler) SetMatchLabels(labels map[string]string) er
 	if len(labels) > 0 {
 		for k,v := range labels {
 			if k == "" || v == "" {
-				return errors.New("match labels is empty")
+				return exception.NewError("match labels is empty")
 			}
 			r.Spec.Selector.MatchLabels[k] = v
 		}

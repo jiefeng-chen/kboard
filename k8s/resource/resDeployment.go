@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResDeployment interface {
@@ -74,7 +74,7 @@ func NewResDeployment() *ResDeployment {
 
 func (r *ResDeployment) SetMetadataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 
 	r.Metadata.Name = name
@@ -84,7 +84,7 @@ func (r *ResDeployment) SetMetadataName(name string) error {
 
 func (r *ResDeployment) SetNamespace(nsName string) error {
 	if nsName == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.Metadata.Namespace = nsName
 
@@ -97,7 +97,7 @@ func (r *ResDeployment) GetNamespace() string {
 
 func (r *ResDeployment) AddContainer(container *Container) error {
 	if container == nil {
-		return errors.New("container is nil")
+		return exception.NewError("container is nil")
 	}
 
 	r.Spec.Template.Spec.Containers = append(r.Spec.Template.Spec.Containers, container)
@@ -109,14 +109,14 @@ func (r *ResDeployment) SetMatchLabels(labels map[string]string) error {
 	if len(labels) > 0 {
 		for k,v := range labels {
 			if k == "" || v == "" {
-				return errors.New("match labels is empty")
+				return exception.NewError("match labels is empty")
 			}
 			r.Spec.Selector.MatchLabels[k] = v
 		}
 
 		return nil
 	}else{
-		return errors.New("labels is empty")
+		return exception.NewError("labels is empty")
 	}
 }
 
@@ -127,7 +127,7 @@ func (r *ResDeployment) SetTemplateLabels(labels map[string]string) error {
 		}
 		return nil
 	}
-	return errors.New("labels are empty")
+	return exception.NewError("labels are empty")
 }
 
 func (r *ResDeployment) ToYamlFile() ([]byte, error) {

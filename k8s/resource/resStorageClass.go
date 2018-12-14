@@ -1,7 +1,6 @@
 package resource
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
 	"strings"
 	"kboard/utils"
@@ -197,11 +196,11 @@ func (r *CephRbd) SetFsType(fst string) error {
 
 func (r *CephRbd) SetData(data []map[string]string) error {
 	if len(data) <= 0 {
-		return errors.New("no data to set")
+		return exception.NewError("no data to set")
 	}
 	for _, v := range data {
 		if v["val"] == "" {
-			return errors.New(v["key"] + " is empty")
+			return exception.NewError(v["key"] + " is empty")
 		}
 		switch v["key"] {
 		case "monitors":

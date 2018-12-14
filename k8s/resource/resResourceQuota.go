@@ -3,7 +3,7 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"github.com/golang/go/src/pkg/errors"
+	"kboard/exception"
 )
 
 // 需要启动时配置ResourceQuota adminssion control
@@ -70,7 +70,7 @@ func NewResResourceQuota() *ResResourceQuota {
 
 func (r *ResResourceQuota) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.MetaData.Namespace = ns
 	return nil
@@ -78,7 +78,7 @@ func (r *ResResourceQuota) SetNamespace(ns string) error {
 
 func (r *ResResourceQuota) SetMetaDataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 	r.MetaData.Name = name
 	return nil

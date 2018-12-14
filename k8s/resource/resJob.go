@@ -2,7 +2,7 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"github.com/golang/go/src/pkg/errors"
+	"kboard/exception"
 )
 
 type IJob interface {
@@ -66,7 +66,7 @@ func NewJob() *ResJob {
 
 func (r *ResJob) SetMetadataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 	r.MetaData.Name = name
 	return nil
@@ -78,7 +78,7 @@ func (r *ResJob) GetNamespace() string {
 
 func (r *ResJob) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.MetaData.Namespace = ns
 	return nil
@@ -86,7 +86,7 @@ func (r *ResJob) SetNamespace(ns string) error {
 
 func (r *ResJob) AddContainer(container *Container) error {
 	if container == nil {
-		return errors.New("container is nil")
+		return exception.NewError("container is nil")
 	}
 	r.Spec.Template.Spec.Container = append(r.Spec.Template.Spec.Container, container)
 	return nil
@@ -94,7 +94,7 @@ func (r *ResJob) AddContainer(container *Container) error {
 
 func (r *ResJob) SetCompletion(t int) error {
 	if t <= 0 {
-		return errors.New("completion is zero")
+		return exception.NewError("completion is zero")
 	}
 	r.Spec.Completions = t
 	return nil
@@ -102,7 +102,7 @@ func (r *ResJob) SetCompletion(t int) error {
 
 func (r *ResJob) SetTemplateName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 	r.Spec.Template.Metadata.Name = name
 	return nil
@@ -110,7 +110,7 @@ func (r *ResJob) SetTemplateName(name string) error {
 
 func (r *ResJob) SetRestartPolicy(policy string) error {
 	if policy == "" {
-		return errors.New("restart policy is empty")
+		return exception.NewError("restart policy is empty")
 	}
 	r.Spec.Template.Spec.RestartPolicy = policy
 	return nil

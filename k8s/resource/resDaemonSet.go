@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResDaemonSet interface {
@@ -93,7 +93,7 @@ type DaemonSetToleration struct {
 
 func (r *ResDaemonSet) SetMetaDataName(name string) error {
 	if name == "" {
-		return errors.New("metadata name is empty")
+		return exception.NewError("metadata name is empty")
 	}
 	// 设置 .metadata.name
 	r.Metadata.Name = name
@@ -106,7 +106,7 @@ func (r *ResDaemonSet) SetMetaDataName(name string) error {
 
 func (r *ResDaemonSet) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("metadata namespace is empty")
+		return exception.NewError("metadata namespace is empty")
 	}
 	r.Metadata.Namespace = ns
 	return nil
@@ -121,7 +121,7 @@ func (r *ResDaemonSet) SetMatchLabels(labels []map[string]string) error {
 		for _, v := range labels {
 			for key, val := range v {
 				if key == "" {
-					return errors.New("matchLabels key is empty")
+					return exception.NewError("matchLabels key is empty")
 				}
 
 				r.Spec.Selector.MatchLabels[key] = val
@@ -135,7 +135,7 @@ func (r *ResDaemonSet) SetTolerations(tolers []map[string]string) error {
 	if len(tolers) > 0 {
 		for _, v := range tolers {
 			if v["key"] == "" {
-				return errors.New("toleration key is empty")
+				return exception.NewError("toleration key is empty")
 			}
 			toler := &DaemonSetToleration{
 				Key:               v["key"],
@@ -152,7 +152,7 @@ func (r *ResDaemonSet) SetTolerations(tolers []map[string]string) error {
 
 func (r *ResDaemonSet) AddContainer(container *Container) error {
 	if container == nil {
-		return errors.New("container is nil")
+		return exception.NewError("container is nil")
 	}
 	r.Spec.Template.Spec.Containers = append(r.Spec.Template.Spec.Containers, container)
 	return nil
@@ -160,7 +160,7 @@ func (r *ResDaemonSet) AddContainer(container *Container) error {
 
 func (r *ResDaemonSet) SetTerminationGracePeriodSeconds(second string) error {
 	if second == "" {
-		return errors.New("termination grace period seconds is empty")
+		return exception.NewError("termination grace period seconds is empty")
 	}
 	r.Spec.Template.Spec.TerminationGracePeriodSeconds = second
 	return nil
@@ -197,7 +197,7 @@ type VolumePersistentVolumeClaim struct {
 
 func (r *ResDaemonSet) AddVolume(vol *Volume) error {
 	if vol == nil {
-		return errors.New("volume is nil")
+		return exception.NewError("volume is nil")
 	}
 	r.Spec.Template.Spec.Volumes = append(r.Spec.Template.Spec.Volumes, vol)
 	return nil
@@ -205,7 +205,7 @@ func (r *ResDaemonSet) AddVolume(vol *Volume) error {
 
 func (r *ResDaemonSet) SetRestartPolicy(rPolicy string) error {
 	if rPolicy == "" {
-		return errors.New("restart policy is empty")
+		return exception.NewError("restart policy is empty")
 	}
 	r.Spec.Template.Spec.RestartPolicy = rPolicy
 	return nil
@@ -215,7 +215,7 @@ func (r *ResDaemonSet) SetNodeSelector(selectors []map[string]string) error {
 	if len(selectors) > 0 {
 		for _, v := range selectors {
 			if v["key"] == "" {
-				return errors.New("node selector's key is empty")
+				return exception.NewError("node selector's key is empty")
 			}
 			r.Spec.Template.Spec.NodeSelector[v["key"]] = v["val"]
 		}

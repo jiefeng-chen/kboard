@@ -2,8 +2,8 @@ package resource
 
 import (
 	"encoding/base64"
-	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResSecret interface {
@@ -63,14 +63,14 @@ func (r *ResSecret) SetData(data []map[string]string) error {
 	if len(data) > 0 {
 		for _, v := range data {
 			if v["key"] == "" || v["val"] == "" {
-				return errors.New("key or val is empty")
+				return exception.NewError("key or val is empty")
 			}
 			// base64编码存储
 			r.Data[v["key"]] = base64.StdEncoding.EncodeToString([]byte(v["val"]))
 		}
 		return nil
 	} else {
-		return errors.New("no data will be set")
+		return exception.NewError("no data will be set")
 	}
 }
 

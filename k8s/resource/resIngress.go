@@ -1,9 +1,9 @@
 package resource
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
 	"kboard/utils"
+	"kboard/exception"
 )
 
 type IResIngress interface {
@@ -68,7 +68,7 @@ func NewIngress() *ResIngress {
 
 func (r *ResIngress) SetAnnotations(annot map[string]string) error {
 	if len(annot) <= 0 {
-		return errors.New("Annotations is empty")
+		return exception.NewError("Annotations is empty")
 	}
 	for _, v := range annot {
 		r.MetaData.Annotations[ANNOTATIONS_INGRESS_CLASS] = v
@@ -78,7 +78,7 @@ func (r *ResIngress) SetAnnotations(annot map[string]string) error {
 
 func (r *ResIngress) SetMetaDataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 	r.MetaData.Name = name
 	return nil
@@ -86,7 +86,7 @@ func (r *ResIngress) SetMetaDataName(name string) error {
 
 func (r *ResIngress) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.MetaData.Namespace = ns
 	return nil
@@ -111,7 +111,7 @@ func (r *ResIngress) SetRules(host string, rules []map[string]string) error {
 		for _, v := range rules {
 			path := new(IngressPath)
 			if v["serviceName"] == "" || v["servicePort"] == "" {
-				return errors.New("服务名称或服务端口为空")
+				return exception.NewError("服务名称或服务端口为空")
 			}
 			if v["path"] != "" {
 				// 这里允许访问路径为空，因为可以直接通过域名访问

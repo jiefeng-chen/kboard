@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResConfigMap interface {
@@ -53,13 +53,13 @@ func (r *ResConfigMap) SetData(data []map[string]string) error {
 	if len(data) > 0 {
 		for _, v := range data {
 			if v["key"] == "" || v["val"] == "" {
-				return errors.New("key or val is empty")
+				return exception.NewError("key or val is empty")
 			}
 			r.Data[v["key"]] = v["val"]
 		}
 		return nil
 	} else {
-		return errors.New("no data will be set")
+		return exception.NewError("no data will be set")
 	}
 }
 

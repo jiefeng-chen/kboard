@@ -1,6 +1,9 @@
 package resource
 
-import "errors"
+import (
+	"errors"
+	"kboard/exception"
+)
 
 type IContainer interface {
 	AppendPort(*Port) error
@@ -49,7 +52,7 @@ func (r *Container) AppendPort(port *Port) error {
 
 func (r *Container) AppendVolumeMount(vol map[string]interface{}) error {
 	if vol == nil {
-		return errors.New("volume is nil")
+		return exception.NewError("volume is nil")
 	}
 	r.VolumeMounts = append(r.VolumeMounts, vol)
 	return nil
@@ -90,7 +93,7 @@ func NewEnv() *Env {
 
 func (r *Container) AppendEnv(env *Env) error {
 	if env == nil {
-		return errors.New("env is nil")
+		return exception.NewError("env is nil")
 	}
 	r.Env = append(r.Env, env)
 	return nil

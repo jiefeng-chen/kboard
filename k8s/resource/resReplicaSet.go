@@ -2,8 +2,8 @@ package resource
 
 
 import (
-	"errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResReplicaSet interface {
@@ -75,7 +75,7 @@ func NewReplicaSet() *ResReplicaSet {
 
 func (r *ResReplicaSet) SetMetadataName(name string) error {
 	if name == "" {
-		return errors.New("metadata name is empty")
+		return exception.NewError("metadata name is empty")
 	}
 	r.Metadata.Name = name
 	return nil
@@ -83,7 +83,7 @@ func (r *ResReplicaSet) SetMetadataName(name string) error {
 
 func (r *ResReplicaSet) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.Metadata.Namespace = ns
 	return nil
@@ -97,14 +97,14 @@ func (r *ResReplicaSet) SetLabels(data map[string]string) error {
 	if len(data) > 0 {
 		for k, v := range data {
 			if k == "" || v == "" {
-				return errors.New("label key or value is empty")
+				return exception.NewError("label key or value is empty")
 			}
 			r.Metadata.Labels[k] = v
 		}
 
 		return nil
 	} else {
-		return errors.New("no labels will be set")
+		return exception.NewError("no labels will be set")
 	}
 }
 
@@ -114,7 +114,7 @@ func (r *ResReplicaSet) GetLabel(name string) string {
 
 func (r *ResReplicaSet) SetTemplateLabel(labels map[string]string) error {
 	if len(labels) <= 0 {
-		return errors.New("labels is empty")
+		return exception.NewError("labels is empty")
 	}
 	for k, v := range labels {
 		r.Spec.Template.Metadata.Labels[k] = v
@@ -124,7 +124,7 @@ func (r *ResReplicaSet) SetTemplateLabel(labels map[string]string) error {
 
 func (r *ResReplicaSet) AddContainer(container *Container) error {
 	if container == nil {
-		return errors.New("container is nil")
+		return exception.NewError("container is nil")
 	}
 	r.Spec.Template.Spec.Containers = append(r.Spec.Template.Spec.Containers, container)
 	return nil
@@ -132,7 +132,7 @@ func (r *ResReplicaSet) AddContainer(container *Container) error {
 
 func (r *ResReplicaSet) SetReplicas(replica int) error {
 	if replica <= 0 {
-		return errors.New("replica is empty")
+		return exception.NewError("replica is empty")
 	}
 	r.Spec.Replicas = replica
 	return nil

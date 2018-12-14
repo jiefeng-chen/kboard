@@ -3,6 +3,7 @@ package resource
 import (
 	"github.com/golang/go/src/pkg/errors"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResPod interface {
@@ -51,7 +52,7 @@ func NewPod(name string) *ResPod {
 
 func (r *ResPod) SetMetadataName(name string) error {
 	if name == "" {
-		return errors.New("name is empty")
+		return exception.NewError("name is empty")
 	}
 	r.Metadata.Name = name
 	return nil
@@ -60,7 +61,7 @@ func (r *ResPod) SetMetadataName(name string) error {
 
 func (r *ResPod) SetNamespace(ns string) error {
 	if ns == "" {
-		return errors.New("namespace is empty")
+		return exception.NewError("namespace is empty")
 	}
 	r.Metadata.Namespace = ns
 	return nil
@@ -68,7 +69,7 @@ func (r *ResPod) SetNamespace(ns string) error {
 
 func (r *ResPod) SetRestartPolicy(policy string) error {
 	if policy == "" {
-		return errors.New("policy is empty")
+		return exception.NewError("policy is empty")
 	}
 	r.Spec.RestartPolicy = policy
 	return nil
@@ -76,7 +77,7 @@ func (r *ResPod) SetRestartPolicy(policy string) error {
 
 func (r *ResPod) AddContainer(container *Container) error {
 	if container == nil {
-		return errors.New("container is nil")
+		return exception.NewError("container is nil")
 	}
 	r.Spec.Containers = append(r.Spec.Containers, container)
 	return nil
@@ -84,11 +85,11 @@ func (r *ResPod) AddContainer(container *Container) error {
 
 func (r *ResPod) SetLabels(labels map[string]string) error {
 	if len(labels) <= 0 {
-		return errors.New("labels is empty")
+		return exception.NewError("labels is empty")
 	}
 	for k, v := range labels {
 		if k == "" || v == "" {
-			return errors.New("labels key or val is empty")
+			return exception.NewError("labels key or val is empty")
 		}
 		anno := map[string]string{
 			"key": k,
@@ -101,7 +102,7 @@ func (r *ResPod) SetLabels(labels map[string]string) error {
 
 func (r *ResPod) AddVolume(vol *Volume) error {
 	if vol == nil {
-		return errors.New("volume is nil")
+		return exception.NewError("volume is nil")
 	}
 	r.Spec.Volumes = append(r.Spec.Volumes, vol)
 	return nil
@@ -114,7 +115,7 @@ func (r *ResPod) SetAnnotations(annos map[string]string) error {
 	}
 	for k, v := range annos {
 		if k == "" || v == "" {
-			return errors.New("annotation key or val is empty")
+			return exception.NewError("annotation key or val is empty")
 		}
 		anno := map[string]string{
 			"key": k,
