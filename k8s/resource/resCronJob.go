@@ -1,12 +1,15 @@
 package resource
 
-import "gopkg.in/yaml.v2"
+import (
+	"gopkg.in/yaml.v2"
+	"kboard/exception"
+)
 
 type ICronJob interface {
 	IResource
-	SetMetaDataName(name string) bool
+	SetMetadataName(name string) error
 	GetMetaDataName() string
-	SetNamespace(string) bool
+	SetNamespace(string) error
 }
 
 type ResCronJob struct {
@@ -39,3 +42,25 @@ func (r *ResCronJob) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
+
+func (r *ResCronJob) SetMetadataName(name string) error {
+	if name == "" {
+		return exception.NewError("name is empty")
+	}
+	r.MetaData.Name = name
+	return nil
+}
+
+func (r *ResCronJob) GetMetaDataName() string {
+	return r.MetaData.Name
+}
+
+func (r *ResCronJob) SetNamespace(ns string) error {
+	if ns == "" {
+		return exception.NewError("namespace is empty")
+	}
+	r.MetaData.Namespace = ns
+	return nil
+}
+
+

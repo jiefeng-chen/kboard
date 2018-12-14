@@ -1,22 +1,24 @@
 package main
 
 import (
+	"flag"
 	"golang.org/x/net/http2"
+	"kboard/config"
+	"kboard/exception"
+	"kboard/router"
 	"log"
 	"net/http"
 	"time"
-	"kboard/config"
-	"kboard/router"
-	"kboard/exception"
-	"flag"
 )
 
 var (
-	Config *config.Config
+	Config             *config.Config
 	NotifyReloadConfig chan int
-	ConfigPath string
-	CaCertPath string
-	CaKeyPath string
+
+	// flag启动参数
+	ConfigPath         string
+	CaCertPath         string
+	CaKeyPath          string
 )
 
 func init() {

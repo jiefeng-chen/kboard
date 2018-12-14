@@ -4,13 +4,13 @@ import "gopkg.in/yaml.v2"
 
 type IResPersistentVolumeClaim interface {
 	IResource
-	SetMetaDataName(string) bool
-	SetNamespace(string) bool
-	SetAccessMode(string) bool
-	SetStorage(string) bool
-	SetVolumeName(string) bool
-	SetVolumeMode(string) bool
-	SetStorageClassName(string) bool
+	SetMetadataName(string) error
+	SetNamespace(string) error
+	SetAccessMode(string) error
+	SetStorage(string) error
+	SetVolumeName(string) error
+	SetVolumeMode(string) error
+	SetStorageClassName(string) error
 }
 
 type ResPersistentVolumeClaim struct {
@@ -64,37 +64,37 @@ func (r *ResPersistentVolumeClaim) GetStorageClassName() string {
 	return r.Spec.StorageClassName
 }
 
-func (r *ResPersistentVolumeClaim) SetMetaDataName(name string) bool {
+func (r *ResPersistentVolumeClaim) SetMetadataName(name string) error {
 	r.Metadata.Name = name
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetNamespace(ns string) bool {
+func (r *ResPersistentVolumeClaim) SetNamespace(ns string) error {
 	r.Metadata.Namespace = ns
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetAccessMode(am string) bool {
+func (r *ResPersistentVolumeClaim) SetAccessMode(am string) error {
 	r.Spec.AccessModes = append(r.Spec.AccessModes, am)
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetStorage(storage string) bool {
+func (r *ResPersistentVolumeClaim) SetStorage(storage string) error {
 	r.Spec.Resources.Requests.Storage = storage
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetVolumeName(vName string) bool {
+func (r *ResPersistentVolumeClaim) SetVolumeName(vName string) error {
 	r.Spec.VolumeName = vName
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetVolumeMode(vName string) bool {
+func (r *ResPersistentVolumeClaim) SetVolumeMode(vName string) error {
 	r.Spec.VolumeMode = vName
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolumeClaim) SetStorageClassName(scName string) bool {
+func (r *ResPersistentVolumeClaim) SetStorageClassName(scName string) error {
 	r.Spec.StorageClassName = scName
-	return true
+	return nil
 }

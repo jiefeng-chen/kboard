@@ -4,15 +4,15 @@ import "gopkg.in/yaml.v2"
 
 type IResPersistentVolume interface {
 	IResource
-	SetMetaDataName(string) bool
-	SetCapacityStorage(string) bool
-	SetNamespace(string) bool
-	SetVolumeMode(string) bool
-	SetAccessModes([]string) bool
-	SetPersistentVolumeReclaimPolicy(string) bool
-	SetStorageClassName(string) bool
-	SetRbd(*Rbd) bool
-	SetClaimRef(*PersistentVolumeClaimRef) bool
+	SetMetaDataName(string) error
+	SetCapacityStorage(string) error
+	SetNamespace(string) error
+	SetVolumeMode(string) error
+	SetAccessModes([]string) error
+	SetPersistentVolumeReclaimPolicy(string) error
+	SetStorageClassName(string) error
+	SetRbd(*Rbd) error
+	SetClaimRef(*PersistentVolumeClaimRef) error
 }
 
 type ResPersistentVolume struct {
@@ -71,47 +71,47 @@ func (r *ResPersistentVolume) ToYamlFile() ([]byte, error) {
 	return yamlData, nil
 }
 
-func (r *ResPersistentVolume) SetMetaDataName(name string) bool {
+func (r *ResPersistentVolume) SetMetaDataName(name string) error {
 	r.Metadata.Name = name
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetNamespace(ns string) bool {
+func (r *ResPersistentVolume) SetNamespace(ns string) error {
 	r.Metadata.Namespace = ns
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetCapacityStorage(s string) bool {
+func (r *ResPersistentVolume) SetCapacityStorage(s string) error {
 	r.Spec.Capacity.Storage = s
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetVolumeMode(vMode string) bool {
+func (r *ResPersistentVolume) SetVolumeMode(vMode string) error {
 	r.Spec.VolumeMode = vMode
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetAccessModes(aModes []string) bool {
+func (r *ResPersistentVolume) SetAccessModes(aModes []string) error {
 	r.Spec.AccessModes = aModes
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetPersistentVolumeReclaimPolicy(pvRP string) bool {
+func (r *ResPersistentVolume) SetPersistentVolumeReclaimPolicy(pvRP string) error {
 	r.Spec.PersistentVolumeReclaimPolicy = pvRP
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetStorageClassName(scName string) bool {
+func (r *ResPersistentVolume) SetStorageClassName(scName string) error {
 	r.Spec.StorageClassName = scName
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetRbd(rbd *Rbd) bool {
+func (r *ResPersistentVolume) SetRbd(rbd *Rbd) error {
 	r.Spec.Rbd = rbd
-	return true
+	return nil
 }
 
-func (r *ResPersistentVolume) SetClaimRef(ref *PersistentVolumeClaimRef) bool {
+func (r *ResPersistentVolume) SetClaimRef(ref *PersistentVolumeClaimRef) error {
 	r.Spec.ClaimRef = ref
-	return true
+	return nil
 }

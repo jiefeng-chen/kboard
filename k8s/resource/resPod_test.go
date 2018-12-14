@@ -3,7 +3,7 @@ package resource
 import "testing"
 
 func TestNewPod(t *testing.T) {
-	var pod *Pod
+	var pod *ResPod
 
 	pod = NewPod("pod1")
 	pod.SetNamespace("namespace")

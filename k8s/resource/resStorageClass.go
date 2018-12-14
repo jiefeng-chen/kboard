@@ -5,17 +5,18 @@ import (
 	"gopkg.in/yaml.v2"
 	"strings"
 	"kboard/utils"
+	"kboard/exception"
 )
 
 type IResStorageClass interface {
 	IResource
 	GetProvisioner() string
-	SetMetaDataName(string) bool
-	SetProvisioner(string) bool
-	SetReclaimPolicy(string) bool
-	SetParameters(interface{}) bool
+	SetMetaDataName(string) error
+	SetProvisioner(string) error
+	SetReclaimPolicy(string) error
+	SetParameters(interface{}) error
 	GetReclaimPolicy() string
-	SetAllowVolumeExpansion(bool) bool
+	SetAllowVolumeExpansion(bool) error
 	GetParameters() interface{}
 	GetAllowVolumeExpansion() bool
 }
@@ -49,29 +50,29 @@ func (r *ResStorageClass) GetProvisioner() string {
 	return r.Provisioner
 }
 
-func (r *ResStorageClass) SetProvisioner(provisioner string) bool {
+func (r *ResStorageClass) SetProvisioner(provisioner string) error {
 	r.Provisioner = provisioner
-	return true
+	return nil
 }
 
-func (r *ResStorageClass) SetMetaDataName(name string) bool {
+func (r *ResStorageClass) SetMetaDataName(name string) error {
 	r.Metadata.Name = name
-	return true
+	return nil
 }
 
-func (r *ResStorageClass) SetReclaimPolicy(rp string) bool {
+func (r *ResStorageClass) SetReclaimPolicy(rp string) error {
 	r.ReclaimPolicy = rp
-	return true
+	return nil
 }
 
-func (r *ResStorageClass) SetParameters(params interface{}) bool {
+func (r *ResStorageClass) SetParameters(params interface{}) error {
 	r.Parameters = params
-	return true
+	return nil
 }
 
-func (r *ResStorageClass) SetAllowVolumeExpansion(ave bool) bool {
+func (r *ResStorageClass) SetAllowVolumeExpansion(ave bool) error {
 	r.AllowVolumeExpansion = ave
-	return true
+	return nil
 }
 
 func (r *ResStorageClass) GetAllowVolumeExpansion() bool {
@@ -97,17 +98,17 @@ func (r *ResStorageClass) ToYamlFile() ([]byte, error) {
 
 // ceph rbd
 type cephRbd interface {
-	SetMonitors(string) bool
-	SetAdminId(string) bool
-	SetAdminSecretName(string) bool
-	SetAdminSecretNamespace(string) bool
-	SetPool(string) bool
-	SetUserId(string) bool
-	SetUserSecretName(string) bool
-	SetFsType(string) bool
+	SetMonitors(string) error
+	SetAdminId(string) error
+	SetAdminSecretName(string) error
+	SetAdminSecretNamespace(string) error
+	SetPool(string) error
+	SetUserId(string) error
+	SetUserSecretName(string) error
+	SetFsType(string) error
 	SetData([]map[string]string) error
-	SetImageFormat(string) bool
-	SetImageFeatures(string) bool
+	SetImageFormat(string) error
+	SetImageFeatures(string) error
 }
 
 type CephRbd struct {
@@ -138,60 +139,60 @@ func NewCephRbd() *CephRbd {
 	}
 }
 
-func (r *CephRbd) SetMonitors(monitors string) bool {
+func (r *CephRbd) SetMonitors(monitors string) error {
 	// 检查ip地址
 	monis := strings.Split(monitors, ",")
 	if len(monis) <= 0 {
-		return false
+		return exception.NewError("monitor is empty")
 	}
 	for _, v := range monis {
 		// 检查ip:port格式
 		url := strings.Split(v, ":")
 		if !utils.IsIP(url[0]) {
-			return false
+			return exception.NewError("ip is empty")
 		}
 		// 端口检查
 		if len(url) <= 1 || url[1] == "" || utils.ToInt(url[1]) <= 0 {
-			return false
+			return exception.NewError("port is empty")
 		}
 	}
 	r.Monitors = monitors
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetAdminId(adminId string) bool {
+func (r *CephRbd) SetAdminId(adminId string) error {
 	r.AdminId = adminId
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetAdminSecretName(adminSN string) bool {
+func (r *CephRbd) SetAdminSecretName(adminSN string) error {
 	r.AdminSecretName = adminSN
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetAdminSecretNamespace(adminSNs string) bool {
+func (r *CephRbd) SetAdminSecretNamespace(adminSNs string) error {
 	r.AdminSecretNamespace = adminSNs
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetPool(pool string) bool {
+func (r *CephRbd) SetPool(pool string) error {
 	r.Pool = pool
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetUserId(uid string) bool {
+func (r *CephRbd) SetUserId(uid string) error {
 	r.UserId = uid
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetUserSecretName(userSN string) bool {
+func (r *CephRbd) SetUserSecretName(userSN string) error {
 	r.UserSecretName = userSN
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetFsType(fst string) bool {
+func (r *CephRbd) SetFsType(fst string) error {
 	r.FsType = fst
-	return true
+	return nil
 }
 
 func (r *CephRbd) SetData(data []map[string]string) error {
@@ -205,8 +206,8 @@ func (r *CephRbd) SetData(data []map[string]string) error {
 		switch v["key"] {
 		case "monitors":
 			monitors := strings.Split(v["val"], ",")
-			if !r.SetMonitors(strings.Join(monitors, ",")) {
-				return errors.New(v["key"] + " format error")
+			if err := r.SetMonitors(strings.Join(monitors, ",")); err != nil {
+				return exception.NewError(v["key"] + " format error")
 			}
 		case "adminId":
 			r.SetAdminId(v["val"])
@@ -231,12 +232,12 @@ func (r *CephRbd) SetData(data []map[string]string) error {
 	return nil
 }
 
-func (r *CephRbd) SetImageFormat(imgFmt string) bool {
+func (r *CephRbd) SetImageFormat(imgFmt string) error {
 	r.ImageFormat = imgFmt
-	return true
+	return nil
 }
 
-func (r *CephRbd) SetImageFeatures(imgFeat string) bool {
+func (r *CephRbd) SetImageFeatures(imgFeat string) error {
 	r.ImageFeatures = imgFeat
-	return true
+	return nil
 }

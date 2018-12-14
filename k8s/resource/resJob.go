@@ -7,7 +7,7 @@ import (
 
 type IJob interface {
 	IResource
-	SetMetaDataName(string) error
+	SetMetadataName(string) error
 	GetNamespace() string
 	SetNamespace(string) error
 	AddContainer(*Container) error
@@ -64,7 +64,7 @@ func NewJob() *ResJob {
 	}
 }
 
-func (r *ResJob) SetMetaDataName(name string) error {
+func (r *ResJob) SetMetadataName(name string) error {
 	if name == "" {
 		return errors.New("name is empty")
 	}

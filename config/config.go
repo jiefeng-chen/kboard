@@ -11,17 +11,17 @@ import (
 
 type IConfig interface {
 	LoadConfigFile(path string) *Config
-	SetTSL(tsl *ServerTSL) error
-	GetTSL() *ServerTSL
+	SetTSL(tsl *ClusterTSL) error
+	GetTSL() *ClusterTSL
 	GetAddress() string
-	IsHttps() bool
+	IsHttps() bool// 是否开启https
 	IsLog() bool
-	IsAuth() bool
+	IsAuth() bool // 是否开启鉴权
 	IsHttp2() bool
 	GetHttpVersion() string
 }
 
-type ServerTSL struct {
+type ClusterTSL struct {
 	Cert string
 	Key  string
 }
@@ -34,13 +34,13 @@ type Config struct {
 }
 
 type TomlConfigData struct {
-	Server struct {
+	Cluster struct {
 		Host        string
 		Port        int
-		Https       bool
 		Log         bool   // 日志记录
 		Auth        bool   // 鉴权
 		HttpVersion string `toml:"httpVersion"` // 1.0, 1.1, 2.0
+		Openssl		bool	// https
 		TLS         struct {
 			Cert string
 			Key  string
@@ -117,52 +117,52 @@ func (c *Config) ReloadConfigFile() {
 	})
 }
 
-func (c *Config) SetTSL(tsl *ServerTSL) error {
+func (c *Config) SetTSL(tsl *ClusterTSL) error {
 	if tsl.Cert == "" || tsl.Key == "" {
 		return exception.NewError("server tsl contain invalid value")
 	}
-	c.Data.Server.TLS.Key = tsl.Key
-	c.Data.Server.TLS.Cert = tsl.Cert
+	c.Data.Cluster.TLS.Key = tsl.Key
+	c.Data.Cluster.TLS.Cert = tsl.Cert
 	return nil
 }
 
 func (c *Config) GetAddress() string {
-	if c.Data.Server.Host == "" {
+	if c.Data.Cluster.Host == "" {
 		exception.CheckError(exception.NewError("server host is empty"), 1004)
 	}
-	port := c.Data.Server.Port
+	port := c.Data.Cluster.Port
 	if port <= 0 || port > 65535 {
 		exception.CheckError(exception.NewError("server port is invalid"), 1004)
 	}
-	return c.Data.Server.Host + ":" + utils.ToString(port)
+	return c.Data.Cluster.Host + ":" + utils.ToString(port)
 }
 
-func (c *Config) GetTSL() *ServerTSL {
-	cert := c.Data.Server.TLS.Cert
-	key := c.Data.Server.TLS.Key
+func (c *Config) GetTSL() *ClusterTSL {
+	cert := c.Data.Cluster.TLS.Cert
+	key := c.Data.Cluster.TLS.Key
 	if cert == "" || key == "" {
 		exception.CheckError(exception.NewError("cert or key is empty"), 1005)
 	}
-	return &ServerTSL{
+	return &ClusterTSL{
 		Cert: cert,
 		Key:  key,
 	}
 }
 
 func (c *Config) IsHttps() bool {
-	return c.Data.Server.Https
+	return c.Data.Cluster.Openssl
 }
 
 func (c *Config) IsLog() bool {
-	return c.Data.Server.Log
+	return c.Data.Cluster.Log
 }
 
 func (c *Config) IsAuth() bool {
-	return c.Data.Server.Auth
+	return c.Data.Cluster.Auth
 }
 
 func (c *Config) IsHttp2() bool {
-	if c.Data.Server.HttpVersion == "2.0" {
+	if c.Data.Cluster.HttpVersion == "2.0" {
 		return true
 	}
 	return false
@@ -170,13 +170,13 @@ func (c *Config) IsHttp2() bool {
 
 func (c *Config) GetHttpVersion() string {
 	var httpVersion string
-	switch c.Data.Server.HttpVersion {
+	switch c.Data.Cluster.HttpVersion {
 	case "1.0":
 		fallthrough
 	case "1.1":
 		fallthrough
 	case "2.0":
-		httpVersion = c.Data.Server.HttpVersion
+		httpVersion = c.Data.Cluster.HttpVersion
 	default:
 		httpVersion = "1.1"
 	}

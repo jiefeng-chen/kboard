@@ -8,12 +8,12 @@ import (
 
 type IResSecret interface {
 	IResource
-	SetMetaDataName(name string) bool
+	SetMetaDataName(string) error
 	GetMetaDataName() string
-	SetType(typeName string) bool
+	SetType(string) error
 	SetData([]map[string]string) error
 	GetData() (map[string]string, error)
-	SetNamespace(string) bool
+	SetNamespace(string) error
 }
 
 type ResSecret struct {
@@ -40,23 +40,23 @@ func NewSecret() *ResSecret {
 	}
 }
 
-func (r *ResSecret) SetNamespace(ns string) bool {
+func (r *ResSecret) SetNamespace(ns string) error {
 	r.MetaData.Namespace = ns
-	return true
+	return nil
 }
 
-func (r *ResSecret) SetMetaDataName(name string) bool {
+func (r *ResSecret) SetMetaDataName(name string) error {
 	r.MetaData.Name = name
-	return true
+	return nil
 }
 
 func (r *ResSecret) GetMetaDataName() string {
 	return r.MetaData.Name
 }
 
-func (r *ResSecret) SetType(typeName string) bool {
+func (r *ResSecret) SetType(typeName string) error {
 	r.Type = typeName
-	return true
+	return nil
 }
 
 func (r *ResSecret) SetData(data []map[string]string) error {

@@ -1,9 +1,23 @@
 package resource
 
-import "github.com/golang/go/src/pkg/errors"
+import (
+	"github.com/golang/go/src/pkg/errors"
+	"gopkg.in/yaml.v2"
+)
+
+type IResPod interface {
+	IResource
+	SetMetadataName(string) error
+	SetNamespace(string) error
+	SetRestartPolicy(string) error
+	SetLabels(map[string]string) error
+	AddContainer(*Container) error
+	AddVolume(*Volume) error
+	SetAnnotations(map[string]string) error
+}
 
 // pod结构体
-type Pod struct {
+type ResPod struct {
 	ApiVersion string `yaml:"apiVersion"`
 	Kind string
 	Metadata struct{
@@ -22,8 +36,8 @@ type Pod struct {
 	}
 }
 
-func NewPod(name string) *Pod {
-	return &Pod{
+func NewPod(name string) *ResPod {
+	return &ResPod{
 		ApiVersion: "v1",
 		Kind: RESOURCE_POD,
 		Metadata: struct {
@@ -35,7 +49,7 @@ func NewPod(name string) *Pod {
 	}
 }
 
-func (r *Pod) SetMetadataName(name string) error {
+func (r *ResPod) SetMetadataName(name string) error {
 	if name == "" {
 		return errors.New("name is empty")
 	}
@@ -44,7 +58,7 @@ func (r *Pod) SetMetadataName(name string) error {
 }
 
 
-func (r *Pod) SetNamespace(ns string) error {
+func (r *ResPod) SetNamespace(ns string) error {
 	if ns == "" {
 		return errors.New("namespace is empty")
 	}
@@ -52,7 +66,7 @@ func (r *Pod) SetNamespace(ns string) error {
 	return nil
 }
 
-func (r *Pod) SetRestartPolicy(policy string) error {
+func (r *ResPod) SetRestartPolicy(policy string) error {
 	if policy == "" {
 		return errors.New("policy is empty")
 	}
@@ -60,7 +74,7 @@ func (r *Pod) SetRestartPolicy(policy string) error {
 	return nil
 }
 
-func (r *Pod) AddContainer(container *Container) error {
+func (r *ResPod) AddContainer(container *Container) error {
 	if container == nil {
 		return errors.New("container is nil")
 	}
@@ -68,7 +82,7 @@ func (r *Pod) AddContainer(container *Container) error {
 	return nil
 }
 
-func (r *Pod) SetLabels(labels map[string]string) error {
+func (r *ResPod) SetLabels(labels map[string]string) error {
 	if len(labels) <= 0 {
 		return errors.New("labels is empty")
 	}
@@ -85,12 +99,39 @@ func (r *Pod) SetLabels(labels map[string]string) error {
 	return nil
 }
 
-func (r *Pod) AddVolume(vol *Volume) error {
+func (r *ResPod) AddVolume(vol *Volume) error {
 	if vol == nil {
 		return errors.New("volume is nil")
 	}
 	r.Spec.Volumes = append(r.Spec.Volumes, vol)
 	return nil
+}
+
+
+func (r *ResPod) SetAnnotations(annos map[string]string) error {
+	if len(annos) <= 0 {
+		return errors.New("annotations is empty")
+	}
+	for k, v := range annos {
+		if k == "" || v == "" {
+			return errors.New("annotation key or val is empty")
+		}
+		anno := map[string]string{
+			"key": k,
+			"name": v,
+		}
+		r.Metadata.Annotations = append(r.Metadata.Annotations, anno)
+	}
+	return nil
+}
+
+
+func (r *ResPod) ToYamlFile() ([]byte, error) {
+	yamlData, err := yaml.Marshal(*r)
+	if err != nil {
+		return []byte{}, err
+	}
+	return yamlData, nil
 }
 
 func NewVolume() *Volume {
@@ -120,24 +161,5 @@ type Volume struct {
 		Items []map[string]string // [key:string, path:string]
 	} `yaml:"configMap"`
 }
-
-func (r *Pod) SetAnnotations(annos map[string]string) error {
-	if len(annos) <= 0 {
-		return errors.New("annotations is empty")
-	}
-	for k, v := range annos {
-		if k == "" || v == "" {
-			return errors.New("annotation key or val is empty")
-		}
-		anno := map[string]string{
-			"key": k,
-			"name": v,
-		}
-		r.Metadata.Annotations = append(r.Metadata.Annotations, anno)
-	}
-	return nil
-}
-
-
 
 
