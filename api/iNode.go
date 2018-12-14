@@ -40,3 +40,11 @@ func (this *INode) Index() {
 	this.TplEngine.Response(99, "", httpErr.Message)
 }
 
+
+// @todo 节点扩容
+
+// @todo 节点隔离与恢复
+
+// @todo 节点移除
+
+

@@ -27,3 +27,10 @@ func (this *IUser) Index() {
 	this.TplEngine.Response(100, "", "数据")
 }
 
+// @todo 用户创建
+
+// @todo 角色关联
+
+// @todo 用户注销
+
+
