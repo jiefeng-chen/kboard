@@ -3,7 +3,7 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"kboard/exception"
+	"errors"
 )
 
 type IResReplicaSet interface {
@@ -15,7 +15,8 @@ type IResReplicaSet interface {
 	GetLabel(string) string
 	SetTemplateLabel(map[string]string) error
 	AddContainer(*Container) error
-	SetReplicas(string) error
+	SetReplicas(int) error
+	SetSelector(Selector) error
 }
 
 type ResReplicaSet struct {
@@ -28,8 +29,8 @@ type ResReplicaSet struct {
 	}
 	Spec struct{
 		Replicas int
-		Selector *Selector
-		Template *ReplicaSetTemplate
+		Selector Selector
+		Template ReplicaSetTemplate
 	}
 }
 
@@ -58,24 +59,26 @@ func NewReplicaSet() *ResReplicaSet {
 		},
 		Spec: struct {
 			Replicas int
-			Selector *Selector
-			Template *ReplicaSetTemplate
+			Selector Selector
+			Template ReplicaSetTemplate
 		}{
 			Replicas: 0,
-			Selector: &Selector{
+			Selector: Selector{
 				MatchLabels: map[string]string{},
 				MatchExpressions: nil,
 			},
-			Template: &ReplicaSetTemplate{
-				Metadata: struct{ Labels map[string]string }{Labels: map[string]string{}},
-				Spec: struct{ Containers []*Container }{Containers: []*Container{}},
+			Template: ReplicaSetTemplate{
+				Metadata: struct{ Labels map[string]string }{
+					Labels: map[string]string{}},
+				Spec: struct{ Containers []*Container }{
+					Containers: []*Container{}},
 		}},
 	}
 }
 
 func (r *ResReplicaSet) SetMetadataName(name string) error {
 	if name == "" {
-		return exception.NewError("metadata name is empty")
+		return errors.New("metadata name is empty")
 	}
 	r.Metadata.Name = name
 	return nil
@@ -83,7 +86,7 @@ func (r *ResReplicaSet) SetMetadataName(name string) error {
 
 func (r *ResReplicaSet) SetNamespace(ns string) error {
 	if ns == "" {
-		return exception.NewError("namespace is empty")
+		return errors.New("namespace is empty")
 	}
 	r.Metadata.Namespace = ns
 	return nil
@@ -97,15 +100,24 @@ func (r *ResReplicaSet) SetLabels(data map[string]string) error {
 	if len(data) > 0 {
 		for k, v := range data {
 			if k == "" || v == "" {
-				return exception.NewError("label key or value is empty")
+				return errors.New("label key or value is empty")
 			}
 			r.Metadata.Labels[k] = v
 		}
 
 		return nil
 	} else {
-		return exception.NewError("no labels will be set")
+		return errors.New("no labels will be set")
 	}
+}
+
+func (r *ResReplicaSet) SetSelector(selector Selector) error {
+	if len(selector.MatchLabels) <= 0 {
+		return errors.New("selector's match labels is empty")
+	}
+	r.Spec.Selector = selector
+	r.Spec.Template.Metadata.Labels = selector.MatchLabels
+	return nil
 }
 
 func (r *ResReplicaSet) GetLabel(name string) string {
@@ -114,7 +126,7 @@ func (r *ResReplicaSet) GetLabel(name string) string {
 
 func (r *ResReplicaSet) SetTemplateLabel(labels map[string]string) error {
 	if len(labels) <= 0 {
-		return exception.NewError("labels is empty")
+		return errors.New("labels is empty")
 	}
 	for k, v := range labels {
 		r.Spec.Template.Metadata.Labels[k] = v
@@ -124,7 +136,7 @@ func (r *ResReplicaSet) SetTemplateLabel(labels map[string]string) error {
 
 func (r *ResReplicaSet) AddContainer(container *Container) error {
 	if container == nil {
-		return exception.NewError("container is nil")
+		return errors.New("container is nil")
 	}
 	r.Spec.Template.Spec.Containers = append(r.Spec.Template.Spec.Containers, container)
 	return nil
@@ -132,7 +144,7 @@ func (r *ResReplicaSet) AddContainer(container *Container) error {
 
 func (r *ResReplicaSet) SetReplicas(replica int) error {
 	if replica <= 0 {
-		return exception.NewError("replica is empty")
+		return errors.New("replica is empty")
 	}
 	r.Spec.Replicas = replica
 	return nil

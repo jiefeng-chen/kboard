@@ -2,13 +2,16 @@ package resource
 
 import (
 	"errors"
-	"kboard/exception"
 )
 
 type IContainer interface {
 	AppendPort(*Port) error
 	AppendVolumeMount(map[string]interface{}) error
 	AppendEnv(*Env) error
+	SetResource(*Resource) error
+	SetImage(string) error
+	SetName(string) error
+	SetLivenessProbe(LivenessProbe) error
 }
 
 
@@ -17,8 +20,8 @@ type Container struct {
 	Name string
 	Image string
 	ImagePullPolicy string	`yaml:"imagePullPolicy"` // [Always | Never | IfNotPresent]
-	Command string
-	Args string
+	Command []string
+	Args []string
 	WorkingDir string `yaml:"workingDir"`	// 当前工作目录
 	VolumeMounts []map[string]interface{} `yaml:"volumeMounts"`	// 挂载卷
 	Resources *Resource
@@ -36,9 +39,15 @@ func NewContainer(name string, image string) *Container {
 		Image: image,
 		Resources:NewResource(),
 		LivenessProbe:NewLivenessProbe(),
-		SecurityContext: struct{ Privileged bool }{Privileged: false},
+		SecurityContext: struct{ Privileged bool }{
+			Privileged: false},
 		Env: []*Env{},
 		Ports: []*Port{},
+		Args: []string{},
+		Command: []string{},
+		ImagePullPolicy: "",
+		WorkingDir: "",
+		VolumeMounts: []map[string]interface{}{},
 	}
 }
 
@@ -52,7 +61,7 @@ func (r *Container) AppendPort(port *Port) error {
 
 func (r *Container) AppendVolumeMount(vol map[string]interface{}) error {
 	if vol == nil {
-		return exception.NewError("volume is nil")
+		return errors.New("volume is nil")
 	}
 	r.VolumeMounts = append(r.VolumeMounts, vol)
 	return nil
@@ -93,9 +102,65 @@ func NewEnv() *Env {
 
 func (r *Container) AppendEnv(env *Env) error {
 	if env == nil {
-		return exception.NewError("env is nil")
+		return errors.New("env is nil")
 	}
 	r.Env = append(r.Env, env)
+	return nil
+}
+
+func (r *Container) SetResource(res *Resource) error {
+	if res == nil {
+		return errors.New("resource is nil")
+	}
+	if res.Requests.Cpu == "" || res.Requests.Memory == "" {
+		return errors.New("request cpu or memory is empty")
+	}
+	r.Resources = res
+	return nil
+}
+
+func (r *Container) SetImage(img string) error {
+	if img == "" {
+		return errors.New("image is empty")
+	}
+	r.Image = img
+	return nil
+}
+
+
+func (r *Container) SetName(name string) error {
+	if name == "" {
+		return errors.New("name is empty")
+	}
+	r.Name = name
+	return nil
+}
+
+func (r *Container) SetLivenessProbe(liveness LivenessProbe) error {
+	if liveness.HttpGet == nil {
+		return errors.New("liveness probe http get is empty")
+	}
+	if liveness.TcpSocket.Port == "" {
+		return errors.New("tcp socket port is empty")
+	}
+	if len(liveness.Exec.Command) <= 0 {
+		return errors.New("command is empty")
+	}
+	if liveness.FailureThreshold <= 0 {
+		return errors.New("failure threshold is invalid")
+	}
+	if liveness.InitialDelaySeconds <= 0 {
+		return errors.New("initial delay second is invalid")
+	}
+	if liveness.PeriodSeconds <= 0 {
+		return errors.New("period second is invalid")
+	}
+	if liveness.SuccessThreshold <= 0 {
+		return errors.New("success second is invalid")
+	}
+	if liveness.TimeoutSeconds <= 0 {
+		return errors.New("timeout second is invalid")
+	}
 	return nil
 }
 
@@ -121,6 +186,19 @@ type LivenessProbe struct {
 	TcpSocket struct{
 		Port string
 	} `yaml:"tcpSocket"`
+	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
+	TimeoutSeconds int `yaml:"timeoutSeconds"`
+	PeriodSeconds int `yaml:"periodSeconds"`
+	SuccessThreshold int `yaml:"successThreshold"`
+	FailureThreshold int `yaml:"failureThreshold"`
+	Path string
+	Port int
+}
+
+type ReadinessProbe struct {
+	Path string
+	HttpGet *HttpGet `yaml:"httpGet"`
+	Port int
 	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
 	TimeoutSeconds int `yaml:"timeoutSeconds"`
 	PeriodSeconds int `yaml:"periodSeconds"`
@@ -158,7 +236,7 @@ type Port struct {
 	Name string
 	ContainerPort int `yaml:"containerPort"`
 	HostPort int `yaml:"hostPort"`
-	Protocol string
+	Protocol string // 仅支持 TCP UDP
 }
 
 func NewPort(name string) *Port {
