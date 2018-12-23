@@ -24,8 +24,8 @@ type ResPod struct {
 	Metadata struct{
 		Name string
 		Namespace string
-		Labels []map[string]string
-		Annotations []map[string]string
+		Labels map[string]string
+		Annotations map[string]string
 	}
 	Spec struct{
 		Containers []*Container
@@ -44,9 +44,9 @@ func NewPod(name string) *ResPod {
 		Metadata: struct {
 			Name        string
 			Namespace   string
-			Labels      []map[string]string
-			Annotations []map[string]string
-		}{Name: name, Namespace: "", Labels: []map[string]string{}, Annotations: []map[string]string{}},
+			Labels      map[string]string
+			Annotations map[string]string
+		}{Name: name, Namespace: "", Labels: map[string]string{}, Annotations: map[string]string{}},
 	}
 }
 
@@ -91,11 +91,8 @@ func (r *ResPod) SetLabels(labels map[string]string) error {
 		if k == "" || v == "" {
 			return exception.NewError("labels key or val is empty")
 		}
-		anno := map[string]string{
-			"key": k,
-			"name": v,
-		}
-		r.Metadata.Labels = append(r.Metadata.Labels, anno)
+
+		r.Metadata.Labels[k] = v
 	}
 	return nil
 }
@@ -117,11 +114,7 @@ func (r *ResPod) SetAnnotations(annos map[string]string) error {
 		if k == "" || v == "" {
 			return exception.NewError("annotation key or val is empty")
 		}
-		anno := map[string]string{
-			"key": k,
-			"name": v,
-		}
-		r.Metadata.Annotations = append(r.Metadata.Annotations, anno)
+		r.Metadata.Annotations[k] = v
 	}
 	return nil
 }

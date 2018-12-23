@@ -22,8 +22,8 @@ type ResNode struct {
 	Metadata struct{
 		Name string
 		Namespace string
-		Labels []map[string]string
-		Annotations []map[string]string
+		Labels map[string]string
+		Annotations map[string]string
 	}
 	Spec *NodeSpec
 	Status *NodeStatus
@@ -127,9 +127,9 @@ func NewResNode(name string) *ResNode {
 		Metadata: struct {
 			Name        string
 			Namespace   string
-			Labels      []map[string]string
-			Annotations []map[string]string
-		}{Name: name, Namespace: "", Labels: []map[string]string{}, Annotations: []map[string]string{}},
+			Labels      map[string]string
+			Annotations map[string]string
+		}{Name: name, Namespace: "", Labels: map[string]string{}, Annotations: map[string]string{}},
 		Spec: &NodeSpec{
 			ConfigSource: &NodeConfigSource{
 				ConfigMap: &ConfigMapNodeConfigSource{
@@ -170,11 +170,7 @@ func (r *ResNode) SetLabels(labels map[string]string) error {
 		if k == "" || v == "" {
 			return exception.NewError("labels key or val is empty")
 		}
-		anno := map[string]string{
-			"key": k,
-			"name": v,
-		}
-		r.Metadata.Labels = append(r.Metadata.Labels, anno)
+		r.Metadata.Labels[k] = v
 	}
 	return nil
 }

@@ -9,9 +9,11 @@ type role interface {
 
 const (
 	// 角色身份
-	ROLE_IDENTIDY_SUPER = 1	// 超管
-	ROLE_IDENTIDY_ADMIN = 2  // 管理员
-	ROLE_IDENTIDY_MEMBER = 3 // 普通成员
+	ROLE_IDENTIDY_SUPER = 1	 // 系统管理员
+	ROLE_IDENTIDY_ADMIN = 2  // 项目管理员
+	ROLE_IDENTIDY_OPS = 3 	 // 运维工程师
+	ROLE_IDENTIDY_DEV = 4	 // 研发工程师
+	ROLE_IDENTIDY_TEST = 5   // 测试工程师
 )
 
 type Identity int
