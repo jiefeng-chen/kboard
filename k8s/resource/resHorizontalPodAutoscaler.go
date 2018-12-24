@@ -79,7 +79,7 @@ type MetricObjectTarget struct {
 
 func NewResHorizontalPodAutoscaler() *ResHorizontalPodAutoscaler {
 	return &ResHorizontalPodAutoscaler{
-		ApiVersion: "autoscaling/v2beta1",
+		ApiVersion: "autoscaling/v2beta1", // k8s>=v1.7
 		Kind:       RESOURCE_HORIZONTAL_POD_AUTOSCALER,
 		Metadata: struct {
 			Name      string
