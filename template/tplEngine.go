@@ -18,9 +18,9 @@ type ITplEngine interface {
 }
 
 type ResponseData struct {
-	Code int
-	Result interface{}
-	Message string
+	Code int `json:"code"`
+	Result interface{} `json:"result"`
+	Message string `json:"message"`
 }
 
 type TplEngine struct {

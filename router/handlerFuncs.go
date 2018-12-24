@@ -19,6 +19,8 @@ func UrlRegister(r *Router) {
 	r.Router.HandleFunc("/login/{action:[a-z]+}", C_LoginHandler(r.Config))
 	r.Router.HandleFunc("/index/{action:[a-z]+}", C_IndexHandler(r.Config))
 
+	r.Router.HandleFunc("/", C_IndexHandler(r.Config))
+	r.Router.HandleFunc("/{.*}", C_IndexHandler(r.Config))
 }
 
 // api下的路由处理handler在此处理

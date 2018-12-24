@@ -24,7 +24,11 @@ func NewIUser(config *config.Config, w http.ResponseWriter, r *http.Request) *IU
 }
 
 func (this *IUser) Index() {
-	this.TplEngine.Response(100, "", "数据")
+	result := map[string]string{
+		"email": "real_jf@163.com",
+		"name": "real_jf",
+	}
+	this.TplEngine.Response(100, result, "数据")
 }
 
 // @todo 用户创建
