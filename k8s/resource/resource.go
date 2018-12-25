@@ -28,6 +28,7 @@ const (
 	RESOURCE_REPLICASET			       = "ReplicaSet"
 	RESOURCE_LIMIT_RANGE			   = "LimitRange"
 	RESOURCE_NETWORK_POLICY			   = "NetworkPolicy"
+	RESOURCE_POD_PRESET				   = "PodPreset"
 )
 
 // 显示名称
@@ -55,6 +56,7 @@ func GetKinds() map[string]string {
 		RESOURCE_INGRESS_CONTROLLER:		"IngressController",
 		RESOURCE_LIMIT_RANGE:				"LimitRange",
 		RESOURCE_NETWORK_POLICY:			"NetworkPolicy",
+		RESOURCE_POD_PRESET:				"PodPreset",
 	}
 }
 

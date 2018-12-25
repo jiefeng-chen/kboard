@@ -37,7 +37,7 @@ type ResPod struct {
 	}
 }
 
-func NewPod(name string) *ResPod {
+func NewResPod(name string) *ResPod {
 	return &ResPod{
 		ApiVersion: "v1",
 		Kind: RESOURCE_POD,
@@ -47,6 +47,20 @@ func NewPod(name string) *ResPod {
 			Labels      map[string]string
 			Annotations map[string]string
 		}{Name: name, Namespace: "", Labels: map[string]string{}, Annotations: map[string]string{}},
+		Spec: struct {
+			Containers       []*Container
+			RestartPolicy    string
+			NodeSelector     struct{}
+			ImagePullSecrets []map[string]string
+			HostNetwork      bool
+			Volumes          []*Volume
+		}{
+			Containers: []*Container{},
+			RestartPolicy: "",
+			NodeSelector: struct{}{},
+			ImagePullSecrets: []map[string]string{},
+			HostNetwork: false,
+			Volumes: []*Volume{}},
 	}
 }
 

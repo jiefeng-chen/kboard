@@ -15,28 +15,52 @@ type IResPersistentVolumeClaim interface {
 
 type ResPersistentVolumeClaim struct {
 	ApiVersion string `yaml:"apiVersion"`
+	Kind string
 	Metadata   struct {
 		Name      string
 		Namespace string
 	}
 	Spec struct {
 		AccessModes []string `yaml:"accessModes" json:"accessModes"`
-		Resources   struct {
-			Requests struct {
-				Storage string
-			}
-		}
+		Resources  *PVCResource
 		VolumeMode       string `yaml:"volumeMode" json:"volumeMode"`
 		StorageClassName string `yaml:"storageClassName" json:"storageClassName"`
 		VolumeName       string `yaml:"volumeName" json:"VolumeName"`
 	}
-	Kind string
+}
+
+type PVCResource struct {
+	Requests *PVCRequest
+}
+
+type PVCRequest struct {
+	Storage string
 }
 
 func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 	return &ResPersistentVolumeClaim{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_PERSISTENT_VOLUME_CLAIM,
+		Metadata: struct {
+			Name      string
+			Namespace string
+		}{Name: "", Namespace: ""},
+		Spec: struct {
+			AccessModes      []string
+			Resources        *PVCResource
+			VolumeMode       string
+			StorageClassName string
+			VolumeName       string
+		}{
+			AccessModes: []string{},
+			Resources: &PVCResource{
+				Requests: &PVCRequest{
+					Storage: "",
+				},
+			},
+			VolumeMode: "",
+			StorageClassName: "",
+			VolumeName: ""},
 	}
 }
 
