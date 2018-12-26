@@ -48,11 +48,14 @@ type TomlConfigData struct {
 			Key  string
 		}
 	}
-	Database struct {
+	Mysql struct {
 		Host     string
 		Port     int
 		Username string
 		Password string
+		Dbname   string
+		Charset  string
+		MaxOpenConns int `toml:"maxOpenConns"`
 	}
 	Memcache struct {
 		Host string
@@ -61,6 +64,7 @@ type TomlConfigData struct {
 	Redis struct {
 		Host string
 		Port int
+		Timeout int
 	}
 	Kubernetes struct {
 		Host string

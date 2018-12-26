@@ -11,16 +11,20 @@
   key = "config/key.pem"
 
 # database
-[database]
+[mysql]
  host = "localhost"
  port = 3306
  username = "root"
  password = "neyo123"
+ dbname = "4399_kube"
+ charset = "utf8"
+ maxOpenConns = 1000
 
 # redis
 [redis]
- host = "127.0.0.2"
+ host = "192.168.37.150"
  port = 6379 # int
+ timeout = 60
 
 # memcache
 [memcache]

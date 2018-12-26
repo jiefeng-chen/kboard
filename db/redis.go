@@ -1,40 +1,28 @@
 package db
 
 import (
-	"github.com/chasex/redis-go-cluster"
 	"kboard/exception"
-	"time"
+	"kboard/config"
+	"github.com/mediocregopher/radix.v2/cluster"
+	"fmt"
 )
 
-type redisCluster interface {
-	Set(string, string) error
-}
 
 type RedisCluster struct {
-	singleton *redis.Cluster
+	singleton *cluster.Cluster
 }
 
 
-func NewRedisCluster() *RedisCluster {
-	cluster, err := redis.NewCluster(&redis.Options{
-		StartNodes: []string{}, // 集群节点
-		ConnTimeout: 50 * time.Microsecond,
-		ReadTimeout: 50 * time.Microsecond,
-		WriteTimeout: 50 * time.Microsecond,
-		KeepAlive: 16,
-		AliveTime: 60 * time.Second,
-	})
+func NewRedisCluster(config *config.Config) *RedisCluster {
+	addr := fmt.Sprintf("%s:%d", config.Data.Mysql.Host, config.Data.Mysql.Port)
+	clusterConn, err := cluster.New(addr)
 	exception.CheckError(err, -1)
+
 	return &RedisCluster{
-		singleton: cluster,
+		singleton: clusterConn,
 	}
 }
 
-func (rc *RedisCluster) Set() error {
 
-}
 
-func (rc *RedisCluster) Set() error {
-
-}
 
