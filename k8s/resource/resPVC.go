@@ -20,13 +20,7 @@ type ResPersistentVolumeClaim struct {
 		Name      string
 		Namespace string
 	}
-	Spec struct {
-		AccessModes []string `yaml:"accessModes" json:"accessModes"`
-		Resources  *PVCResource
-		VolumeMode       string `yaml:"volumeMode" json:"volumeMode"`
-		StorageClassName string `yaml:"storageClassName" json:"storageClassName"`
-		VolumeName       string `yaml:"volumeName" json:"VolumeName"`
-	}
+	Spec *ResPVCSpec
 }
 
 type PVCResource struct {
@@ -45,13 +39,7 @@ func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 			Name      string
 			Namespace string
 		}{Name: "", Namespace: ""},
-		Spec: struct {
-			AccessModes      []string
-			Resources        *PVCResource
-			VolumeMode       string
-			StorageClassName string
-			VolumeName       string
-		}{
+		Spec: &ResPVCSpec{
 			AccessModes: []string{},
 			Resources: &PVCResource{
 				Requests: &PVCRequest{
@@ -60,8 +48,17 @@ func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 			},
 			VolumeMode: "",
 			StorageClassName: "",
-			VolumeName: ""},
+			VolumeName: "",
+		},
 	}
+}
+
+type ResPVCSpec struct {
+	AccessModes []string `yaml:"accessModes" json:"accessModes"`
+	Resources  *PVCResource
+	VolumeMode       string `yaml:"volumeMode" json:"volumeMode"`
+	StorageClassName string `yaml:"storageClassName" json:"storageClassName"`
+	VolumeName       string `yaml:"volumeName" json:"VolumeName"`
 }
 
 func (r *ResPersistentVolumeClaim) ToYamlFile() ([]byte, error) {

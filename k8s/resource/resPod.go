@@ -27,14 +27,7 @@ type ResPod struct {
 		Labels map[string]string
 		Annotations map[string]string
 	}
-	Spec struct{
-		Containers []*Container
-		RestartPolicy string `yaml:"restartPolicy"`  // [Always | Never | OnFailure]
-		NodeSelector struct{} `yaml:"nodeSelector"`
-		ImagePullSecrets []map[string]string `yaml:"imagePullSecrets"`
-		HostNetwork bool `yaml:"hostNetwork"`
-		Volumes []*Volume
-	}
+	Spec *ResPodSpec
 }
 
 func NewResPod(name string) *ResPod {
@@ -47,14 +40,7 @@ func NewResPod(name string) *ResPod {
 			Labels      map[string]string
 			Annotations map[string]string
 		}{Name: name, Namespace: "", Labels: map[string]string{}, Annotations: map[string]string{}},
-		Spec: struct {
-			Containers       []*Container
-			RestartPolicy    string
-			NodeSelector     struct{}
-			ImagePullSecrets []map[string]string
-			HostNetwork      bool
-			Volumes          []*Volume
-		}{
+		Spec: &ResPodSpec{
 			Containers: []*Container{},
 			RestartPolicy: "",
 			NodeSelector: struct{}{},
@@ -62,6 +48,15 @@ func NewResPod(name string) *ResPod {
 			HostNetwork: false,
 			Volumes: []*Volume{}},
 	}
+}
+
+type ResPodSpec struct {
+	Containers []*Container
+	RestartPolicy string `yaml:"restartPolicy"`  // [Always | Never | OnFailure]
+	NodeSelector struct{} `yaml:"nodeSelector"`
+	ImagePullSecrets []map[string]string `yaml:"imagePullSecrets"`
+	HostNetwork bool `yaml:"hostNetwork"`
+	Volumes []*Volume
 }
 
 func (r *ResPod) SetMetadataName(name string) error {

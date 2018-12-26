@@ -5,6 +5,9 @@ import (
 	"kboard/template"
 	"kboard/config"
 	"net/http"
+	"kboard/db"
+	"github.com/garyburd/redigo/redis"
+	"log"
 )
 
 type ITeam struct {
@@ -25,7 +28,13 @@ func NewITeam(config *config.Config, w http.ResponseWriter, r *http.Request) *IT
 }
 
 func (this *ITeam) Index() {
-	this.TplEngine.Response(100, "", "数据")
+	redisCluster := db.NewRedisCluster(this.Config)
+
+	_, err := redisCluster.Singleton.Do("SET", "name", "red")
+	log.Printf("%v", err)
+	v, err := redis.String(redisCluster.Singleton.Do("GET", "name"))
+	log.Printf("%v", err)
+	this.TplEngine.Response(100, v, "数据")
 }
 
 // @todo 团队列表

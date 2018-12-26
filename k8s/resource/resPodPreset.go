@@ -21,14 +21,16 @@ type ResPodPreset struct {
 		Labels map[string]string
 		Annotations map[string]string
 	}
-	Spec struct{
-		Containers []*Container
-		RestartPolicy string `yaml:"restartPolicy"`  // [Always | Never | OnFailure]
-		NodeSelector struct{} `yaml:"nodeSelector"`
-		ImagePullSecrets []map[string]string `yaml:"imagePullSecrets"`
-		HostNetwork bool `yaml:"hostNetwork"`
-		Volumes []*Volume
-	}
+	Spec *ResPodPresetSpec
+}
+
+type ResPodPresetSpec struct {
+	Containers []*Container
+	RestartPolicy string `yaml:"restartPolicy"`  // [Always | Never | OnFailure]
+	NodeSelector struct{} `yaml:"nodeSelector"`
+	ImagePullSecrets []map[string]string `yaml:"imagePullSecrets"`
+	HostNetwork bool `yaml:"hostNetwork"`
+	Volumes []*Volume
 }
 
 func NewResPodPreset(name string) *ResPodPreset {
@@ -45,20 +47,14 @@ func NewResPodPreset(name string) *ResPodPreset {
 			Namespace: "",
 			Labels: map[string]string{},
 			Annotations: map[string]string{}},
-		Spec: struct {
-			Containers       []*Container
-			RestartPolicy    string
-			NodeSelector     struct{}
-			ImagePullSecrets []map[string]string
-			HostNetwork      bool
-			Volumes          []*Volume
-		}{
+		Spec: &ResPodPresetSpec{
 			Containers: []*Container{},
 			RestartPolicy: "",
 			NodeSelector: struct{}{},
 			ImagePullSecrets: []map[string]string{},
 			HostNetwork: false,
-			Volumes: []*Volume{}},
+			Volumes: []*Volume{},
+		},
 	}
 }
 

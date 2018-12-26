@@ -23,7 +23,7 @@
 # redis
 [redis]
  host = "192.168.37.150"
- port = 6379 # int
+ port = 8001 # int
  timeout = 60
 
 # memcache

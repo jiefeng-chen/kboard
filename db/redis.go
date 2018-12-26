@@ -3,25 +3,27 @@ package db
 import (
 	"kboard/exception"
 	"kboard/config"
-	"github.com/mediocregopher/radix.v2/cluster"
+	"github.com/garyburd/redigo/redis"
 	"fmt"
 )
 
 
 type RedisCluster struct {
-	singleton *cluster.Cluster
+	Singleton redis.Conn
 }
 
 
 func NewRedisCluster(config *config.Config) *RedisCluster {
 	addr := fmt.Sprintf("%s:%d", config.Data.Mysql.Host, config.Data.Mysql.Port)
-	clusterConn, err := cluster.New(addr)
+	clusterConn, err := redis.Dial("tcp", addr)
 	exception.CheckError(err, -1)
 
 	return &RedisCluster{
-		singleton: clusterConn,
+		Singleton: clusterConn,
 	}
 }
+
+
 
 
 
