@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"kboard/db"
 )
 
 var (
@@ -43,8 +42,6 @@ func init() {
 	}()
 
 	// init db、cache、control and so on
-	mysql := db.NewMysql(Config)
-
 
 }
 

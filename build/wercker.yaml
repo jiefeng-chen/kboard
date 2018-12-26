@@ -1,0 +1,85 @@
+# wercker 构建模板
+
+# 基础镜像golang
+box: golang
+
+# 开发流水线，定义一个box用于构建
+dev:
+  steps:
+    - setup-go-worspace:
+        package-dir: github.com/cloudnativego/hello
+    - script:
+        name: env
+        code: env
+
+    - script:
+        name: go get
+        code: |
+          cd $WERCKER_SOURCE_DIR
+          go version
+          go get -u github.com/Masterminds/glide
+          export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          glide install
+
+    - internal/watch:
+        code: go run main.go
+        reload: true
+
+# 定义在wercker构建期间要执行的步骤和脚本列表
+build:
+  steps:
+    - setup-go-workspace:
+        package-dir: github.com/cloudnativego/hello
+
+    - script:
+        name: env
+        code: env
+
+    - script:
+        name: go get
+        code: |
+
+          cd $WERCKER_SOURCE_DIR
+          go version
+          go get -u github.com/Masterminds/glide
+          export PATH=$WERCKER_SOURCE_DIR/bin:$PATH
+          glide install
+
+    # Build the project
+    - script:
+        name: go build
+        code: |
+          go build
+
+    # Test the project
+    - script:
+        name: go test
+        code: |
+          go test -v $(glide novendor)
+
+    - script:
+        name: copy files to wercker output
+        code: |
+          cp -R ./ ${WERCKER_OUTPUT_DIR}
+
+# 定义构建的部署方式和位置
+deploy:
+  steps:
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        cmd: /pipeline/source/hello
+        port: "8080"
+        tag: latest
+        repository: cloudnativego/book-hello
+        registry: https://registry.hub.docker.com
+
+    - cng/cf-deploy:
+        api: $API
+        user: $USER
+        password: $PASSWORD
+        org: $ORG
+        space: $SPACE
+        appname: wercker-step-hello
+        docker_image: cloudnativego/book-hello
+

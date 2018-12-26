@@ -1,0 +1,11 @@
+#!/bin/sh
+# install wercker cli
+
+curl -L https://s3.amazonaws.com/downloads.wercker.com/cli/stable/linux_amd64/wercker -o /usr/local/bin/wercker
+
+chmod +x /usr/local/bin/wercker
+
+
+
+
+
