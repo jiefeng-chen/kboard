@@ -5,7 +5,7 @@ import "testing"
 func TestNewReplicaSet(t *testing.T) {
 	var replicaSet *ResReplicaSet
 
-	replicaSet = NewReplicaSet()
+	replicaSet = NewResReplicaSet()
 
 	replicaSet.SetMetadataName("hello")
 	replicaSet.SetNamespace("world")
@@ -23,13 +23,13 @@ func TestNewContainer(t *testing.T) {
 
 	container = NewContainer("nginx", "nginx:latest")
 
-	container.Args = "/bin/sh -c"
+	container.Args = []string{"/bin/sh -c"}
 	env := NewEnv()
 	env.Name = "SYS_ENV"
 	env.ValueFrom.ResourceFieldRef.Resource = "1"
 	env.ValueFrom.ResourceFieldRef.ContainerName = "container"
 	container.AppendEnv(env)
-	container.Command = "hello"
+	container.Command = []string{"hello"}
 	container.Resources = NewResource()
 	container.VolumeMounts = []map[string]interface{}{}
 	container.AppendPort(NewPort("port"))

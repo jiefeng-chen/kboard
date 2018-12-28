@@ -29,15 +29,21 @@ func NewITeam(config *config.Config, w http.ResponseWriter, r *http.Request) *IT
 
 func (this *ITeam) Index() {
 	redisCluster := db.NewRedisCluster(this.Config)
-
 	_, err := redisCluster.Singleton.Do("SET", "name", "red")
-	log.Printf("%v", err)
+	if err != nil {
+		log.Printf("set %v", err)
+	}
 	v, err := redis.String(redisCluster.Singleton.Do("GET", "name"))
-	log.Printf("%v", err)
+	if err != nil {
+		log.Printf("get %v", err)
+	}
 	this.TplEngine.Response(100, v, "数据")
 }
 
 // @todo 团队列表
+func (this *ITeam) List() {
+
+}
 // @todo 创建团队
 // @todo 撤销团队
 // @todo 申请加入

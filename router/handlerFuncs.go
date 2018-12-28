@@ -38,6 +38,7 @@ func I_NodeHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)
 	handler := func (w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewINode(c, w, r)
+		i.Register("scale", i.Scale)
 		i.Register("index", i.Index).Run(action)
 	}
 
@@ -48,7 +49,7 @@ func I_OrderHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 	handler := func (w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewIOrder(c, w, r)
-
+		i.Register("list", i.List)
 		i.Register("index", i.Index).Run(action)
 	}
 

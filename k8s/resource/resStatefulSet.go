@@ -17,6 +17,7 @@ type IResStatefulSet interface {
 	SetVolumeClaimName(string) error
 	SetAccessMode(string) error
 	SetStorage(string) error
+	SetSelector(*Selector) error
 }
 
 type ResStatefulSet struct {
@@ -30,6 +31,7 @@ type ResStatefulSet struct {
 }
 
 type StatefulSetSpec struct {
+	Selector *Selector
 	ServiceName string `yaml:"serviceName"`
 	Replicas int
 	Template *StatefulSetSpecTemplate
@@ -65,7 +67,7 @@ type VolumeClaimTemplateSpec struct {
 func NewResStatefulSet() *ResStatefulSet {
 	return &ResStatefulSet{
 		Kind:                 RESOURCE_STATEFULE_SET,
-		ApiVersion:           "apps/v1beta1",
+		ApiVersion:           "apps/v1",
 		Spec: &StatefulSetSpec{
 			ServiceName: "",
 			Replicas: 0,
@@ -187,6 +189,14 @@ func (r *ResStatefulSet) SetStorage(cap string) error {
 		return exception.NewError("storage is empty")
 	}
 	r.Spec.VolumeClaimTemplate.Spec.Resources.Requests.Storage = cap
+	return nil
+}
+
+func (r *ResStatefulSet) SetSelector(selector *Selector) error {
+	if selector == nil {
+		return exception.NewError("selector is nil")
+	}
+	r.Spec.Selector = selector
 	return nil
 }
 

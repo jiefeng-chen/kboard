@@ -12,6 +12,7 @@ type IContainer interface {
 	SetImage(string) error
 	SetName(string) error
 	SetLivenessProbe(LivenessProbe) error
+	SetReadinessProbe(ReadinessProbe) error
 }
 
 
@@ -137,12 +138,15 @@ func (r *Container) SetName(name string) error {
 }
 
 func (r *Container) SetLivenessProbe(liveness LivenessProbe) error {
-	if liveness.HttpGet == nil {
-		return errors.New("liveness probe http get is empty")
+	if liveness.HttpGet != nil {
+		// http get 方式检查 port、path
+		if liveness.Path == "" || liveness.Port == 0 {
+			return errors.New("liveness probe use httpget way, need path and port")
+		}
+	}else if liveness.TcpSocket.Port == 0 {
+		return errors.New("tcp socket port way need port")
 	}
-	if liveness.TcpSocket.Port == "" {
-		return errors.New("tcp socket port is empty")
-	}
+
 	if len(liveness.Exec.Command) <= 0 {
 		return errors.New("command is empty")
 	}
@@ -164,28 +168,64 @@ func (r *Container) SetLivenessProbe(liveness LivenessProbe) error {
 	return nil
 }
 
+func (r *Container) SetReadinessProbe(readiness ReadinessProbe) error {
+	if readiness.HttpGet != nil {
+		// http get 方式检查 port、path
+		if readiness.Path == "" || readiness.Port == 0 {
+			return errors.New("liveness probe use httpget way, need path and port")
+		}
+	}else if readiness.TcpSocket.Port == 0 {
+		return errors.New("tcp socket port way need port")
+	}
+
+	if readiness.FailureThreshold <= 0 {
+		return errors.New("failure threshold is invalid")
+	}
+	if readiness.InitialDelaySeconds <= 0 {
+		return errors.New("initial delay second is invalid")
+	}
+	if readiness.PeriodSeconds <= 0 {
+		return errors.New("period second is invalid")
+	}
+	if readiness.SuccessThreshold <= 0 {
+		return errors.New("success second is invalid")
+	}
+	if readiness.TimeoutSeconds <= 0 {
+		return errors.New("timeout second is invalid")
+	}
+	return nil
+}
+
 func NewLivenessProbe() *LivenessProbe {
 	return &LivenessProbe{
-		Exec: struct{ Command []string }{Command: []string{}},
-		HttpGet: &HttpGet{
-			Path: "",
-			Port: "",
-			Host: "",
-			Scheme: "",
-			HttpHeaders: []map[string]string{},
-		},
-		TcpSocket: struct{ Port string }{Port: ""},
 	}
 }
 
+type ProbeAction struct {
+	Exec *ExecAction `yaml:"exec"`
+	HttpGet *HttpGetAction `yaml:"httpGet"`
+	TcpSocket *TcpSocketAction `yaml:"tcpSocket"`
+}
+
+type TcpSocketAction struct {
+	Port int
+}
+
+type ExecAction struct {
+	Command []string
+}
+
+
+type HttpGetAction struct {
+	Path string
+	Port string
+	Host string
+	Scheme string
+	HttpHeaders []map[string]string `yaml:"httpHeaders"`
+}
+
 type LivenessProbe struct {
-	Exec struct{
-		Command []string
-	}
-	HttpGet *HttpGet `yaml:"httpGet"`
-	TcpSocket struct{
-		Port string
-	} `yaml:"tcpSocket"`
+	ProbeAction `yaml:",inline"`
 	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
 	TimeoutSeconds int `yaml:"timeoutSeconds"`
 	PeriodSeconds int `yaml:"periodSeconds"`
@@ -196,8 +236,8 @@ type LivenessProbe struct {
 }
 
 type ReadinessProbe struct {
+	ProbeAction
 	Path string
-	HttpGet *HttpGet `yaml:"httpGet"`
 	Port int
 	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
 	TimeoutSeconds int `yaml:"timeoutSeconds"`
@@ -205,15 +245,6 @@ type ReadinessProbe struct {
 	SuccessThreshold int `yaml:"successThreshold"`
 	FailureThreshold int `yaml:"failureThreshold"`
 }
-
-type HttpGet struct {
-	Path string
-	Port string
-	Host string
-	Scheme string
-	HttpHeaders []map[string]string `yaml:"httpHeaders"`
-}
-
 
 type Secret struct {
 	SecretName string `yaml:"secretName"`

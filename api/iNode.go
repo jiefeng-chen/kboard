@@ -5,6 +5,8 @@ import (
 	"kboard/config"
 	"net/http"
 	"kboard/k8s"
+	"kboard/k8s/resource"
+	"log"
 )
 
 type INode struct {
@@ -42,9 +44,57 @@ func (this *INode) Index() {
 
 
 // @todo 节点扩容
+func (this *INode) Scale() {
+	lib := k8s.NewStatefulSet(this.Config)
+	statefulSet := resource.NewResStatefulSet()
+	statefulSet.SetMetaDataName("nginx")
+	statefulSet.SetNamespace("myapp")
+	statefulSet.SetReplicas(3)
+	container := resource.NewContainer("mycontainer", "image")
+	container.Resources = &resource.Resource{
+		Limits: &resource.Limits{
+			Cpu: "0.5",
+			Memory:"100Mi",
+		},
+		Requests: &resource.Request{
+			Cpu: "0.1",
+			Memory: "50Mi",
+		},
+	}
+	statefulSet.AddContainer(container)
+
+	annos := map[string]string{
+		"app":"nginx",
+	}
+	statefulSet.SetAnnotations(annos)
+	labels := map[string]string{
+		"app":"nginx",
+	}
+	statefulSet.SetLabels(labels)
+	statefulSet.SetSelector(&resource.Selector{
+		MatchLabels: labels,
+	})
+	statefulSet.SetServiceName("service name")
+	statefulSet.SetStorage("1Gi")
+	statefulSet.SetReplicas(3)
+	statefulSet.SetVolumeClaimName("volume claim name")
+	statefulSet.SetAccessMode("ReadWriteOnce")
+
+	yamlData, err := statefulSet.ToYamlFile()
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	res := lib.WriteToEtcd("myapp", "mystateful", yamlData)
+
+	this.TplEngine.Response(100, res, "数据")
+}
 
 // @todo 节点隔离与恢复
 
-// @todo 节点移除
 
+
+// @todo 节点移除
+func (this *INode) Delete()  {
+
+}
 
