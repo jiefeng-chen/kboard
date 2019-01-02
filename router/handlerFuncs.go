@@ -20,7 +20,7 @@ func UrlRegister(r *Router) {
 	r.Router.HandleFunc("/login/{action:[a-z]+}", C_LoginHandler(r.Config))
 	r.Router.HandleFunc("/index/{action:[a-z]+}", C_IndexHandler(r.Config))
 
-	r.Router.HandleFunc("/", C_IndexHandler(r.Config))
+	r.Router.HandleFunc("/", C_DefaultHandler(r.Config))
 }
 
 // api下的路由处理handler在此处理
@@ -91,6 +91,15 @@ func C_IndexHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 }
 
 
+func C_DefaultHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+	handler := func (w http.ResponseWriter, r *http.Request) {
+		action := mux.Vars(r)["action"]
+		c := control.NewCtlDefault(c, w, r)
+		c.Register("default", c.Index).Run(action)
+	}
+
+	return handler
+}
 
 
 
