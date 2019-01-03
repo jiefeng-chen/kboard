@@ -2,7 +2,6 @@ package api
 
 
 import (
-	"kboard/template"
 	"kboard/config"
 	"net/http"
 	"kboard/db"
@@ -11,20 +10,15 @@ import (
 )
 
 type ITeam struct {
-	Api
+	IApi
 }
 
 func NewITeam(config *config.Config, w http.ResponseWriter, r *http.Request) *ITeam {
-	return &ITeam{
-		Api{
-			Config: config,
-			TplEngine: template.NewTplEngine(w, r),
-			Module: "index",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
-		},
+	team := &ITeam{
+		IApi: *NewIApi(config, w, r),
 	}
+	team.Module = "team"
+	return team
 }
 
 func (this *ITeam) Index() {

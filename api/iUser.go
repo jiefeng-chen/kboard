@@ -1,26 +1,19 @@
 package api
 
 import (
-	"kboard/template"
 	"kboard/config"
 	"net/http"
 )
 
 type IUser struct {
-	Api
+	IApi
 }
 
 func NewIUser(config *config.Config, w http.ResponseWriter, r *http.Request) *IUser {
-	return &IUser{
-		Api{
-			Config: config,
-			TplEngine: template.NewTplEngine(w, r),
-			Module: "index",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
-		},
-	}
+	user := &IUser{
+		IApi: *NewIApi(config, w, r)}
+	user.Module = "user"
+	return user
 }
 
 func (this *IUser) Index() {
@@ -28,10 +21,13 @@ func (this *IUser) Index() {
 		"email": "real_jf@163.com",
 		"name": "real_jf",
 	}
-	this.TplEngine.Response(100, result, "数据")
+	this.TplEngine.ResponseWithHeader(100, result, "数据", this.Header)
 }
 
 // @todo 用户创建
+func (this *IUser) Create() {
+
+}
 
 // @todo 角色关联
 

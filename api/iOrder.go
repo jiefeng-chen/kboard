@@ -1,7 +1,6 @@
 package api
 
 import (
-	"kboard/template"
 	"kboard/config"
 	"net/http"
 	"kboard/k8s/resource"
@@ -9,20 +8,15 @@ import (
 )
 
 type IOrder struct {
-	Api
+	IApi
 }
 
 func NewIOrder(config *config.Config, w http.ResponseWriter, r *http.Request) *IOrder {
-	return &IOrder{
-		Api{
-			Config: config,
-			TplEngine: template.NewTplEngine(w, r),
-			Module: "index",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
-		},
+	order := &IOrder{
+		IApi: *NewIApi(config, w, r),
 	}
+	order.Module = "order"
+	return order
 }
 
 func (this *IOrder) Index() {
