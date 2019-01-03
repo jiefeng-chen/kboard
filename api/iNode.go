@@ -1,7 +1,6 @@
 package api
 
 import (
-	"kboard/template"
 	"kboard/config"
 	"net/http"
 	"kboard/k8s"
@@ -10,20 +9,15 @@ import (
 )
 
 type INode struct {
-	Api
+	IApi
 }
 
 func NewINode(config *config.Config, w http.ResponseWriter, r *http.Request) *INode {
-	return &INode{
-		Api{
-			Config: config,
-			TplEngine: template.NewTplEngine(w, r),
-			Module: "index",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
-		},
+	node := &INode{
+		IApi: *NewIApi(config, w, r),
 	}
+	node.Module = "node"
+	return node
 }
 
 func (this *INode) Index() {

@@ -19,6 +19,7 @@ type Control struct {
 	Config *config.Config
 	TplEngine *template.TplEngine
 	Module string
+	Namespace string
 	Actions map[string]func()
 	W http.ResponseWriter
 	R *http.Request
@@ -29,6 +30,7 @@ func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *
 		Config: config,
 		TplEngine: template.NewTplEngine(w, r),
 		Module: "base",
+		Namespace: "control",
 		Actions: map[string]func(){},
 		R: r,
 		W: w,

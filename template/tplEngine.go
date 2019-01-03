@@ -15,6 +15,7 @@ type ITplEngine interface {
 	Assign(string, interface{}) *TplEngine
 	Display(string)
 	Response(int, interface{}, string)
+	ResponseWithHeader(int, interface{}, string, map[string]string)
 }
 
 type ResponseData struct {
@@ -28,6 +29,7 @@ type TplEngine struct {
 	TplData map[string]interface{}
 	W http.ResponseWriter
 	R *http.Request
+	Header map[string]string
 }
 
 func NewTplEngine(w http.ResponseWriter, r *http.Request) *TplEngine  {
@@ -35,6 +37,7 @@ func NewTplEngine(w http.ResponseWriter, r *http.Request) *TplEngine  {
 		W: w,
 		R: r,
 		TplData: make(map[string]interface{}),
+		Header: map[string]string{},
 	}
 }
 
@@ -103,5 +106,21 @@ func (t *TplEngine) Response(code int, result interface{}, message string)  {
 	}
 	jsonData, err := json.Marshal(data)
 	exception.CheckError(err, 2005)
+	t.W.Write(jsonData)
+}
+
+func (t *TplEngine) ResponseWithHeader(code int, result interface{}, message string, headerOptions map[string]string) {
+	data := ResponseData{
+		Code: code,
+		Result: result,
+		Message: message,
+	}
+	jsonData, err := json.Marshal(data)
+	exception.CheckError(err, 2005)
+	if len(headerOptions) > 0 {
+		for field, val := range headerOptions {
+			t.W.Header().Set(field, val)
+		}
+	}
 	t.W.Write(jsonData)
 }
