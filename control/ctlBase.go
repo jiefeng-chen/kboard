@@ -13,6 +13,9 @@ import (
 type IControl interface {
 	Register(string, func()) *Control
 	Run(string)
+	ResponseWithHeader(int, interface{}, string)
+	Response(int, interface{}, string)
+	Display(string)
 }
 
 type Control struct {
@@ -23,6 +26,7 @@ type Control struct {
 	Actions map[string]func()
 	W http.ResponseWriter
 	R *http.Request
+	Header map[string]string
 }
 
 func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *Control {
@@ -34,6 +38,12 @@ func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *
 		Actions: map[string]func(){},
 		R: r,
 		W: w,
+		Header: map[string]string{
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "*",
+			"Access-Control-Allow-Headers": "Content-Type,Access-Token,X-Access-Token,X-Session-Token",
+			"Access-Control-Expose-Headers": "*",
+		},
 	}
 }
 
@@ -92,4 +102,15 @@ func (c *Control) Index() {
 	fmt.Fprintln(c.TplEngine.W, "hello world, this is default index")
 }
 
+func (c *Control) ResponseWithHeader(code int, result interface{}, message string) {
+	c.TplEngine.ResponseWithHeader(code, result, message, c.Header)
+}
+
+func (c *Control) Response(code int, result interface{}, message string) {
+	c.TplEngine.Response(code, result, message)
+}
+
+func (c *Control) Display(tpl string) {
+	c.TplEngine.Display(tpl)
+}
 

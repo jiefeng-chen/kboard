@@ -24,5 +24,5 @@ func NewCtlLogin(config *config.Config, w http.ResponseWriter, r *http.Request) 
 }
 
 func (this *CtlLogin) Index() {
-	this.TplEngine.Display("login")
+	this.Display("login")
 }

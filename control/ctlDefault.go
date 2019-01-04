@@ -24,6 +24,6 @@ func NewCtlDefault(config *config.Config, w http.ResponseWriter, r *http.Request
 }
 
 func (this *CtlDefault) Index() {
-	this.TplEngine.Response(100, "", "ok")
+	this.Response(100, "", "ok")
 }
 

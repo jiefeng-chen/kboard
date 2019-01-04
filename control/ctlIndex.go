@@ -25,5 +25,5 @@ func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) 
 }
 
 func (this *CtlIndex) Index() {
-	this.TplEngine.Display("index")
+	this.Display("index")
 }
