@@ -8,13 +8,13 @@ import (
 
 type IResIngress interface {
 	IResource
-	SetMetaDataName(string) error
-	GetMetaDataName() string
+	SetMetadataName(string) error
+	GetMetadataName() string
 	SetNamespace(string) error
 	SetRules(string, []map[string]string) error
-	SetAnnotations(string) error
+	SetAnnotations(map[string]string) error
 	SetLabels([]map[string]string) error
-	SetTls(hosts []string, secretName string) error
+	SetTls([]string, string) error
 }
 
 type ResIngress struct {
@@ -83,7 +83,7 @@ func (r *ResIngress) SetAnnotations(annot map[string]string) error {
 	return nil
 }
 
-func (r *ResIngress) SetMetaDataName(name string) error {
+func (r *ResIngress) SetMetadataName(name string) error {
 	if name == "" {
 		return exception.NewError("name is empty")
 	}
@@ -99,7 +99,7 @@ func (r *ResIngress) SetNamespace(ns string) error {
 	return nil
 }
 
-func (r *ResIngress) GetMetaDataName() string {
+func (r *ResIngress) GetMetadataName() string {
 	return r.MetaData.Name
 }
 

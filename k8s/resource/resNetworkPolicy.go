@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+	"gopkg.in/yaml.v2"
 )
 
 // k8s >= v1.3
@@ -187,4 +188,12 @@ func (r *ResNetworkPolicy) AddEgress(eg *Egress) error {
 	return nil
 }
 
+
+func (r *ResNetworkPolicy) ToYamlFile() ([]byte, error) {
+	yamlData, err := yaml.Marshal(*r)
+	if err != nil {
+		return []byte{}, err
+	}
+	return yamlData, nil
+}
 
