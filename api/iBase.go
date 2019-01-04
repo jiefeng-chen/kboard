@@ -13,6 +13,8 @@ import (
 type iApi interface {
 	Register(string, func()) *IApi
 	Run(string)
+	ResponseWithHeader(int, interface{}, string)
+	Response(int, interface{}, string)
 }
 
 type IApi struct {
@@ -112,5 +114,13 @@ func NewIBase(config *config.Config, w http.ResponseWriter, r *http.Request) *IB
 	}
 	base.Module = "base"
 	return base
+}
+
+func (c *IApi) ResponseWithHeader(code int, result interface{}, message string) {
+	c.TplEngine.ResponseWithHeader(code, result, message, c.Header)
+}
+
+func (c *IApi) Response(code int, result interface{}, message string) {
+	c.TplEngine.Response(code, result, message)
 }
 

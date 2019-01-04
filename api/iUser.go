@@ -21,7 +21,7 @@ func (this *IUser) Index() {
 		"email": "real_jf@163.com",
 		"name": "real_jf",
 	}
-	this.TplEngine.ResponseWithHeader(100, result, "数据", this.Header)
+	this.ResponseWithHeader(100, result, "数据")
 }
 
 // @todo 用户创建
