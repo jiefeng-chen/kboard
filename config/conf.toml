@@ -33,7 +33,7 @@
 
 # kubernetes cluster
 [kubernetes]
- host = "http://192.168.37.150" # string
+ host = "http://192.168.56.191" # string
  port = 8080 # int
 
 # etcd cluster
