@@ -26,6 +26,7 @@ func (this *ILogin) Index() {
 	result := map[string]string{
 		"email": email,
 		"password": password,
+		"username": email,
 	}
 	this.ResponseWithHeader(100, result, "登录成功")
 }
