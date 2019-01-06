@@ -7,6 +7,9 @@ import (
 
 /**
 	创建自定义资源
+	k8s >= v1.7.0
+
+	Spec.Validation need version of 1.13.0 or higher
 **/
 
 type IResCustomResourceDefinition interface {
