@@ -6,7 +6,7 @@ import (
 )
 
 /**
-	创建自定义资源，
+	创建自定义资源
 **/
 
 type IResCustomResourceDefinition interface {
