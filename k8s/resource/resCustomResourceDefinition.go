@@ -12,24 +12,35 @@ import (
 type IResCustomResourceDefinition interface {
 	IResource
 	SetMetadataName(string) error
-	SetNamespace(string) error
-	GetNamespace() string
 }
 
 type ResCustomResourceDefinition struct {
 	ApiVersion string `yaml:"apiVersion"`
 	Kind       string
 	Metadata   struct {
-		Name      string
-		Namespace string
-		Annotations map[string]string
-		Labels      map[string]string
+		Name      string // name must match the spec fields below, and be in the form: <plural>.<group>
 	}
 	Spec *CustomResourceDefinitionSpec
 }
 
 type CustomResourceDefinitionSpec struct {
+	Group string // group name to use for REST API: /apis/<group>/<version>
+	Version []*CrdVersion
+	Scope string // either Namespaced or Cluster
+	Names *CrdNames
+}
 
+type CrdNames struct {
+	Plural string // plural name to be used in the URL: /apis/<group>/<version>/<plural>
+	Singular string // singular name to be used as an alias on the CLI and for display
+	Kind string // kind is normally the CamelCased singular type. Your resource manifests use this
+	ShortNames []string // shortNames allow shorter string to match your resource on the CLI
+}
+
+type CrdVersion struct {
+	Name string
+	Served bool // Each version can be enabled/disabled by Served flag
+	Storage bool // One and only one version must be marked as the storage version
 }
 
 func NewCustomResourceDefinition() *ResCustomResourceDefinition {
@@ -38,10 +49,7 @@ func NewCustomResourceDefinition() *ResCustomResourceDefinition {
 		Kind:       RESOURCE_CUSTOM_RESOURCE_DEFINITION,
 		Metadata: struct {
 			Name        string
-			Namespace   string
-			Annotations map[string]string
-			Labels      map[string]string
-		}{Name: "", Namespace: "", Annotations: map[string]string{}, Labels: map[string]string{}},
+		}{Name: ""},
 		Spec: nil,
 	}
 }
@@ -53,19 +61,6 @@ func (r *ResCustomResourceDefinition) SetMetadataName(name string) error {
 	r.Metadata.Name = name
 	return nil
 }
-
-func (r *ResCustomResourceDefinition) SetNamespace(ns string) error {
-	if ns == "" {
-		return exception.NewError("namespace is empty")
-	}
-	r.Metadata.Namespace = ns
-	return nil
-}
-
-func (r *ResCustomResourceDefinition) GetNamespace() string {
-	return r.Metadata.Namespace
-}
-
 
 func (r *ResCustomResourceDefinition) ToYamlFile() ([]byte, error) {
 	yamlData, err := yaml.Marshal(*r)
