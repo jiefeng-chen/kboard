@@ -9,7 +9,7 @@ type IResConfigMap interface {
 	IResource
 	SetMetadataName(string) error
 	SetData([]map[string]string) error
-	SetNamespace(string) bool
+	SetNamespace(string) error
 	GetNamespace() string
 }
 
@@ -40,9 +40,9 @@ func (r *ResConfigMap) SetMetadataName(name string) error {
 	return nil
 }
 
-func (r *ResConfigMap) SetNamespace(ns string) bool {
+func (r *ResConfigMap) SetNamespace(ns string) error {
 	r.Metadata.Namespace = ns
-	return true
+	return nil
 }
 
 func (r *ResConfigMap) GetNamespace() string {

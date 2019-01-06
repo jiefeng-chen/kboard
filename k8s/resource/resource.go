@@ -29,6 +29,7 @@ const (
 	RESOURCE_LIMIT_RANGE			   = "LimitRange"
 	RESOURCE_NETWORK_POLICY			   = "NetworkPolicy"
 	RESOURCE_POD_PRESET				   = "PodPreset"
+	RESOURCE_CUSTOM_RESOURCE_DEFINITION = "CustomResourceDefinition"
 )
 
 // 显示名称
@@ -57,6 +58,7 @@ func GetKinds() map[string]string {
 		RESOURCE_LIMIT_RANGE:				"LimitRange",
 		RESOURCE_NETWORK_POLICY:			"NetworkPolicy",
 		RESOURCE_POD_PRESET:				"PodPreset",
+		RESOURCE_CUSTOM_RESOURCE_DEFINITION: "CustomResourceDefinition",
 	}
 }
 
