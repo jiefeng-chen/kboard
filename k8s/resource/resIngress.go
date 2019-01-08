@@ -8,12 +8,13 @@ import (
 
 type IResIngress interface {
 	IResource
-	SetMetaDataName(string) error
-	GetMetaDataName() string
+	SetMetadataName(string) error
+	GetMetadataName() string
 	SetNamespace(string) error
 	SetRules(string, []map[string]string) error
-	SetAnnotations(string) error
+	SetAnnotations(map[string]string) error
 	SetLabels([]map[string]string) error
+	SetTls([]string, string) error
 }
 
 type ResIngress struct {
@@ -27,7 +28,13 @@ type ResIngress struct {
 	}
 	Spec struct {
 		Rules []*IngressRule
+		Tls []Tls
 	}
+}
+
+type Tls struct {
+	Hosts []string
+	SecretName string `yaml:"secretName"`
 }
 
 type IngressRule struct {
@@ -49,8 +56,8 @@ type IngressBackend struct {
 
 const (
 	ANNOTATIONS_INGRESS_CLASS = "kubernetes.io/ingress.class"
-	ANNOTATIONS_WHITELIST_X_FORWARDED_FOR = "ingress.kubernetes.io/whitelist-x-forwarded-for"
-	ANNOTATIONS_WHITELIST_SOURCE_RANGE = "traefik.ingress.kubernetes.io/whitelist-source-range"
+	ANNOTATIONS_WHITELIST_X_FORWARDED_FOR = "ingress.kubernetes.io/whitelist-x-forwarded-for" // 是否开启ip白名单
+	ANNOTATIONS_WHITELIST_SOURCE_RANGE = "traefik.ingress.kubernetes.io/whitelist-source-range" // ip白名单列表
 )
 
 func NewIngress() *ResIngress {
@@ -70,13 +77,13 @@ func (r *ResIngress) SetAnnotations(annot map[string]string) error {
 	if len(annot) <= 0 {
 		return exception.NewError("Annotations is empty")
 	}
-	for _, v := range annot {
-		r.MetaData.Annotations[ANNOTATIONS_INGRESS_CLASS] = v
+	for k, v := range annot {
+		r.MetaData.Annotations[k] = v
 	}
 	return nil
 }
 
-func (r *ResIngress) SetMetaDataName(name string) error {
+func (r *ResIngress) SetMetadataName(name string) error {
 	if name == "" {
 		return exception.NewError("name is empty")
 	}
@@ -92,7 +99,7 @@ func (r *ResIngress) SetNamespace(ns string) error {
 	return nil
 }
 
-func (r *ResIngress) GetMetaDataName() string {
+func (r *ResIngress) GetMetadataName() string {
 	return r.MetaData.Name
 }
 
@@ -136,5 +143,23 @@ func (r *ResIngress) SetLabels(labels []map[string]string) error {
 			}
 		}
 	}
+	return nil
+}
+
+func (r *ResIngress) SetTls(hosts []string, secretName string) error {
+	if len(hosts) < 0 {
+		return exception.NewError("缺少域名")
+	}
+	if secretName == "" {
+		return exception.NewError("缺少tls密钥对")
+	}
+	tls := Tls{
+		Hosts: []string{},
+		SecretName: secretName,
+	}
+	for _, host := range hosts {
+		tls.Hosts = append(tls.Hosts, host)
+	}
+	r.Spec.Tls = append(r.Spec.Tls, tls)
 	return nil
 }

@@ -1,6 +1,9 @@
 package resource
 
-import "errors"
+import (
+	"errors"
+	"gopkg.in/yaml.v2"
+)
 
 // 对pod所包含的所有container所需的cpu和内存资源进行管理
 type IResLimitRange interface {
@@ -96,4 +99,10 @@ func (r *ResLimitRange) AddLimits(limit *Limit) error {
 	return nil
 }
 
-
+func (r *ResLimitRange) ToYamlFile() ([]byte, error) {
+	yamlData, err := yaml.Marshal(*r)
+	if err != nil {
+		return []byte{}, err
+	}
+	return yamlData, nil
+}
