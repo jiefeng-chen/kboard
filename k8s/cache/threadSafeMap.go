@@ -1,6 +1,9 @@
 package cache
 
-import "sync"
+import (
+	"sync"
+	"container/list"
+)
 
 // thread safe map
 type IThreadSafeMap interface {
@@ -15,13 +18,16 @@ type IThreadSafeMap interface {
 type ThreadSafeMap struct {
 	lock sync.RWMutex
 
-	items map[string]interface{}
+	items *list.List // 链表
 
+	len int // 当前长度
 
+	cap int // 容量
 }
 
 func (t *ThreadSafeMap) Set(key string, value interface{}) error {
 	// LRU实现
+
 }
 
 func (t *ThreadSafeMap) Get(key string) (item interface{}, exist bool) {
@@ -45,8 +51,11 @@ func (t *ThreadSafeMap) Size() int {
 
 }
 
-func NewThreadSafeMap() IThreadSafeMap {
+func NewThreadSafeMap(cap int) IThreadSafeMap {
 	return &ThreadSafeMap{
-
+		cap: cap,
+		len: 0,
+		lock:  sync.RWMutex{},
+		items:  list.New(),
 	}
 }
