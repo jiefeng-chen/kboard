@@ -18,7 +18,7 @@ type ReplicationController struct {
 	K8sCore
 }
 
-func NewReplicationController(Config *config.Config) *ReplicationController {
+func NewReplicationController(Config *config.Config) IReplicationController {
 	return &ReplicationController{
 		K8sCore{
 			Config: Config,

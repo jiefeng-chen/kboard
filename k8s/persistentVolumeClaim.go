@@ -14,7 +14,7 @@ type IPersistentVolumeClaim interface {
 	Patch(ns string, name string, data []byte) *HttpError
 }
 
-func NewPersistentVolumeClaim(Config *config.Config) *PersistentVolumeClaim {
+func NewPersistentVolumeClaim(Config *config.Config) IPersistentVolumeClaim {
 	return &PersistentVolumeClaim{
 		K8sCore{
 			Config: Config,
@@ -52,7 +52,7 @@ func (l *PersistentVolumeClaim) WriteToEtcd(ns string, name string, data []byte)
 		yamlData := map[string]interface{}{"Spec": map[string]interface{}{
 			"Resources": map[string]interface{}{
 				"Requests": map[string]interface{}{
-					"Storage": dataStr.Spec.Resources.Requests.Storage,
+					"Storage": dataStr.GetStorage(),
 				},
 			},
 		}}

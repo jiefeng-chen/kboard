@@ -49,17 +49,17 @@ func (this *IOrder) List() {
 	})
 
 	container := resource.NewContainer("mycontainer", "image")
-	container.Resources = &resource.Resource{
-		Limits: &resource.Limits{
+	container.SetResource(resource.Resource{
+		Limits: resource.Limits{
 			Cpu: "0.5",
 			Memory:"100Mi",
 		},
-		Requests: &resource.Request{
+		Requests: resource.Request{
 			Cpu: "0.1",
 			Memory: "50Mi",
 		},
-	}
-	container.LivenessProbe = &resource.LivenessProbe{
+	})
+	container.SetLivenessProbe(resource.LivenessProbe{
 		ProbeAction: resource.ProbeAction{
 			Exec: &resource.ExecAction{
 				Command: []string{
@@ -73,7 +73,7 @@ func (this *IOrder) List() {
 		TimeoutSeconds: 10,
 		SuccessThreshold: 1,
 		FailureThreshold: 10,
-	}
+	})
 	resReplicaSet.AddContainer(container)
 	resReplicaSet.SetTemplateLabel(labels)
 	resReplicaSet.SetLabels(labels)

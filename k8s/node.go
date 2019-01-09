@@ -8,15 +8,18 @@ import (
 )
 
 type INode interface {
-	IK8sCore
 	Nodes() (*simplejson.Json, *HttpError)
+	Read(string) (*simplejson.Json, *HttpError)
+	Create([]byte) *HttpError
+	Replace(string, []byte) *HttpError
+	WriteToEtcd(string, string, []byte) *HttpError
 }
 
 type Node struct {
 	K8sCore
 }
 
-func NewNode(Config *config.Config) *Node {
+func NewNode(Config *config.Config) INode {
 	return &Node{
 		K8sCore{
 			Config: Config,

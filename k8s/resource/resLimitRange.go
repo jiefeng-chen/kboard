@@ -14,16 +14,15 @@ type IResLimitRange interface {
 	AddLimits(*Limit) error
 }
 
-
 type ResLimitRange struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
-	Metadata struct{
-		Name string
+	Kind       string
+	Metadata   struct {
+		Name      string
 		Namespace string
-		Labels map[string]string
+		Labels    map[string]string
 	}
-	Spec struct{
+	Spec struct {
 		Limits []*Limit
 	}
 }
@@ -31,31 +30,31 @@ type ResLimitRange struct {
 type Limit LimitContainer
 
 type LimitPod struct {
-	Max Limits
-	Min Limits
+	Max                  Limits
+	Min                  Limits
 	MaxLimitRequestRatio Limits `yaml:"maxLimitRequestRatio"`
-	Type string
+	Type                 string
 }
 
 type LimitContainer struct {
-	Default Limits
+	Default        Limits
 	DefaultRequest Request `yaml:"defaultRequest"`
 	LimitPod
 }
 
-func NewResLimitRange() *ResLimitRange {
+func NewResLimitRange() IResLimitRange {
 	return &ResLimitRange{
 		ApiVersion: "v1",
-		Kind: RESOURCE_LIMIT_RANGE,
+		Kind:       RESOURCE_LIMIT_RANGE,
 		Metadata: struct {
-			Name        string
-			Namespace   string
-			Labels      map[string]string
+			Name      string
+			Namespace string
+			Labels    map[string]string
 		}{
-			Name: "",
+			Name:      "",
 			Namespace: "",
-			Labels: map[string]string{}},
-			Spec: struct{ Limits []*Limit }{Limits: []*Limit{}},
+			Labels:    map[string]string{}},
+		Spec: struct{ Limits []*Limit }{Limits: []*Limit{}},
 	}
 }
 

@@ -8,15 +8,19 @@ import (
 )
 
 type INamespace interface {
-	IK8sCore
-	List(string) (*simplejson.Json, error)
+	WriteToEtcd(string, []byte) *HttpError
+	Create([]byte) *HttpError
+	Replace(string, []byte) *HttpError
+	Read(string) (*simplejson.Json, *HttpError)
+	List(string) (*simplejson.Json, *HttpError)
+	Delete(string) *HttpError
 }
 
 type Namespace struct {
 	K8sCore
 }
 
-func NewNamespace(Config *config.Config) *Namespace {
+func NewNamespace(Config *config.Config) INamespace {
 	return &Namespace{
 		K8sCore{
 			Config: Config,

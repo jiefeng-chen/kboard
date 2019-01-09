@@ -13,7 +13,7 @@ import (
 
 type IPod interface {
 	IK8sCore
-	List(string) (*simplejson.Json, error)
+	List(string) (*simplejson.Json, *HttpError)
 	Log(string, string) []byte
 }
 
@@ -21,7 +21,7 @@ type Pod struct {
 	K8sCore
 }
 
-func NewPod(Config *config.Config) *Pod {
+func NewPod(Config *config.Config) IPod {
 	return &Pod{
 		K8sCore{
 			Config: Config,

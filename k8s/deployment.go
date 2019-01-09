@@ -14,7 +14,7 @@ type Deployment struct {
 	K8sCore
 }
 
-func NewDeployment(Config *config.Config) *Deployment {
+func NewDeployment(Config *config.Config) IDeployment {
 	return &Deployment{
 		K8sCore{
 			Config: Config,

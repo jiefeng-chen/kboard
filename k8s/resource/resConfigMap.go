@@ -23,7 +23,7 @@ type ResConfigMap struct {
 	Data map[string]string
 }
 
-func NewConfigMap() *ResConfigMap {
+func NewConfigMap() IResConfigMap {
 	return &ResConfigMap{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_CONFIG_MAP,

@@ -2,65 +2,69 @@ package resource
 
 import (
 	"errors"
+	"kboard/exception"
 )
 
 type IContainer interface {
-	AppendPort(*Port) error
-	AppendVolumeMount(map[string]interface{}) error
-	AppendEnv(*Env) error
-	SetResource(*Resource) error
 	SetImage(string) error
 	SetName(string) error
+	SetImagePullPolicy(string) error
+	SetCommands([]string) error
+	SetArgs([]string) error
+	SetWorkDir(string) error
+	SetVolumeMount(map[string]interface{}) error
+	SetResource(Resource) error
+	SetEnv(Env) error
+	SetPort(Port) error
 	SetLivenessProbe(LivenessProbe) error
 	SetReadinessProbe(ReadinessProbe) error
 }
 
-
 // 容器结构体
 type Container struct {
-	Name string
-	Image string
-	ImagePullPolicy string	`yaml:"imagePullPolicy"` // [Always | Never | IfNotPresent]
-	Command []string
-	Args []string
-	WorkingDir string `yaml:"workingDir"`	// 当前工作目录
-	VolumeMounts []map[string]interface{} `yaml:"volumeMounts"`	// 挂载卷
-	Resources *Resource
-	Env []*Env
-	Ports []*Port	// 端口号
-	LivenessProbe *LivenessProbe  `yaml:"livenessProbe"`
-	SecurityContext struct{
+	Name            string
+	Image           string
+	ImagePullPolicy string `yaml:"imagePullPolicy"` // [Always | Never | IfNotPresent]
+	Command         []string
+	Args            []string
+	WorkingDir      string                   `yaml:"workingDir"`   // 当前工作目录
+	VolumeMounts    []map[string]interface{} `yaml:"volumeMounts"` // 挂载卷
+	Resources       *Resource
+	Env             []Env
+	Ports           []Port        // 端口号
+	LivenessProbe   *LivenessProbe `yaml:"livenessProbe"`
+	SecurityContext struct {
 		Privileged bool // true-容器运行在特权模式
 	} `yaml:"securityContext"`
 }
 
-func NewContainer(name string, image string) *Container {
+func NewContainer(name string, image string) IContainer {
 	return &Container{
-		Name: name,
-		Image: image,
-		Resources:NewResource(),
-		LivenessProbe:NewLivenessProbe(),
+		Name:          name,
+		Image:         image,
+		Resources:     NewResource(),
+		LivenessProbe: NewLivenessProbe(),
 		SecurityContext: struct{ Privileged bool }{
 			Privileged: false},
-		Env: []*Env{},
-		Ports: []*Port{},
-		Args: []string{},
-		Command: []string{},
+		Env:             []Env{},
+		Ports:           []Port{},
+		Args:            []string{},
+		Command:         []string{},
 		ImagePullPolicy: "",
-		WorkingDir: "",
-		VolumeMounts: []map[string]interface{}{},
+		WorkingDir:      "",
+		VolumeMounts:    []map[string]interface{}{},
 	}
 }
 
-func (r *Container) AppendPort(port *Port) error {
-	if port == nil {
+func (r *Container) SetPort(port Port) error {
+	if port == (Port{}) {
 		return errors.New("port is nil")
 	}
 	r.Ports = append(r.Ports, port)
 	return nil
 }
 
-func (r *Container) AppendVolumeMount(vol map[string]interface{}) error {
+func (r *Container) SetVolumeMount(vol map[string]interface{}) error {
 	if vol == nil {
 		return errors.New("volume is nil")
 	}
@@ -69,12 +73,12 @@ func (r *Container) AppendVolumeMount(vol map[string]interface{}) error {
 }
 
 type Env struct {
-	Name string
+	Name      string
 	ValueFrom *ValueFrom `yaml:"valueFrom"`
 }
 
 type ValueFrom struct {
-	FieldRef *FieldRef `yaml:"fieldRef"`
+	FieldRef         *FieldRef         `yaml:"fieldRef"`
 	ResourceFieldRef *ResourceFieldRef `yaml:"resourceFieldRef"`
 }
 
@@ -84,11 +88,15 @@ type FieldRef struct {
 
 type ResourceFieldRef struct {
 	ContainerName string `yaml:"containerName"`
-	Resource string
+	Resource      string
 }
 
-func NewEnv() *Env {
-	return &Env{
+type ValueFromHandler interface {
+
+}
+
+func NewEnv() Env {
+	return Env{
 		Name: "",
 		ValueFrom: &ValueFrom{
 			FieldRef: &FieldRef{
@@ -96,27 +104,29 @@ func NewEnv() *Env {
 			},
 			ResourceFieldRef: &ResourceFieldRef{
 				ContainerName: "",
-				Resource: "",
+				Resource:      "",
 			},
 		}}
 }
 
-func (r *Container) AppendEnv(env *Env) error {
-	if env == nil {
+func (r *Container) SetEnv(env Env) error {
+	if env == (Env{}) {
 		return errors.New("env is nil")
 	}
 	r.Env = append(r.Env, env)
 	return nil
 }
 
-func (r *Container) SetResource(res *Resource) error {
-	if res == nil {
-		return errors.New("resource is nil")
+func (r *Container) SetArgs(args []string) error {
+	if len(args) <= 0 {
+		return errors.New("args is empty")
 	}
-	if res.Requests.Cpu == "" || res.Requests.Memory == "" {
-		return errors.New("request cpu or memory is empty")
+	for _, v := range args {
+		if v == "" {
+			continue
+		}
+		r.Args = append(r.Args, v)
 	}
-	r.Resources = res
 	return nil
 }
 
@@ -128,12 +138,40 @@ func (r *Container) SetImage(img string) error {
 	return nil
 }
 
-
 func (r *Container) SetName(name string) error {
 	if name == "" {
 		return errors.New("name is empty")
 	}
 	r.Name = name
+	return nil
+}
+
+func (r *Container) SetImagePullPolicy(imgplc string) error {
+	if imgplc == "" {
+		return exception.NewError("image pull policy is empty")
+	}
+	r.ImagePullPolicy = imgplc
+	return nil
+}
+
+func (r *Container) SetCommands(cmds []string) error {
+	if len(cmds) <= 0 {
+		return exception.NewError("commands is empty")
+	}
+	for _, cmd := range cmds {
+		if cmd == "" {
+			continue
+		}
+		r.Command = append(r.Command, cmd)
+	}
+	return nil
+}
+
+func (r *Container) SetWorkDir(wkdir string) error {
+	if wkdir == "" {
+		return exception.NewError("work directory is empty")
+	}
+	r.WorkingDir = wkdir
 	return nil
 }
 
@@ -143,7 +181,7 @@ func (r *Container) SetLivenessProbe(liveness LivenessProbe) error {
 		if liveness.Path == "" || liveness.Port == 0 {
 			return errors.New("liveness probe use httpget way, need path and port")
 		}
-	}else if liveness.TcpSocket.Port == 0 {
+	} else if liveness.TcpSocket.Port == 0 {
 		return errors.New("tcp socket port way need port")
 	}
 
@@ -165,6 +203,7 @@ func (r *Container) SetLivenessProbe(liveness LivenessProbe) error {
 	if liveness.TimeoutSeconds <= 0 {
 		return errors.New("timeout second is invalid")
 	}
+	r.LivenessProbe = &liveness
 	return nil
 }
 
@@ -174,7 +213,7 @@ func (r *Container) SetReadinessProbe(readiness ReadinessProbe) error {
 		if readiness.Path == "" || readiness.Port == 0 {
 			return errors.New("liveness probe use httpget way, need path and port")
 		}
-	}else if readiness.TcpSocket.Port == 0 {
+	} else if readiness.TcpSocket.Port == 0 {
 		return errors.New("tcp socket port way need port")
 	}
 
@@ -196,14 +235,21 @@ func (r *Container) SetReadinessProbe(readiness ReadinessProbe) error {
 	return nil
 }
 
-func NewLivenessProbe() *LivenessProbe {
-	return &LivenessProbe{
+func (r *Container) SetResource(res Resource) error {
+	if res.Requests.Cpu == "" || res.Requests.Memory == "" {
+		return errors.New("request cpu or memory is empty")
 	}
+	r.Resources = &res
+	return nil
+}
+
+func NewLivenessProbe() *LivenessProbe {
+	return &LivenessProbe{}
 }
 
 type ProbeAction struct {
-	Exec *ExecAction `yaml:"exec"`
-	HttpGet *HttpGetAction `yaml:"httpGet"`
+	Exec      *ExecAction      `yaml:"exec"`
+	HttpGet   *HttpGetAction   `yaml:"httpGet"`
 	TcpSocket *TcpSocketAction `yaml:"tcpSocket"`
 }
 
@@ -215,68 +261,65 @@ type ExecAction struct {
 	Command []string
 }
 
-
 type HttpGetAction struct {
-	Path string
-	Port string
-	Host string
-	Scheme string
+	Path        string
+	Port        string
+	Host        string
+	Scheme      string
 	HttpHeaders []map[string]string `yaml:"httpHeaders"`
 }
 
 type LivenessProbe struct {
-	ProbeAction `yaml:",inline"`
+	ProbeAction         `yaml:",inline"`
 	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
-	TimeoutSeconds int `yaml:"timeoutSeconds"`
-	PeriodSeconds int `yaml:"periodSeconds"`
-	SuccessThreshold int `yaml:"successThreshold"`
-	FailureThreshold int `yaml:"failureThreshold"`
-	Path string
-	Port int
+	TimeoutSeconds      int `yaml:"timeoutSeconds"`
+	PeriodSeconds       int `yaml:"periodSeconds"`
+	SuccessThreshold    int `yaml:"successThreshold"`
+	FailureThreshold    int `yaml:"failureThreshold"`
+	Path                string
+	Port                int
 }
 
 type ReadinessProbe struct {
 	ProbeAction
-	Path string
-	Port int
+	Path                string
+	Port                int
 	InitialDelaySeconds int `yaml:"initialDelaySeconds"`
-	TimeoutSeconds int `yaml:"timeoutSeconds"`
-	PeriodSeconds int `yaml:"periodSeconds"`
-	SuccessThreshold int `yaml:"successThreshold"`
-	FailureThreshold int `yaml:"failureThreshold"`
+	TimeoutSeconds      int `yaml:"timeoutSeconds"`
+	PeriodSeconds       int `yaml:"periodSeconds"`
+	SuccessThreshold    int `yaml:"successThreshold"`
+	FailureThreshold    int `yaml:"failureThreshold"`
 }
 
 type Secret struct {
-	SecretName string `yaml:"secretName"`
-	Items []map[string]string // [key:string, path:string]
+	SecretName string              `yaml:"secretName"`
+	Items      []map[string]string // [key:string, path:string]
 }
 
 func NewResource() *Resource {
 	return &Resource{
-		Limits: &Limits{Cpu: "", Memory: ""},
-		Requests: &Request{Cpu: "", Memory: ""},
+		Limits:   Limits{Cpu: "", Memory: ""},
+		Requests: Request{Cpu: "", Memory: ""},
 	}
 }
 
-type Resource struct{
-	Limits *Limits
-	Requests *Request
+type Resource struct {
+	Limits   Limits
+	Requests Request
 }
 
 type Port struct {
-	Name string
-	ContainerPort int `yaml:"containerPort"`
-	HostPort int `yaml:"hostPort"`
-	Protocol string // 仅支持 TCP UDP
+	Name          string
+	ContainerPort int    `yaml:"containerPort"`
+	HostPort      int    `yaml:"hostPort"`
+	Protocol      string // 仅支持 TCP UDP
 }
 
 func NewPort(name string) *Port {
 	return &Port{
-		Name: name,
+		Name:          name,
 		ContainerPort: 0,
-		HostPort: 0,
-		Protocol: "",
+		HostPort:      0,
+		Protocol:      "",
 	}
 }
-
-

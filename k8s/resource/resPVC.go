@@ -11,11 +11,12 @@ type IResPersistentVolumeClaim interface {
 	SetVolumeName(string) error
 	SetVolumeMode(string) error
 	SetStorageClassName(string) error
+	GetStorage() string
 }
 
 type ResPersistentVolumeClaim struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
+	Kind       string
 	Metadata   struct {
 		Name      string
 		Namespace string
@@ -31,7 +32,7 @@ type PVCRequest struct {
 	Storage string
 }
 
-func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
+func NewPersistentVolumeClaim() IResPersistentVolumeClaim {
 	return &ResPersistentVolumeClaim{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_PERSISTENT_VOLUME_CLAIM,
@@ -46,16 +47,16 @@ func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 					Storage: "",
 				},
 			},
-			VolumeMode: "",
+			VolumeMode:       "",
 			StorageClassName: "",
-			VolumeName: "",
+			VolumeName:       "",
 		},
 	}
 }
 
 type ResPVCSpec struct {
-	AccessModes []string `yaml:"accessModes" json:"accessModes"`
-	Resources  *PVCResource
+	AccessModes      []string `yaml:"accessModes" json:"accessModes"`
+	Resources        *PVCResource
 	VolumeMode       string `yaml:"volumeMode" json:"volumeMode"`
 	StorageClassName string `yaml:"storageClassName" json:"storageClassName"`
 	VolumeName       string `yaml:"volumeName" json:"VolumeName"`

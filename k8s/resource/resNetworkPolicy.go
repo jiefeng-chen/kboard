@@ -19,17 +19,16 @@ type IResNetworkPolicy interface {
 
 const (
 	POLICY_TYPE_INGRESS = "Ingress"
-	POLICY_TYPE_EGRESS = "Egress"
+	POLICY_TYPE_EGRESS  = "Egress"
 )
-
 
 type ResNetworkPolicy struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
-	Metadata struct{
-		Name string
-		Namespace string
-		Labels map[string]string
+	Kind       string
+	Metadata   struct {
+		Name        string
+		Namespace   string
+		Labels      map[string]string
 		Annotations map[string]string
 	}
 	Spec *NetPolicySpec
@@ -37,9 +36,9 @@ type ResNetworkPolicy struct {
 
 type NetPolicySpec struct {
 	PodSelector *PodSelector `yaml:"podSelector"`
-	PolicyTypes []string `yaml:"policyTypes"` // Ingress、Egress
-	Ingress []*Ingress // 入站规则
-	Egress []*Egress // 出站规则
+	PolicyTypes []string     `yaml:"policyTypes"` // Ingress、Egress
+	Ingress     []*Ingress   // 入站规则
+	Egress      []*Egress    // 出站规则
 }
 
 type PodSelector struct {
@@ -47,24 +46,23 @@ type PodSelector struct {
 }
 
 type Ingress struct {
-	From struct{
-		IpBlock *IpBlock `yaml:"ipBlock"`
+	From struct {
+		IpBlock           *IpBlock           `yaml:"ipBlock"`
 		NamespaceSelector *NamespaceSelector `yaml:"namespaceSelector"`
-		PodSelector *PodSelector `yaml:"podSelector"`
+		PodSelector       *PodSelector       `yaml:"podSelector"`
 	}
 	Ports []*NetPolicyPort
 }
 
-
 type Egress struct {
-	To struct{
+	To struct {
 		IpBlock *IpBlock `yaml:"ipBlock"`
 	}
 	Ports []*NetPolicyPort
 }
 
 type IpBlock struct {
-	Cidr string // 源地址ip地址段
+	Cidr   string   // 源地址ip地址段
 	Except []string // 排除ip地址段
 }
 
@@ -74,31 +72,30 @@ type NamespaceSelector struct {
 
 type NetPolicyPort struct {
 	Protocol string // TCP UDP
-	Port int
+	Port     int
 }
 
-func NewResNetworkPolicy() *ResNetworkPolicy {
+func NewResNetworkPolicy() IResNetworkPolicy {
 	return &ResNetworkPolicy{
 		ApiVersion: "networking.k8s.io/v1",
-		Kind: RESOURCE_NETWORK_POLICY,
+		Kind:       RESOURCE_NETWORK_POLICY,
 		Metadata: struct {
 			Name        string
 			Namespace   string
 			Labels      map[string]string
 			Annotations map[string]string
 		}{
-			Name: "",
-			Namespace: "",
-			Labels: map[string]string{},
+			Name:        "",
+			Namespace:   "",
+			Labels:      map[string]string{},
 			Annotations: map[string]string{}},
 		Spec: &NetPolicySpec{
-				PodSelector: &PodSelector{},
-				PolicyTypes: []string{},
-				Ingress: []*Ingress{},
-				Egress: []*Egress{}},
+			PodSelector: &PodSelector{},
+			PolicyTypes: []string{},
+			Ingress:     []*Ingress{},
+			Egress:      []*Egress{}},
 	}
 }
-
 
 func (r *ResNetworkPolicy) SetMetadataName(name string) error {
 	if name == "" {
@@ -188,7 +185,6 @@ func (r *ResNetworkPolicy) AddEgress(eg *Egress) error {
 	return nil
 }
 
-
 func (r *ResNetworkPolicy) ToYamlFile() ([]byte, error) {
 	yamlData, err := yaml.Marshal(*r)
 	if err != nil {
@@ -196,4 +192,3 @@ func (r *ResNetworkPolicy) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-

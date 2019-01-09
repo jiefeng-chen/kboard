@@ -8,14 +8,18 @@ import (
 )
 
 type IStorageClass interface {
-	IK8sCore
+	WriteToEtcd(string, []byte) *HttpError
+	Create([]byte) *HttpError
+	Replace(string, []byte) *HttpError
+	Read(string) (*simplejson.Json, *HttpError)
+	Delete(string) *HttpError
 }
 
 type StorageClass struct {
 	K8sCore
 }
 
-func NewStorageClass(Config *config.Config) *StorageClass {
+func NewStorageClass(Config *config.Config) IStorageClass {
 	return &StorageClass{
 		K8sCore{
 			Config: Config,

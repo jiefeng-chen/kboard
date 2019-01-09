@@ -45,16 +45,16 @@ func (this *INode) Scale() {
 	statefulSet.SetNamespace("myapp")
 	statefulSet.SetReplicas(3)
 	container := resource.NewContainer("mycontainer", "image")
-	container.Resources = &resource.Resource{
-		Limits: &resource.Limits{
+	container.SetResource(resource.Resource{
+		Limits: resource.Limits{
 			Cpu: "0.5",
 			Memory:"100Mi",
 		},
-		Requests: &resource.Request{
+		Requests: resource.Request{
 			Cpu: "0.1",
 			Memory: "50Mi",
 		},
-	}
+	})
 	statefulSet.AddContainer(container)
 
 	annos := map[string]string{

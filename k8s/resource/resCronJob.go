@@ -15,20 +15,17 @@ type ICronJob interface {
 type ResCronJob struct {
 	Kind       string
 	ApiVersion string `yaml:"apiVersion"`
-	MetaData   struct {
+	Metadata   struct {
 		Name      string
 		Namespace string
 	}
-	Spec struct {
-		Rules []IngressRule
-	}
 }
 
-func NewCronJob() *ResCronJob {
+func NewCronJob() ICronJob {
 	return &ResCronJob{
 		Kind:       RESOURCE_CRON_JOB,
 		ApiVersion: "extensions/v1beta1",
-		MetaData: struct {
+		Metadata: struct {
 			Name      string
 			Namespace string
 		}{Name: "", Namespace: ""},
@@ -47,20 +44,18 @@ func (r *ResCronJob) SetMetadataName(name string) error {
 	if name == "" {
 		return exception.NewError("name is empty")
 	}
-	r.MetaData.Name = name
+	r.Metadata.Name = name
 	return nil
 }
 
 func (r *ResCronJob) GetMetaDataName() string {
-	return r.MetaData.Name
+	return r.Metadata.Name
 }
 
 func (r *ResCronJob) SetNamespace(ns string) error {
 	if ns == "" {
 		return exception.NewError("namespace is empty")
 	}
-	r.MetaData.Namespace = ns
+	r.Metadata.Namespace = ns
 	return nil
 }
-
-

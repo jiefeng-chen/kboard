@@ -12,9 +12,9 @@ type IResDaemonSet interface {
 	GetNamespace() string
 	SetMatchLabels([]map[string]string) error
 	SetTolerations([]map[string]string) error
-	AddContainer(*Container) error
+	AddContainer(IContainer) error
 	SetTerminationGracePeriodSeconds(string) error
-	AddVolume(*Volume) error
+	SetVolume(*Volume) error
 	SetRestartPolicy(string) error
 	SetNodeSelector([]map[string]string) error
 }
@@ -30,7 +30,7 @@ type ResDaemonSet struct {
 	Spec *DaemonSetSpec
 }
 
-func NewResDaemonSet() *ResDaemonSet {
+func NewResDaemonSet() IResDaemonSet {
 	return &ResDaemonSet{
 		ApiVersion: "extensions/v1beta1",
 		Kind:       RESOURCE_DAEMONSET,
@@ -41,20 +41,20 @@ func NewResDaemonSet() *ResDaemonSet {
 		}{Name: "", Namespace: "", Labels: map[string]string{}},
 		Spec: &DaemonSetSpec{
 			Selector: &Selector{
-				MatchLabels: map[string]string{},
+				MatchLabels:      map[string]string{},
 				MatchExpressions: nil,
 			},
 			Template: &DaemonSetSpecTemplate{
 				Metadata: struct{ Labels map[string]string }{
-						Labels: map[string]string{}},
+					Labels: map[string]string{}},
 				Spec: &DaemonSetTemplateSpec{
-					Tolerations: []*DaemonSetToleration{},
-					Containers: []*Container{},
+					Tolerations:                   []*DaemonSetToleration{},
+					Containers:                    []IContainer{},
 					TerminationGracePeriodSeconds: "",
-					Volumes: []*Volume{},
-					RestartPolicy: "Always",
+					Volumes:          []*Volume{},
+					RestartPolicy:    "Always",
 					ImagePullSecrets: map[string]string{},
-					NodeSelector: map[string]string{},
+					NodeSelector:     map[string]string{},
 				},
 			},
 		},
@@ -75,7 +75,7 @@ type DaemonSetSpecTemplate struct {
 
 type DaemonSetTemplateSpec struct {
 	Tolerations                   []*DaemonSetToleration
-	Containers                    []*Container
+	Containers                    []IContainer
 	TerminationGracePeriodSeconds string `yaml:"terminationGracePeriodSeconds"`
 	Volumes                       []*Volume
 	RestartPolicy                 string            `yaml:"restartPolicy"` // 默认为 Always
@@ -150,7 +150,7 @@ func (r *ResDaemonSet) SetTolerations(tolers []map[string]string) error {
 	return nil
 }
 
-func (r *ResDaemonSet) AddContainer(container *Container) error {
+func (r *ResDaemonSet) AddContainer(container IContainer) error {
 	if container == nil {
 		return exception.NewError("container is nil")
 	}
@@ -195,7 +195,7 @@ type VolumePersistentVolumeClaim struct {
 	} `yaml:"persistentVolumeClaim"`
 }
 
-func (r *ResDaemonSet) AddVolume(vol *Volume) error {
+func (r *ResDaemonSet) SetVolume(vol *Volume) error {
 	if vol == nil {
 		return exception.NewError("volume is nil")
 	}

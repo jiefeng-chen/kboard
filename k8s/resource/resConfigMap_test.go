@@ -9,5 +9,7 @@ func TestResConfigMap_SetData(t *testing.T) {
 	}
 	confMap := NewConfigMap()
 	confMap.SetData(data)
+	confMap.SetNamespace("helle")
+	confMap.SetMetadataName("132413")
 	t.Fatalf("%+v", confMap)
 }

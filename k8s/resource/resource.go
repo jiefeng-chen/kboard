@@ -6,58 +6,58 @@ type IResource interface {
 
 // 资源类型
 const (
-	RESOURCE_CONFIG_MAP                = "ConfigMap"
-	RESOURCE_PERSISTENT_VOLUME_CLAIM   = "PersistentVolumeClaim"
-	RESOURCE_PERSISTENT_VOLUME         = "PersistentVolume"
-	RESOURCE_SECRET                    = "Secret"
-	RESOURCE_STORAGE_CLASS             = "StorageClass"
-	RESOURCE_SERVICE                   = "Service"
-	RESOURCE_POD                       = "Pod"
-	RESOURCE_REPLICATION_CONTROLLER    = "ReplicationController"
-	RESOURCE_NAMESPACE                 = "Namespace"
-	RESOURCE_NODE                      = "Node"
-	RESOURCE_STATEFULE_SET             = "StatefulSet"
-	RESOURCE_RESOURCE_QUOTA            = "ResourceQuota"
-	RESOURCE_JOB                       = "Job"
-	RESOURCE_CRON_JOB                  = "CronJob"
-	RESOURCE_INGRESS                   = "Ingress"
-	RESOURCE_DAEMONSET                 = "DaemonSet"
-	RESOURCE_DEPLOYMENT                = "Deployment"
-	RESOURCE_INGRESS_CONTROLLER        = "IngressController"
-	RESOURCE_HORIZONTAL_POD_AUTOSCALER = "HorizontalPodAutoscaler"
-	RESOURCE_REPLICASET			       = "ReplicaSet"
-	RESOURCE_LIMIT_RANGE			   = "LimitRange"
-	RESOURCE_NETWORK_POLICY			   = "NetworkPolicy"
-	RESOURCE_POD_PRESET				   = "PodPreset"
+	RESOURCE_CONFIG_MAP                 = "ConfigMap"
+	RESOURCE_PERSISTENT_VOLUME_CLAIM    = "PersistentVolumeClaim"
+	RESOURCE_PERSISTENT_VOLUME          = "PersistentVolume"
+	RESOURCE_SECRET                     = "Secret"
+	RESOURCE_STORAGE_CLASS              = "StorageClass"
+	RESOURCE_SERVICE                    = "Service"
+	RESOURCE_POD                        = "Pod"
+	RESOURCE_REPLICATION_CONTROLLER     = "ReplicationController"
+	RESOURCE_NAMESPACE                  = "Namespace"
+	RESOURCE_NODE                       = "Node"
+	RESOURCE_STATEFULE_SET              = "StatefulSet"
+	RESOURCE_RESOURCE_QUOTA             = "ResourceQuota"
+	RESOURCE_JOB                        = "Job"
+	RESOURCE_CRON_JOB                   = "CronJob"
+	RESOURCE_INGRESS                    = "Ingress"
+	RESOURCE_DAEMONSET                  = "DaemonSet"
+	RESOURCE_DEPLOYMENT                 = "Deployment"
+	RESOURCE_INGRESS_CONTROLLER         = "IngressController"
+	RESOURCE_HORIZONTAL_POD_AUTOSCALER  = "HorizontalPodAutoscaler"
+	RESOURCE_REPLICASET                 = "ReplicaSet"
+	RESOURCE_LIMIT_RANGE                = "LimitRange"
+	RESOURCE_NETWORK_POLICY             = "NetworkPolicy"
+	RESOURCE_POD_PRESET                 = "PodPreset"
 	RESOURCE_CUSTOM_RESOURCE_DEFINITION = "CustomResourceDefinition"
 )
 
 // 显示名称
 func GetKinds() map[string]string {
 	return map[string]string{
-		RESOURCE_CONFIG_MAP:              "ConfigMap",
-		RESOURCE_PERSISTENT_VOLUME_CLAIM: "PersistentVolumeClaim",
-		RESOURCE_PERSISTENT_VOLUME:       "PersistentVolume",
-		RESOURCE_SECRET:                  "Secret",
-		RESOURCE_STORAGE_CLASS:           "StorageClass",
-		RESOURCE_SERVICE:                 "Service",
-		RESOURCE_POD:                     "Pod",
-		RESOURCE_REPLICATION_CONTROLLER:  "ReplicationController",
-		RESOURCE_NAMESPACE:               "Namespace",
-		RESOURCE_NODE:                    "Node",
-		RESOURCE_STATEFULE_SET:           "StatefulSet",
-		RESOURCE_RESOURCE_QUOTA:          "ResourceQuota",
-		RESOURCE_JOB:                     "Job",
-		RESOURCE_CRON_JOB:                "CronJob",
-		RESOURCE_INGRESS:                 "Ingress",
-		RESOURCE_DAEMONSET:               "DaemonSet",
-		RESOURCE_DEPLOYMENT:              "Deployment",
-		RESOURCE_REPLICASET:			  "ReplicaSet",
-		RESOURCE_HORIZONTAL_POD_AUTOSCALER: "HorizontalPodAutoscaler",
-		RESOURCE_INGRESS_CONTROLLER:		"IngressController",
-		RESOURCE_LIMIT_RANGE:				"LimitRange",
-		RESOURCE_NETWORK_POLICY:			"NetworkPolicy",
-		RESOURCE_POD_PRESET:				"PodPreset",
+		RESOURCE_CONFIG_MAP:                 "ConfigMap",
+		RESOURCE_PERSISTENT_VOLUME_CLAIM:    "PersistentVolumeClaim",
+		RESOURCE_PERSISTENT_VOLUME:          "PersistentVolume",
+		RESOURCE_SECRET:                     "Secret",
+		RESOURCE_STORAGE_CLASS:              "StorageClass",
+		RESOURCE_SERVICE:                    "Service",
+		RESOURCE_POD:                        "Pod",
+		RESOURCE_REPLICATION_CONTROLLER:     "ReplicationController",
+		RESOURCE_NAMESPACE:                  "Namespace",
+		RESOURCE_NODE:                       "Node",
+		RESOURCE_STATEFULE_SET:              "StatefulSet",
+		RESOURCE_RESOURCE_QUOTA:             "ResourceQuota",
+		RESOURCE_JOB:                        "Job",
+		RESOURCE_CRON_JOB:                   "CronJob",
+		RESOURCE_INGRESS:                    "Ingress",
+		RESOURCE_DAEMONSET:                  "DaemonSet",
+		RESOURCE_DEPLOYMENT:                 "Deployment",
+		RESOURCE_REPLICASET:                 "ReplicaSet",
+		RESOURCE_HORIZONTAL_POD_AUTOSCALER:  "HorizontalPodAutoscaler",
+		RESOURCE_INGRESS_CONTROLLER:         "IngressController",
+		RESOURCE_LIMIT_RANGE:                "LimitRange",
+		RESOURCE_NETWORK_POLICY:             "NetworkPolicy",
+		RESOURCE_POD_PRESET:                 "PodPreset",
 		RESOURCE_CUSTOM_RESOURCE_DEFINITION: "CustomResourceDefinition",
 	}
 }
@@ -104,6 +104,3 @@ func GetReclaimPolicy() map[string]string {
 		"Retain": "Retain",
 	}
 }
-
-
-

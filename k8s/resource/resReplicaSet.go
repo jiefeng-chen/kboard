@@ -1,9 +1,8 @@
 package resource
 
-
 import (
-	"gopkg.in/yaml.v2"
 	"errors"
+	"gopkg.in/yaml.v2"
 )
 
 type IResReplicaSet interface {
@@ -14,7 +13,7 @@ type IResReplicaSet interface {
 	SetLabels(map[string]string) error
 	GetLabel(string) string
 	SetTemplateLabel(map[string]string) error
-	AddContainer(*Container) error
+	AddContainer(IContainer) error
 	SetReplicas(int) error
 	SetSelector(Selector) error
 }
@@ -25,9 +24,9 @@ type ResReplicaSet struct {
 	Metadata   struct {
 		Name      string
 		Namespace string
-		Labels 	  map[string]string	// 标签组
+		Labels    map[string]string // 标签组
 	}
-	Spec struct{
+	Spec struct {
 		Replicas int
 		Selector Selector
 		Template ReplicaSetTemplate
@@ -35,16 +34,15 @@ type ResReplicaSet struct {
 }
 
 type ReplicaSetTemplate struct {
-	Metadata struct{
+	Metadata struct {
 		Labels map[string]string
 	}
-	Spec struct{
-		Containers []*Container
+	Spec struct {
+		Containers []IContainer
 	}
 }
 
-
-func NewResReplicaSet() *ResReplicaSet {
+func NewResReplicaSet() IResReplicaSet {
 	return &ResReplicaSet{
 		ApiVersion: "apps/v1",
 		Kind:       RESOURCE_REPLICASET,
@@ -53,9 +51,9 @@ func NewResReplicaSet() *ResReplicaSet {
 			Namespace string
 			Labels    map[string]string
 		}{
-			Name: "",
+			Name:      "",
 			Namespace: "",
-			Labels: map[string]string{},
+			Labels:    map[string]string{},
 		},
 		Spec: struct {
 			Replicas int
@@ -64,15 +62,15 @@ func NewResReplicaSet() *ResReplicaSet {
 		}{
 			Replicas: 0,
 			Selector: Selector{
-				MatchLabels: map[string]string{},
+				MatchLabels:      map[string]string{},
 				MatchExpressions: nil,
 			},
 			Template: ReplicaSetTemplate{
 				Metadata: struct{ Labels map[string]string }{
 					Labels: map[string]string{}},
-				Spec: struct{ Containers []*Container }{
-					Containers: []*Container{}},
-		}},
+				Spec: struct{ Containers []IContainer }{
+					Containers: []IContainer{}},
+			}},
 	}
 }
 
@@ -134,7 +132,7 @@ func (r *ResReplicaSet) SetTemplateLabel(labels map[string]string) error {
 	return nil
 }
 
-func (r *ResReplicaSet) AddContainer(container *Container) error {
+func (r *ResReplicaSet) AddContainer(container IContainer) error {
 	if container == nil {
 		return errors.New("container is nil")
 	}
@@ -150,7 +148,6 @@ func (r *ResReplicaSet) SetReplicas(replica int) error {
 	return nil
 }
 
-
 func (r *ResReplicaSet) ToYamlFile() ([]byte, error) {
 	yamlData, err := yaml.Marshal(*r)
 	if err != nil {
@@ -158,7 +155,3 @@ func (r *ResReplicaSet) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-
-
-
-

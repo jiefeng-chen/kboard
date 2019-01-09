@@ -1,6 +1,5 @@
 package resource
 
-
 import (
 	"gopkg.in/yaml.v2"
 	"kboard/exception"
@@ -21,33 +20,33 @@ type ResResourceQuota struct {
 		Name      string
 		Namespace string
 	}
-	Spec struct{
+	Spec struct {
 		Hard *Hard
 	}
 }
 
 type Hard struct {
-	Configmaps string
+	Configmaps             string
 	Persistentvolumeclaims string
 	Replicationcontrollers string
-	Secrets string
-	Services string
-	Pods string
-	Requests *Request
-	Limits *Limits
+	Secrets                string
+	Services               string
+	Pods                   string
+	Requests               *Request
+	Limits                 *Limits
 }
 
 type Limits struct {
-	Cpu string
+	Cpu    string
 	Memory string
 }
 
 type Request struct {
-	Cpu string
+	Cpu    string
 	Memory string
 }
 
-func NewResResourceQuota() *ResResourceQuota {
+func NewResResourceQuota() IResResourceQuota {
 	return &ResResourceQuota{
 		Kind:       RESOURCE_RESOURCE_QUOTA,
 		ApiVersion: "v1",
@@ -57,11 +56,11 @@ func NewResResourceQuota() *ResResourceQuota {
 		}{Name: "", Namespace: ""},
 		Spec: struct{ Hard *Hard }{Hard: &Hard{
 			Requests: &Request{
-				Cpu: "",
+				Cpu:    "",
 				Memory: "",
 			},
 			Limits: &Limits{
-				Cpu: "",
+				Cpu:    "",
 				Memory: "",
 			},
 		}},

@@ -2,9 +2,9 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"strings"
-	"kboard/utils"
 	"kboard/exception"
+	"kboard/utils"
+	"strings"
 )
 
 type IResStorageClass interface {
@@ -33,7 +33,7 @@ type ResStorageClass struct {
 	Parameters           interface{}
 }
 
-func NewStorageClass() *ResStorageClass {
+func NewStorageClass() IResStorageClass {
 	return &ResStorageClass{
 		Kind:                 RESOURCE_STORAGE_CLASS,
 		ApiVersion:           "storage.k8s.io/v1",

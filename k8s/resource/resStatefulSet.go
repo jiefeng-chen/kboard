@@ -12,7 +12,7 @@ type IResStatefulSet interface {
 	SetServiceName(string) error
 	SetReplicas(int) error
 	SetLabels(map[string]string) error
-	AddContainer(*Container) error
+	AddContainer(IContainer) error
 	SetAnnotations(map[string]string) error
 	SetVolumeClaimName(string) error
 	SetAccessMode(string) error
@@ -31,25 +31,25 @@ type ResStatefulSet struct {
 }
 
 type StatefulSetSpec struct {
-	Selector *Selector
-	ServiceName string `yaml:"serviceName"`
-	Replicas int
-	Template *StatefulSetSpecTemplate
+	Selector            *Selector
+	ServiceName         string `yaml:"serviceName"`
+	Replicas            int
+	Template            *StatefulSetSpecTemplate
 	VolumeClaimTemplate *VolumeClaimTemplate `yaml:"volumeClaimTemplate"`
 }
 
 type StatefulSetSpecTemplate struct {
-	Metadata struct{
+	Metadata struct {
 		Labels map[string]string
 	}
-	Spec struct{
-		Containers []*Container
+	Spec struct {
+		Containers []IContainer
 	}
 }
 
 type VolumeClaimTemplate struct {
-	Metadata struct{
-		Name string
+	Metadata struct {
+		Name        string
 		Annotations map[string]string
 	}
 	Spec *VolumeClaimTemplateSpec
@@ -57,34 +57,34 @@ type VolumeClaimTemplate struct {
 
 type VolumeClaimTemplateSpec struct {
 	AccessModes []string `yaml:"accessModes"`
-	Resources struct{
-		Requests struct{
+	Resources   struct {
+		Requests struct {
 			Storage string
 		}
 	}
 }
 
-func NewResStatefulSet() *ResStatefulSet {
+func NewResStatefulSet() IResStatefulSet {
 	return &ResStatefulSet{
-		Kind:                 RESOURCE_STATEFULE_SET,
-		ApiVersion:           "apps/v1",
+		Kind:       RESOURCE_STATEFULE_SET,
+		ApiVersion: "apps/v1",
 		Spec: &StatefulSetSpec{
 			ServiceName: "",
-			Replicas: 0,
+			Replicas:    0,
 			Template: &StatefulSetSpecTemplate{
 				Metadata: struct{ Labels map[string]string }{Labels: map[string]string{}},
-				Spec: struct{ Containers []*Container }{Containers: nil},
+				Spec:     struct{ Containers []IContainer }{Containers: nil},
 			},
 			VolumeClaimTemplate: &VolumeClaimTemplate{
 				Metadata: struct {
 					Name        string
 					Annotations map[string]string
 				}{
-					Name: "",
+					Name:        "",
 					Annotations: map[string]string{}},
 				Spec: &VolumeClaimTemplateSpec{
 					AccessModes: []string{},
-					Resources: struct{Requests struct{ Storage string } }{
+					Resources: struct{ Requests struct{ Storage string } }{
 						Requests: struct{ Storage string }{
 							Storage: ""}},
 				},
@@ -101,7 +101,6 @@ func (r *ResStatefulSet) SetMetaDataName(name string) error {
 	return nil
 }
 
-
 func (r *ResStatefulSet) SetNamespace(ns string) error {
 	if ns == "" {
 		return exception.NewError("name is empty")
@@ -110,7 +109,6 @@ func (r *ResStatefulSet) SetNamespace(ns string) error {
 	return nil
 }
 
-
 func (r *ResStatefulSet) SetServiceName(svcName string) error {
 	if svcName == "" {
 		return exception.NewError("service name is empty")
@@ -118,7 +116,6 @@ func (r *ResStatefulSet) SetServiceName(svcName string) error {
 	r.Spec.ServiceName = svcName
 	return nil
 }
-
 
 func (r *ResStatefulSet) SetReplicas(replica int) error {
 	if replica <= 0 {
@@ -141,15 +138,13 @@ func (r *ResStatefulSet) SetLabels(labels map[string]string) error {
 	return nil
 }
 
-
-func (r *ResStatefulSet) AddContainer(container *Container) error {
+func (r *ResStatefulSet) AddContainer(container IContainer) error {
 	if container == nil {
 		return exception.NewError("container is nil")
 	}
 	r.Spec.Template.Spec.Containers = append(r.Spec.Template.Spec.Containers, container)
 	return nil
 }
-
 
 func (r *ResStatefulSet) SetAnnotations(annos map[string]string) error {
 	if len(annos) <= 0 {
@@ -165,7 +160,6 @@ func (r *ResStatefulSet) SetAnnotations(annos map[string]string) error {
 	return nil
 }
 
-
 func (r *ResStatefulSet) SetVolumeClaimName(volClaimName string) error {
 	if volClaimName == "" {
 		return exception.NewError("volume claim name is empty")
@@ -174,7 +168,6 @@ func (r *ResStatefulSet) SetVolumeClaimName(volClaimName string) error {
 	return nil
 }
 
-
 func (r *ResStatefulSet) SetAccessMode(accMode string) error {
 	if accMode == "" {
 		return exception.NewError("access mode is empty")
@@ -182,7 +175,6 @@ func (r *ResStatefulSet) SetAccessMode(accMode string) error {
 	r.Spec.VolumeClaimTemplate.Spec.AccessModes = append(r.Spec.VolumeClaimTemplate.Spec.AccessModes, accMode)
 	return nil
 }
-
 
 func (r *ResStatefulSet) SetStorage(cap string) error {
 	if cap == "" {
@@ -207,6 +199,3 @@ func (r *ResStatefulSet) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-
-
-

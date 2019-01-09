@@ -14,7 +14,7 @@ type HorizontalPodAutoscaler struct {
 }
 
 
-func NewHorizontalPodAutoscaler(Config *config.Config) *HorizontalPodAutoscaler {
+func NewHorizontalPodAutoscaler(Config *config.Config) IHorizontalPodAutoscaler {
 	return &HorizontalPodAutoscaler{
 		K8sCore{
 			Config: Config,

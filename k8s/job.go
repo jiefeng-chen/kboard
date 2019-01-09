@@ -1,21 +1,19 @@
 package k8s
 
 import (
-	"github.com/bitly/go-simplejson"
 	"kboard/config"
 	"kboard/k8s/resource"
 )
 
 type IJob interface {
 	IK8sCore
-	Nodes() (*simplejson.Json, *HttpError)
 }
 
 type Job struct {
 	K8sCore
 }
 
-func NewJob(Config *config.Config) *Job {
+func NewJob(Config *config.Config) IJob {
 	return &Job{
 		K8sCore{
 			Config: Config,

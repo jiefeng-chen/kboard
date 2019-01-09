@@ -1,8 +1,8 @@
 package resource
 
 import (
-	"kboard/exception"
 	"gopkg.in/yaml.v2"
+	"kboard/exception"
 )
 
 type IResNamespace interface {
@@ -15,19 +15,19 @@ type IResNamespace interface {
 // pod结构体
 type ResNamespace struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
-	Metadata struct{
-		Name string
-		Namespace string
-		Labels map[string]string
+	Kind       string
+	Metadata   struct {
+		Name        string
+		Namespace   string
+		Labels      map[string]string
 		Annotations map[string]string
 	}
 }
 
-func NewResNamespace() *ResNamespace {
+func NewResNamespace() IResNamespace {
 	return &ResNamespace{
 		ApiVersion: "v1",
-		Kind: RESOURCE_NAMESPACE,
+		Kind:       RESOURCE_NAMESPACE,
 		Metadata: struct {
 			Name        string
 			Namespace   string
@@ -73,4 +73,3 @@ func (r *ResNamespace) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-

@@ -12,7 +12,7 @@ type IResPod interface {
 	SetNamespace(string) error
 	SetRestartPolicy(string) error
 	SetLabels(map[string]string) error
-	AddContainer(*Container) error
+	AddContainer(IContainer) error
 	AddVolume(*Volume) error
 	SetAnnotations(map[string]string) error
 }
@@ -20,20 +20,20 @@ type IResPod interface {
 // pod结构体
 type ResPod struct {
 	ApiVersion string `yaml:"apiVersion"`
-	Kind string
-	Metadata struct{
-		Name string
-		Namespace string
-		Labels map[string]string
+	Kind       string
+	Metadata   struct {
+		Name        string
+		Namespace   string
+		Labels      map[string]string
 		Annotations map[string]string
 	}
 	Spec *ResPodSpec
 }
 
-func NewResPod(name string) *ResPod {
+func NewResPod(name string) IResPod {
 	return &ResPod{
 		ApiVersion: "v1",
-		Kind: RESOURCE_POD,
+		Kind:       RESOURCE_POD,
 		Metadata: struct {
 			Name        string
 			Namespace   string
@@ -41,22 +41,22 @@ func NewResPod(name string) *ResPod {
 			Annotations map[string]string
 		}{Name: name, Namespace: "", Labels: map[string]string{}, Annotations: map[string]string{}},
 		Spec: &ResPodSpec{
-			Containers: []*Container{},
-			RestartPolicy: "",
-			NodeSelector: struct{}{},
+			Containers:       []IContainer{},
+			RestartPolicy:    "",
+			NodeSelector:     struct{}{},
 			ImagePullSecrets: []map[string]string{},
-			HostNetwork: false,
-			Volumes: []*Volume{}},
+			HostNetwork:      false,
+			Volumes:          []*Volume{}},
 	}
 }
 
 type ResPodSpec struct {
-	Containers []*Container
-	RestartPolicy string `yaml:"restartPolicy"`  // [Always | Never | OnFailure]
-	NodeSelector struct{} `yaml:"nodeSelector"`
+	Containers       []IContainer
+	RestartPolicy    string              `yaml:"restartPolicy"` // [Always | Never | OnFailure]
+	NodeSelector     struct{}            `yaml:"nodeSelector"`
 	ImagePullSecrets []map[string]string `yaml:"imagePullSecrets"`
-	HostNetwork bool `yaml:"hostNetwork"`
-	Volumes []*Volume
+	HostNetwork      bool                `yaml:"hostNetwork"`
+	Volumes          []*Volume
 }
 
 func (r *ResPod) SetMetadataName(name string) error {
@@ -66,7 +66,6 @@ func (r *ResPod) SetMetadataName(name string) error {
 	r.Metadata.Name = name
 	return nil
 }
-
 
 func (r *ResPod) SetNamespace(ns string) error {
 	if ns == "" {
@@ -84,7 +83,7 @@ func (r *ResPod) SetRestartPolicy(policy string) error {
 	return nil
 }
 
-func (r *ResPod) AddContainer(container *Container) error {
+func (r *ResPod) AddContainer(container IContainer) error {
 	if container == nil {
 		return exception.NewError("container is nil")
 	}
@@ -114,7 +113,6 @@ func (r *ResPod) AddVolume(vol *Volume) error {
 	return nil
 }
 
-
 func (r *ResPod) SetAnnotations(annos map[string]string) error {
 	if len(annos) <= 0 {
 		return errors.New("annotations is empty")
@@ -128,7 +126,6 @@ func (r *ResPod) SetAnnotations(annos map[string]string) error {
 	return nil
 }
 
-
 func (r *ResPod) ToYamlFile() ([]byte, error) {
 	yamlData, err := yaml.Marshal(*r)
 	if err != nil {
@@ -139,12 +136,11 @@ func (r *ResPod) ToYamlFile() ([]byte, error) {
 
 func NewVolume() *Volume {
 	return &Volume{
-		Name:"",
+		Name: "",
 		EmptyDir: struct {
-
 		}{},
 		HostPath: struct{ Path string }{Path: ""},
-		Secret: &Secret{SecretName: "", Items: []map[string]string{}},
+		Secret:   &Secret{SecretName: "", Items: []map[string]string{}},
 		ConfigMap: struct {
 			Name  string
 			Items []map[string]string
@@ -153,16 +149,14 @@ func NewVolume() *Volume {
 }
 
 type Volume struct {
-	Name string
+	Name     string
 	EmptyDir interface{} `yaml:"emptyDir"`
-	HostPath struct{
+	HostPath struct {
 		Path string
 	} `yaml:"hostPath"`
-	Secret *Secret
-	ConfigMap struct{
-		Name string
+	Secret    *Secret
+	ConfigMap struct {
+		Name  string
 		Items []map[string]string // [key:string, path:string]
 	} `yaml:"configMap"`
 }
-
-

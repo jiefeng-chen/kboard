@@ -28,22 +28,22 @@ type ResJob struct {
 
 type JobSpec struct {
 	Completions int // 固定结束次数
-	Template *JobTemplate
+	Template    *JobTemplate
 }
 
 type JobTemplate struct {
-	Metadata struct{
+	Metadata struct {
 		Name string
 	}
 	Spec *JobTemplateSpec
 }
 
 type JobTemplateSpec struct {
-	Container []*Container
+	Container     []*Container
 	RestartPolicy string `yaml:"restartPolicy"`
 }
 
-func NewJob() *ResJob {
+func NewJob() IJob {
 	return &ResJob{
 		Kind:       RESOURCE_JOB,
 		ApiVersion: "batch/v1",
@@ -56,7 +56,7 @@ func NewJob() *ResJob {
 			Template: &JobTemplate{
 				Metadata: struct{ Name string }{Name: ""},
 				Spec: &JobTemplateSpec{
-					Container: nil,
+					Container:     nil,
 					RestartPolicy: "",
 				},
 			},
@@ -116,7 +116,6 @@ func (r *ResJob) SetRestartPolicy(policy string) error {
 	return nil
 }
 
-
 func (r *ResJob) ToYamlFile() ([]byte, error) {
 	yamlData, err := yaml.Marshal(*r)
 	if err != nil {
@@ -124,6 +123,3 @@ func (r *ResJob) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-
-
-

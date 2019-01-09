@@ -8,7 +8,10 @@ import (
 )
 
 type IResourceQuota interface {
-	IK8sCore
+	WriteToEtcd(string, []byte) *HttpError
+	Create(string, []byte) *HttpError
+	Replace(string, []byte) *HttpError
+	Read(string) (*simplejson.Json, *HttpError)
 }
 
 type ResourceQuota struct {
@@ -16,7 +19,7 @@ type ResourceQuota struct {
 	MetaName string
 }
 
-func NewResourceQuota(Config *config.Config) *ResourceQuota {
+func NewResourceQuota(Config *config.Config) IResourceQuota {
 	return &ResourceQuota{
 		MetaName: "quota-v1",
 		K8sCore: K8sCore{

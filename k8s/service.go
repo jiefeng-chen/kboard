@@ -13,7 +13,7 @@ type Service struct {
 	K8sCore
 }
 
-func NewService(Config *config.Config) *Service {
+func NewService(Config *config.Config) IService {
 	return &Service{
 		K8sCore{
 			Config: Config,

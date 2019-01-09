@@ -3,18 +3,18 @@ package resource
 import "testing"
 
 func TestNewResStatefulSet(t *testing.T) {
-	var resStatefulSet *ResStatefulSet
+	var resStatefulSet IResStatefulSet
 
 	resStatefulSet = NewResStatefulSet()
 	// 1. name
 	resStatefulSet.SetMetaDataName("name")
 	resStatefulSet.SetNamespace("namespace")
 	annos := map[string]string{
-		"app":"nginx",
+		"app": "nginx",
 	}
 	resStatefulSet.SetAnnotations(annos)
 	labels := map[string]string{
-		"app":"nginx",
+		"app": "nginx",
 	}
 	resStatefulSet.SetLabels(labels)
 	resStatefulSet.SetServiceName("service name")
@@ -22,7 +22,7 @@ func TestNewResStatefulSet(t *testing.T) {
 	resStatefulSet.SetReplicas(3)
 	resStatefulSet.SetVolumeClaimName("volume claim name")
 	resStatefulSet.SetAccessMode("ReadWriteOnce")
-	var container *Container
+	var container IContainer
 	container = NewContainer("nginx", "nginx:latest")
 
 	resStatefulSet.AddContainer(container)

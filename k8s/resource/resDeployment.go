@@ -11,7 +11,7 @@ type IResDeployment interface {
 	SetNamespace(string) error
 	GetNamespace() string
 	SetMatchLabels(map[string]string) error
-	AddContainer(*Container) error
+	AddContainer(IContainer) error
 	SetTemplateLabels(map[string]string) error
 }
 
@@ -30,14 +30,14 @@ type ResDeployment struct {
 				Labels map[string]string
 			}
 			Spec struct {
-				Containers []*Container
+				Containers []IContainer
 			}
 		}
 		Replicas string // replica副本数
 	}
 }
 
-func NewResDeployment() *ResDeployment {
+func NewResDeployment() IResDeployment {
 	return &ResDeployment{
 		ApiVersion: "extensions/v1beta1",
 		Kind:       RESOURCE_DEPLOYMENT,
@@ -53,22 +53,20 @@ func NewResDeployment() *ResDeployment {
 		Spec: struct {
 			Selector *Selector
 			Template struct {
-				Metadata struct{ Labels map[string]string };
-				Spec     struct{ Containers []*Container }
+				Metadata struct{ Labels map[string]string }
+				Spec     struct{ Containers []IContainer }
 			}
 			Replicas string
 		}{
-			Selector: &Selector{
-				MatchLabels: map[string]string{},
-				MatchExpressions: nil,
-			},
-			Template: struct {
-			Metadata struct{ Labels map[string]string }
-			Spec     struct{ Containers []*Container }
+			Selector: nil,
+			Template: struct {Metadata struct{ Labels map[string]string }
+			Spec     struct{ Containers []IContainer }
 		}{
-			Metadata: struct{ Labels map[string]string }{Labels: map[string]string{}},
-			Spec: struct{ Containers []*Container }{Containers: nil}},
-			Replicas: ""},
+			Metadata: struct{ Labels map[string]string }{
+				Labels: map[string]string{}},
+			Spec: struct{Containers []IContainer }{
+				Containers: nil}},
+				Replicas: ""},
 	}
 }
 
@@ -95,7 +93,7 @@ func (r *ResDeployment) GetNamespace() string {
 	return r.Metadata.Namespace
 }
 
-func (r *ResDeployment) AddContainer(container *Container) error {
+func (r *ResDeployment) AddContainer(container IContainer) error {
 	if container == nil {
 		return exception.NewError("container is nil")
 	}

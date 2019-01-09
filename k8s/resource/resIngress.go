@@ -2,8 +2,8 @@ package resource
 
 import (
 	"gopkg.in/yaml.v2"
-	"kboard/utils"
 	"kboard/exception"
+	"kboard/utils"
 )
 
 type IResIngress interface {
@@ -28,12 +28,12 @@ type ResIngress struct {
 	}
 	Spec struct {
 		Rules []*IngressRule
-		Tls []Tls
+		Tls   []Tls
 	}
 }
 
 type Tls struct {
-	Hosts []string
+	Hosts      []string
 	SecretName string `yaml:"secretName"`
 }
 
@@ -55,12 +55,12 @@ type IngressBackend struct {
 }
 
 const (
-	ANNOTATIONS_INGRESS_CLASS = "kubernetes.io/ingress.class"
-	ANNOTATIONS_WHITELIST_X_FORWARDED_FOR = "ingress.kubernetes.io/whitelist-x-forwarded-for" // 是否开启ip白名单
-	ANNOTATIONS_WHITELIST_SOURCE_RANGE = "traefik.ingress.kubernetes.io/whitelist-source-range" // ip白名单列表
+	ANNOTATIONS_INGRESS_CLASS             = "kubernetes.io/ingress.class"
+	ANNOTATIONS_WHITELIST_X_FORWARDED_FOR = "ingress.kubernetes.io/whitelist-x-forwarded-for"      // 是否开启ip白名单
+	ANNOTATIONS_WHITELIST_SOURCE_RANGE    = "traefik.ingress.kubernetes.io/whitelist-source-range" // ip白名单列表
 )
 
-func NewIngress() *ResIngress {
+func NewIngress() IResIngress {
 	return &ResIngress{
 		Kind:       RESOURCE_INGRESS,
 		ApiVersion: "extensions/v1beta1",
@@ -154,7 +154,7 @@ func (r *ResIngress) SetTls(hosts []string, secretName string) error {
 		return exception.NewError("缺少tls密钥对")
 	}
 	tls := Tls{
-		Hosts: []string{},
+		Hosts:      []string{},
 		SecretName: secretName,
 	}
 	for _, host := range hosts {

@@ -13,7 +13,7 @@ type ReplicaSet struct {
 	K8sCore
 }
 
-func NewReplicaSet(Config *config.Config) *ReplicaSet {
+func NewReplicaSet(Config *config.Config) IReplicaSet {
 	return &ReplicaSet{
 		K8sCore{
 			Config: Config,

@@ -3,9 +3,9 @@ package resource
 import "testing"
 
 func TestNewPod(t *testing.T) {
-	var pod *ResPod
+	var pod IResPod
 
-	pod = NewPod("pod1")
+	pod = NewResPod("pod1")
 	pod.SetNamespace("namespace")
 	labels := map[string]string{
 		"app": "app",
@@ -18,7 +18,7 @@ func TestNewPod(t *testing.T) {
 	volume.Name = "vol1"
 	volume.Secret = &Secret{
 		SecretName: "secret1",
-		Items: []map[string]string{},
+		Items:      []map[string]string{},
 	}
 	pod.AddVolume(volume)
 	pod.SetRestartPolicy("policy1")

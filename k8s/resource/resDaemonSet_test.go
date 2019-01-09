@@ -3,7 +3,7 @@ package resource
 import "testing"
 
 func TestNewResDaemonSet(t *testing.T) {
-	var daemonSet *ResDaemonSet
+	var daemonSet IResDaemonSet
 
 	daemonSet = NewResDaemonSet()
 	daemonSet.SetNamespace("my")

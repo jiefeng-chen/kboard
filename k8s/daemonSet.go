@@ -15,7 +15,7 @@ type DaemonSet struct {
 }
 
 
-func NewDaemonSet(Config *config.Config) *DaemonSet {
+func NewDaemonSet(Config *config.Config) IDaemonSet {
 	return &DaemonSet{
 		K8sCore{
 			Config: Config,

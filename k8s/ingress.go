@@ -15,7 +15,7 @@ type Ingress struct {
 	K8sCore
 }
 
-func NewIngress(Config *config.Config) *Ingress {
+func NewIngress(Config *config.Config) IIngress {
 	return &Ingress{
 		K8sCore{
 			Config: Config,

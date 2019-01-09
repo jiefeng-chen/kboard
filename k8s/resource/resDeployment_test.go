@@ -3,7 +3,7 @@ package resource
 import "testing"
 
 func TestNewResDeployment(t *testing.T) {
-	var deploy *ResDeployment
+	var deploy IResDeployment
 	deploy = NewResDeployment()
 
 	deploy.SetMetadataName("name")
