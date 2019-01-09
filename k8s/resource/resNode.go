@@ -1,9 +1,10 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResNode interface {

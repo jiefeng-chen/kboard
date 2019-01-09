@@ -1,8 +1,9 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResDaemonSet interface {
@@ -51,10 +52,10 @@ func NewResDaemonSet() *ResDaemonSet {
 					Tolerations:                   []*DaemonSetToleration{},
 					Containers:                    []IContainer{},
 					TerminationGracePeriodSeconds: "",
-					Volumes:          []*Volume{},
-					RestartPolicy:    "Always",
-					ImagePullSecrets: map[string]string{},
-					NodeSelector:     map[string]string{},
+					Volumes:                       []*Volume{},
+					RestartPolicy:                 "Always",
+					ImagePullSecrets:              map[string]string{},
+					NodeSelector:                  map[string]string{},
 				},
 			},
 		},

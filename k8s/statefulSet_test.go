@@ -1,10 +1,10 @@
 package k8s
 
 import (
-	"testing"
 	config2 "kboard/config"
 	"kboard/k8s/resource"
 	"log"
+	"testing"
 )
 
 func TestNewStatefulSet(t *testing.T) {
@@ -24,5 +24,3 @@ func TestNewStatefulSet(t *testing.T) {
 	res := lib.WriteToEtcd("myapp", "mystateful", yamlData)
 	t.Errorf("%v", res)
 }
-
-

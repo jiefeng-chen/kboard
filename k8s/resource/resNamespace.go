@@ -1,8 +1,9 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResNamespace interface {

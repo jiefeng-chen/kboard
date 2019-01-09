@@ -2,10 +2,11 @@ package router
 
 import (
 	"flag"
-	"github.com/gorilla/mux"
+	"kboard/config"
 	"kboard/middleware"
 	"net/http"
-	"kboard/config"
+
+	"github.com/gorilla/mux"
 )
 
 type Router struct {
@@ -49,5 +50,3 @@ func (r *Router) InitRouter() *Router {
 
 	return r
 }
-
-

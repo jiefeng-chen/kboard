@@ -1,10 +1,11 @@
 package k8s
 
 import (
-	"kboard/k8s/resource"
 	"encoding/json"
 	"fmt"
 	"kboard/config"
+	"kboard/k8s/resource"
+
 	"gopkg.in/yaml.v2"
 )
 

@@ -2,9 +2,9 @@ package api
 
 import (
 	"kboard/config"
-	"net/http"
-	"kboard/k8s/resource"
 	"kboard/k8s"
+	"kboard/k8s/resource"
+	"net/http"
 )
 
 type IOrder struct {
@@ -24,7 +24,6 @@ func (this *IOrder) Index() {
 	this.TplEngine.Response(100, "", "")
 }
 
-
 // @todo 创建工单
 func (this *IOrder) Edit() {
 
@@ -41,21 +40,21 @@ func (this *IOrder) List() {
 	resReplicaSet.SetNamespace("myapp")
 
 	labels := map[string]string{
-		"app":"nginx",
+		"app": "nginx",
 	}
 
 	resReplicaSet.SetSelector(resource.Selector{
-		MatchLabels:labels,
+		MatchLabels: labels,
 	})
 
 	container := resource.NewContainer("mycontainer", "image")
 	container.SetResource(resource.Resource{
 		Limits: resource.Limits{
-			Cpu: "0.5",
-			Memory:"100Mi",
+			Cpu:    "0.5",
+			Memory: "100Mi",
 		},
 		Requests: resource.Request{
-			Cpu: "0.1",
+			Cpu:    "0.1",
 			Memory: "50Mi",
 		},
 	})
@@ -69,10 +68,10 @@ func (this *IOrder) List() {
 			},
 		},
 		InitialDelaySeconds: 50,
-		PeriodSeconds: 10,
-		TimeoutSeconds: 10,
-		SuccessThreshold: 1,
-		FailureThreshold: 10,
+		PeriodSeconds:       10,
+		TimeoutSeconds:      10,
+		SuccessThreshold:    1,
+		FailureThreshold:    10,
 	})
 	resReplicaSet.AddContainer(container)
 	resReplicaSet.SetTemplateLabel(labels)
@@ -86,5 +85,3 @@ func (this *IOrder) List() {
 	res := lib.WriteToEtcd("myapp", "hello", yamlData)
 	this.TplEngine.Response(100, res, "数据")
 }
-
-

@@ -1,8 +1,8 @@
 package k8s
 
 import (
-	"kboard/k8s/resource"
 	"kboard/config"
+	"kboard/k8s/resource"
 )
 
 type IService interface {
@@ -25,7 +25,3 @@ func NewService(Config *config.Config) IService {
 		},
 	}
 }
-
-
-
-

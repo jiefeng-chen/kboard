@@ -1,10 +1,11 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
 	"kboard/utils"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResStorageClass interface {

@@ -1,12 +1,12 @@
 package api
 
-
 import (
 	"kboard/config"
-	"net/http"
 	"kboard/db"
-	"github.com/garyburd/redigo/redis"
 	"log"
+	"net/http"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 type ITeam struct {
@@ -38,6 +38,7 @@ func (this *ITeam) Index() {
 func (this *ITeam) List() {
 
 }
+
 // @todo 创建团队
 // @todo 撤销团队
 // @todo 申请加入
@@ -61,4 +62,3 @@ func (this *ITeam) List() {
 // @todo 删除dockerfile
 // @todo 构建镜像
 // @todo 上传镜像
-

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"github.com/bitly/go-simplejson"
 	"net"
 	"net/http"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/bitly/go-simplejson"
 )
 
 func createDir(path string) error {

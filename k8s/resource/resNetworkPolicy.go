@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+
 	"gopkg.in/yaml.v2"
 )
 

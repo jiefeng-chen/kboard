@@ -1,9 +1,10 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
 	"kboard/utils"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResIngress interface {

@@ -68,7 +68,6 @@ func (r *ResPodPreset) SetNamespace(string) error {
 	return nil
 }
 
-
 func (r *ResPodPreset) SetRestartPolicy(string) error {
 	return nil
 }

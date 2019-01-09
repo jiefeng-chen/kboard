@@ -17,4 +17,3 @@ func TestNewReplicaSet(t *testing.T) {
 
 	t.Fatalf("%v", replicaSet)
 }
-

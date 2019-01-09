@@ -1,11 +1,11 @@
 package gopool
 
 import (
-	"time"
-	"sync"
 	"context"
-	"log"
 	"kboard/exception"
+	"log"
+	"sync"
+	"time"
 )
 
 const (
@@ -25,27 +25,27 @@ type pool interface {
 
 // goroutine协程池
 type Pool struct {
-	cap int // 协程池容量
-	taskNum int // 接收任务总数量
-	TaskQueue  chan *Task // 接收任务队列
-	JobQueue chan *Task // 工作队列
-	startTime time.Time // 开始时间
-	endTime time.Time // 结束时间
-	wg *sync.WaitGroup // 同步所有goroutine
-	ctx context.Context
+	cap           int             // 协程池容量
+	taskNum       int             // 接收任务总数量
+	TaskQueue     chan *Task      // 接收任务队列
+	JobQueue      chan *Task      // 工作队列
+	startTime     time.Time       // 开始时间
+	endTime       time.Time       // 结束时间
+	wg            *sync.WaitGroup // 同步所有goroutine
+	ctx           context.Context
 	ctxCancelFunc context.CancelFunc
 	ctxWithCancel context.Context
-	result []interface{} // 所有的运行结果
+	result        []interface{} // 所有的运行结果
 }
 
 func NewPool(cap int) *Pool {
 	return &Pool{
-		cap: cap,
-		taskNum: 0,
+		cap:       cap,
+		taskNum:   0,
 		TaskQueue: make(chan *Task, 100),
-		JobQueue: make(chan *Task, 100),
-		wg: &sync.WaitGroup{},
-		ctx: context.Background(),
+		JobQueue:  make(chan *Task, 100),
+		wg:        &sync.WaitGroup{},
+		ctx:       context.Background(),
 	}
 }
 
@@ -131,6 +131,3 @@ func (p *Pool) Run() {
 	// 结束
 	p.stop()
 }
-
-
-

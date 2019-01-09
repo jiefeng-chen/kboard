@@ -1,14 +1,14 @@
 package k8s
 
 import (
-
-	"kboard/k8s/resource"
 	"fmt"
-	"github.com/bitly/go-simplejson"
-	"kboard/config"
 	"io/ioutil"
-	"net/http"
+	"kboard/config"
+	"kboard/k8s/resource"
 	"log"
+	"net/http"
+
+	"github.com/bitly/go-simplejson"
 )
 
 type IPod interface {
@@ -39,7 +39,7 @@ func (l *Pod) List(ns string) (*simplejson.Json, *HttpError) {
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
-	if httpResult.Kind == l.Kind + "List" {
+	if httpResult.Kind == l.Kind+"List" {
 		err.Code = 200
 		err.Message = "Success"
 	} else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {

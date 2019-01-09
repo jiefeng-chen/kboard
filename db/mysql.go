@@ -1,38 +1,38 @@
 package db
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"fmt"
 	"database/sql"
+	"fmt"
+	"kboard/config"
 	"kboard/exception"
+	"kboard/utils"
 	"log"
 	"time"
-	"kboard/config"
-	"kboard/utils"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Mysql struct {
-	User string
-	Passwd string
-	Host string
-	Port string
-	Dbname string
-	Charset string
+	User         string
+	Passwd       string
+	Host         string
+	Port         string
+	Dbname       string
+	Charset      string
 	MaxOpenConns int
-	Timeout int
+	Timeout      int
 }
-
 
 func NewMysql(config *config.Config) *Mysql {
 	return &Mysql{
-		User: config.Data.Mysql.Username,
-		Passwd: config.Data.Mysql.Password,
-		Host: config.Data.Mysql.Host,
-		Port: utils.ToString(config.Data.Mysql.Port),
-		Dbname: config.Data.Mysql.Dbname,
-		Charset: config.Data.Mysql.Charset,
+		User:         config.Data.Mysql.Username,
+		Passwd:       config.Data.Mysql.Password,
+		Host:         config.Data.Mysql.Host,
+		Port:         utils.ToString(config.Data.Mysql.Port),
+		Dbname:       config.Data.Mysql.Dbname,
+		Charset:      config.Data.Mysql.Charset,
 		MaxOpenConns: config.Data.Mysql.MaxOpenConns,
-		Timeout: 60,
+		Timeout:      60,
 	}
 }
 
@@ -63,4 +63,3 @@ func (m *Mysql) Init() {
 
 	log.Println("init mysql")
 }
-

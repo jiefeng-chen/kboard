@@ -2,8 +2,9 @@ package resource
 
 import (
 	"encoding/base64"
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResSecret interface {

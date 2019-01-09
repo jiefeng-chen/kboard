@@ -1,9 +1,9 @@
 package control
 
 import (
-	"net/http"
 	"kboard/config"
 	"kboard/template"
+	"net/http"
 )
 
 type CtlDefault struct {
@@ -13,12 +13,12 @@ type CtlDefault struct {
 func NewCtlDefault(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlDefault {
 	return &CtlDefault{
 		Control{
-			Config: config,
+			Config:    config,
 			TplEngine: template.NewTplEngine(w, r),
-			Module: "default",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
+			Module:    "default",
+			Actions:   map[string]func(){},
+			R:         r,
+			W:         w,
 		},
 	}
 }
@@ -26,4 +26,3 @@ func NewCtlDefault(config *config.Config, w http.ResponseWriter, r *http.Request
 func (this *CtlDefault) Index() {
 	this.Response(100, "", "ok")
 }
-

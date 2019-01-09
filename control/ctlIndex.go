@@ -1,10 +1,9 @@
 package control
 
-
 import (
-	"net/http"
 	"kboard/config"
 	"kboard/template"
+	"net/http"
 )
 
 type CtlIndex struct {
@@ -14,12 +13,12 @@ type CtlIndex struct {
 func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlIndex {
 	return &CtlIndex{
 		Control{
-			Config: config,
+			Config:    config,
 			TplEngine: template.NewTplEngine(w, r),
-			Module: "index",
-			Actions: map[string]func(){},
-			R: r,
-			W: w,
+			Module:    "index",
+			Actions:   map[string]func(){},
+			R:         r,
+			W:         w,
 		},
 	}
 }

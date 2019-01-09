@@ -1,13 +1,13 @@
 package api
 
 import (
-	"kboard/template"
+	"fmt"
 	"kboard/config"
 	"kboard/exception"
-	"fmt"
+	"kboard/template"
+	"kboard/utils"
 	"log"
 	"net/http"
-	"kboard/utils"
 )
 
 type iApi interface {
@@ -18,29 +18,29 @@ type iApi interface {
 }
 
 type IApi struct {
-	Config *config.Config
+	Config    *config.Config
 	TplEngine *template.TplEngine
-	Module string
-	Actions map[string]func()
-	W http.ResponseWriter
-	R *http.Request
-	Header map[string]string
+	Module    string
+	Actions   map[string]func()
+	W         http.ResponseWriter
+	R         *http.Request
+	Header    map[string]string
 	Namespace string
 }
 
 func NewIApi(config *config.Config, w http.ResponseWriter, r *http.Request) *IApi {
 	return &IApi{
-		Config: config,
+		Config:    config,
 		TplEngine: template.NewTplEngine(w, r),
-		Module: "",
+		Module:    "",
 		Namespace: "Api",
-		Actions: map[string]func(){},
-		R: r,
-		W: w,
+		Actions:   map[string]func(){},
+		R:         r,
+		W:         w,
 		Header: map[string]string{
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "*",
-			"Access-Control-Allow-Headers": "Content-Type,Access-Token,X-Access-Token,X-Session-Token",
+			"Access-Control-Allow-Origin":   "*",
+			"Access-Control-Allow-Methods":  "*",
+			"Access-Control-Allow-Headers":  "Content-Type,Access-Token,X-Access-Token,X-Session-Token",
 			"Access-Control-Expose-Headers": "*",
 		},
 	}
@@ -62,7 +62,6 @@ func (i *IApi) PostInt(name string) int {
 	return utils.ToInt(i.R.FormValue(name))
 }
 
-
 func (i *IApi) Register(action string, f func()) *IApi {
 	if i.Actions == nil {
 		i.Actions = map[string]func(){}
@@ -73,7 +72,6 @@ func (i *IApi) Register(action string, f func()) *IApi {
 	i.Actions[action] = f
 	return i
 }
-
 
 func (i *IApi) Run(action string) {
 	// 注册全局变量
@@ -88,11 +86,11 @@ func (i *IApi) Run(action string) {
 		if i.Actions["index"] == nil {
 			fmt.Fprintln(i.TplEngine.W, "404 page not found!")
 			log.Println("404")
-		}else{
+		} else {
 			i.TplEngine.TplData["GAction"] = "index"
 			i.Actions["index"]()
 		}
-	}else{
+	} else {
 		// run action
 		i.Actions[action]()
 	}
@@ -101,7 +99,6 @@ func (i *IApi) Run(action string) {
 func (c *IApi) Index() {
 	fmt.Fprintln(c.TplEngine.W, "hello world, this is default index")
 }
-
 
 // base interface
 type IBase struct {
@@ -123,4 +120,3 @@ func (c *IApi) ResponseWithHeader(code int, result interface{}, message string) 
 func (c *IApi) Response(code int, result interface{}, message string) {
 	c.TplEngine.Response(code, result, message)
 }
-

@@ -1,10 +1,11 @@
 package k8s
 
 import (
-	"kboard/k8s/resource"
-	"github.com/bitly/go-simplejson"
-	"kboard/config"
 	"fmt"
+	"kboard/config"
+	"kboard/k8s/resource"
+
+	"github.com/bitly/go-simplejson"
 )
 
 type INode interface {
@@ -78,7 +79,6 @@ func (l *Node) Replace(name string, data []byte) *HttpError {
 	}
 	return err
 }
-
 
 func (l *Node) Nodes() (*simplejson.Json, *HttpError) {
 	jsonData := l.get(l.Urls.Create)

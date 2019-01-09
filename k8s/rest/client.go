@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"net/url"
 	"net/http"
+	"net/url"
 )
 
 type IHttpClient interface {
@@ -16,9 +16,9 @@ type IHttpClient interface {
 type HttpClient struct {
 	baseUrl *url.URL
 
+	header *http.Header
+
 	Client *http.Client
-
-
 }
 
 func (c *HttpClient) Get() {
@@ -41,10 +41,10 @@ func (c *HttpClient) Patch() {
 
 }
 
-
-func NewHttpClient(url *url.URL, client *http.Client) IHttpClient {
+func NewHttpClient(url *url.URL, client *http.Client, header *http.Header) IHttpClient {
 	return &HttpClient{
 		baseUrl: url,
-		Client: client,
+		header:  header,
+		Client:  client,
 	}
 }

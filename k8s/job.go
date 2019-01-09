@@ -17,13 +17,11 @@ func NewJob(Config *config.Config) IJob {
 	return &Job{
 		K8sCore{
 			Config: Config,
-			Kind: resource.RESOURCE_JOB,
+			Kind:   resource.RESOURCE_JOB,
 			Urls: Urls{
-				Read: "/apis/batch/v1/namespaces/%s/jobs/%s",
+				Read:   "/apis/batch/v1/namespaces/%s/jobs/%s",
 				Create: "/apis/batch/v1/namespaces/%s/jobs",
 			},
 		},
 	}
 }
-
-

@@ -1,11 +1,10 @@
 package k8s
 
-
 import (
-	"kboard/k8s/resource"
-	"kboard/config"
 	"encoding/json"
 	"fmt"
+	"kboard/config"
+	"kboard/k8s/resource"
 )
 
 type IStatefulSet interface {
@@ -67,7 +66,3 @@ func (l *StatefulSet) Patch(ns string, name string, data []byte) *HttpError {
 	}
 	return err
 }
-
-
-
-

@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"sync"
 	"container/list"
+	"sync"
 )
 
 // thread safe map
@@ -43,7 +43,7 @@ func (t *ThreadSafeMap) Clear() {
 
 }
 
-func (t *ThreadSafeMap) Exist()  {
+func (t *ThreadSafeMap) Exist() {
 
 }
 
@@ -53,9 +53,9 @@ func (t *ThreadSafeMap) Size() int {
 
 func NewThreadSafeMap(cap int) IThreadSafeMap {
 	return &ThreadSafeMap{
-		cap: cap,
-		len: 0,
+		cap:   cap,
+		len:   0,
 		lock:  sync.RWMutex{},
-		items:  list.New(),
+		items: list.New(),
 	}
 }

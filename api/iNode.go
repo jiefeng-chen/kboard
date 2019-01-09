@@ -2,10 +2,10 @@ package api
 
 import (
 	"kboard/config"
-	"net/http"
 	"kboard/k8s"
 	"kboard/k8s/resource"
 	"log"
+	"net/http"
 )
 
 type INode struct {
@@ -24,7 +24,7 @@ func (this *INode) Index() {
 	// 获取node状态
 	node := this.GetString("name")
 	lib := k8s.NewNode(this.Config)
-	if node == ""{
+	if node == "" {
 		this.TplEngine.Response(101, "", "缺少节点名称")
 		return
 	}
@@ -36,7 +36,6 @@ func (this *INode) Index() {
 	this.TplEngine.Response(99, "", httpErr.Message)
 }
 
-
 // @todo 节点扩容
 func (this *INode) Scale() {
 	lib := k8s.NewStatefulSet(this.Config)
@@ -47,22 +46,22 @@ func (this *INode) Scale() {
 	container := resource.NewContainer("mycontainer", "image")
 	container.SetResource(resource.Resource{
 		Limits: resource.Limits{
-			Cpu: "0.5",
-			Memory:"100Mi",
+			Cpu:    "0.5",
+			Memory: "100Mi",
 		},
 		Requests: resource.Request{
-			Cpu: "0.1",
+			Cpu:    "0.1",
 			Memory: "50Mi",
 		},
 	})
 	statefulSet.AddContainer(container)
 
 	annos := map[string]string{
-		"app":"nginx",
+		"app": "nginx",
 	}
 	statefulSet.SetAnnotations(annos)
 	labels := map[string]string{
-		"app":"nginx",
+		"app": "nginx",
 	}
 	statefulSet.SetLabels(labels)
 	statefulSet.SetSelector(&resource.Selector{
@@ -85,10 +84,7 @@ func (this *INode) Scale() {
 
 // @todo 节点隔离与恢复
 
-
-
 // @todo 节点移除
-func (this *INode) Delete()  {
+func (this *INode) Delete() {
 
 }
-

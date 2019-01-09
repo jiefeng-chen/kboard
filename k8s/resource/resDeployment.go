@@ -1,8 +1,9 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
+
+	"gopkg.in/yaml.v2"
 )
 
 type IResDeployment interface {
@@ -25,7 +26,7 @@ type ResDeployment struct {
 	}
 	Spec struct {
 		Selector *Selector // 圈定deployment管理的pod范围 跟下面的.spec.template.metadata.labels 匹配
-		Template struct{ // pod模板，跟pod有一模一样的schema，但是不需要apiVersion和kind字段
+		Template struct {  // pod模板，跟pod有一模一样的schema，但是不需要apiVersion和kind字段
 			Metadata struct {
 				Labels map[string]string
 			}
@@ -46,9 +47,9 @@ func NewResDeployment() *ResDeployment {
 			Namespace string
 			Labels    map[string]string
 		}{
-			Name: "",
+			Name:      "",
 			Namespace: "",
-			Labels: map[string]string{},
+			Labels:    map[string]string{},
 		},
 		Spec: struct {
 			Selector *Selector
@@ -59,14 +60,15 @@ func NewResDeployment() *ResDeployment {
 			Replicas string
 		}{
 			Selector: nil,
-			Template: struct {Metadata struct{ Labels map[string]string }
-			Spec     struct{ Containers []IContainer }
-		}{
-			Metadata: struct{ Labels map[string]string }{
-				Labels: map[string]string{}},
-			Spec: struct{Containers []IContainer }{
-				Containers: nil}},
-				Replicas: ""},
+			Template: struct {
+				Metadata struct{ Labels map[string]string }
+				Spec     struct{ Containers []IContainer }
+			}{
+				Metadata: struct{ Labels map[string]string }{
+					Labels: map[string]string{}},
+				Spec: struct{ Containers []IContainer }{
+					Containers: nil}},
+			Replicas: ""},
 	}
 }
 
@@ -105,7 +107,7 @@ func (r *ResDeployment) AddContainer(container IContainer) error {
 
 func (r *ResDeployment) SetMatchLabels(labels map[string]string) error {
 	if len(labels) > 0 {
-		for k,v := range labels {
+		for k, v := range labels {
 			if k == "" || v == "" {
 				return exception.NewError("match labels is empty")
 			}
@@ -113,7 +115,7 @@ func (r *ResDeployment) SetMatchLabels(labels map[string]string) error {
 		}
 
 		return nil
-	}else{
+	} else {
 		return exception.NewError("labels is empty")
 	}
 }
@@ -135,4 +137,3 @@ func (r *ResDeployment) ToYamlFile() ([]byte, error) {
 	}
 	return yamlData, nil
 }
-

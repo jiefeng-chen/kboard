@@ -2,8 +2,9 @@ package test
 
 import (
 	"testing"
-	"github.com/chasex/redis-go-cluster"
 	"time"
+
+	"github.com/chasex/redis-go-cluster"
 )
 
 func TestRedisNode(t *testing.T) {
@@ -19,11 +20,11 @@ func TestRedisConn(t *testing.T) {
 			"192.168.37.150:8004",
 			"192.168.37.150:8005",
 			"192.168.37.150:8006"},
-		ConnTimeout: 50 * time.Millisecond,
-		ReadTimeout: 50 * time.Millisecond,
+		ConnTimeout:  50 * time.Millisecond,
+		ReadTimeout:  50 * time.Millisecond,
 		WriteTimeout: 50 * time.Millisecond,
-		KeepAlive: 16,
-		AliveTime: 50 * time.Second,
+		KeepAlive:    16,
+		AliveTime:    50 * time.Second,
 	})
 
 	if err != nil {
@@ -47,4 +48,3 @@ func TestRedisConn(t *testing.T) {
 	t.Errorf("%v", data)
 
 }
-

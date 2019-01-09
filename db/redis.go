@@ -1,17 +1,16 @@
 package db
 
 import (
-	"kboard/exception"
 	"kboard/config"
+	"kboard/exception"
 	"time"
+
 	"github.com/chasex/redis-go-cluster"
 )
-
 
 type RedisCluster struct {
 	Singleton *redis.Cluster
 }
-
 
 func NewRedisCluster(config *config.Config) *RedisCluster {
 	clusterConn, err := redis.NewCluster(&redis.Options{
@@ -22,11 +21,11 @@ func NewRedisCluster(config *config.Config) *RedisCluster {
 			"192.168.37.150:8004",
 			"192.168.37.150:8005",
 			"192.168.37.150:8006"},
-		ConnTimeout: 50 * time.Millisecond,
-		ReadTimeout: 50 * time.Millisecond,
+		ConnTimeout:  50 * time.Millisecond,
+		ReadTimeout:  50 * time.Millisecond,
 		WriteTimeout: 50 * time.Millisecond,
-		KeepAlive: 16,
-		AliveTime: 60 * time.Second,
+		KeepAlive:    16,
+		AliveTime:    60 * time.Second,
 	})
 	exception.CheckError(err, -1)
 
@@ -34,9 +33,3 @@ func NewRedisCluster(config *config.Config) *RedisCluster {
 		Singleton: clusterConn,
 	}
 }
-
-
-
-
-
-

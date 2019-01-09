@@ -24,11 +24,9 @@ func (this *ILogin) Index() {
 		this.ResponseWithHeader(101, "", "缺少数据")
 	}
 	result := map[string]string{
-		"email": email,
+		"email":    email,
 		"password": password,
 		"username": email,
 	}
 	this.ResponseWithHeader(100, result, "登录成功")
 }
-
-

@@ -1,8 +1,9 @@
 package resource
 
 import (
-	"gopkg.in/yaml.v2"
 	"kboard/exception"
+
+	"gopkg.in/yaml.v2"
 )
 
 // 需要启动时配置ResourceQuota adminssion control

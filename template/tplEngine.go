@@ -1,10 +1,10 @@
 package template
 
 import (
-	"html/template"
-	"net/http"
 	"encoding/json"
+	"html/template"
 	"kboard/exception"
+	"net/http"
 )
 
 type ITplEngine interface {
@@ -19,25 +19,25 @@ type ITplEngine interface {
 }
 
 type ResponseData struct {
-	Code int `json:"code"`
-	Result interface{} `json:"result"`
-	Message string `json:"message"`
+	Code    int         `json:"code"`
+	Result  interface{} `json:"result"`
+	Message string      `json:"message"`
 }
 
 type TplEngine struct {
-	tpl *template.Template
+	tpl     *template.Template
 	TplData map[string]interface{}
-	W http.ResponseWriter
-	R *http.Request
-	Header map[string]string
+	W       http.ResponseWriter
+	R       *http.Request
+	Header  map[string]string
 }
 
-func NewTplEngine(w http.ResponseWriter, r *http.Request) *TplEngine  {
+func NewTplEngine(w http.ResponseWriter, r *http.Request) *TplEngine {
 	return &TplEngine{
-		W: w,
-		R: r,
+		W:       w,
+		R:       r,
 		TplData: make(map[string]interface{}),
-		Header: map[string]string{},
+		Header:  map[string]string{},
 	}
 }
 
@@ -91,17 +91,17 @@ func (t *TplEngine) Display(tpl string) {
 	exception.CheckError(err, 2004)
 }
 
-func (t *TplEngine) DisplayMulti(tpl string, subTpl []string){
+func (t *TplEngine) DisplayMulti(tpl string, subTpl []string) {
 	tpls := []string{tpl}
 	tpls = append(tpls, subTpl...)
 	err := t.ParseFiles(tpls...).tpl.Execute(t.W, t.TplData)
 	exception.CheckError(err, 2004)
 }
 
-func (t *TplEngine) Response(code int, result interface{}, message string)  {
+func (t *TplEngine) Response(code int, result interface{}, message string) {
 	data := ResponseData{
-		Code: code,
-		Result: result,
+		Code:    code,
+		Result:  result,
 		Message: message,
 	}
 	jsonData, err := json.Marshal(data)
@@ -111,8 +111,8 @@ func (t *TplEngine) Response(code int, result interface{}, message string)  {
 
 func (t *TplEngine) ResponseWithHeader(code int, result interface{}, message string, headerOptions map[string]string) {
 	data := ResponseData{
-		Code: code,
-		Result: result,
+		Code:    code,
+		Result:  result,
 		Message: message,
 	}
 	jsonData, err := json.Marshal(data)

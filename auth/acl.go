@@ -1,6 +1,5 @@
 package auth
 
-
 const (
 	ACL_USER_R = 1
 	ACL_USER_W = 2
@@ -15,21 +14,16 @@ const (
 	ACL_OTHER_X = 4
 )
 
-
 type acl interface {
 	SetAcl()
 	GetAcl()
 }
 
-
 type Acl struct {
-
 }
 
 func NewAcl() *Acl {
-	return &Acl{
-
-	}
+	return &Acl{}
 }
 
 func (a *Acl) SetAcl() {
@@ -39,4 +33,3 @@ func (a *Acl) SetAcl() {
 func (a *Acl) GetAcl() {
 
 }
-

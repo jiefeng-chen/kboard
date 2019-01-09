@@ -1,20 +1,18 @@
 package gopool
 
-
-
 // 任务队列
 type Task struct {
 	taskFunc func(args interface{}) (error, interface{})
 	Callback func(result interface{}) (error, interface{}) // 执行完成回到函数
-	Result interface{} // 运行结果
-	Args interface{} // 参数
+	Result   interface{}                                   // 运行结果
+	Args     interface{}                                   // 参数
 }
 
 func NewTask(taskFunc func(interface{}) (error, interface{}), callback func(interface{}) (error, interface{}), args interface{}) *Task {
 	return &Task{
 		taskFunc: taskFunc,
 		Callback: callback,
-		Args: args,
+		Args:     args,
 	}
 }
 
@@ -31,7 +29,3 @@ func (t *Task) Execute() error {
 	t.Result = res
 	return nil
 }
-
-
-
-

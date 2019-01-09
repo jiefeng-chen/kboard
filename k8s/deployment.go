@@ -1,9 +1,8 @@
 package k8s
 
-
 import (
-	"kboard/k8s/resource"
 	"kboard/config"
+	"kboard/k8s/resource"
 )
 
 type IDeployment interface {
@@ -26,4 +25,3 @@ func NewDeployment(Config *config.Config) IDeployment {
 		},
 	}
 }
-

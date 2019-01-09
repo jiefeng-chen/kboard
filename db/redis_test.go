@@ -1,9 +1,10 @@
 package db
 
 import (
-	"testing"
-	"kboard/config"
 	"fmt"
+	"kboard/config"
+	"testing"
+
 	"github.com/garyburd/redigo/redis"
 )
 
@@ -24,6 +25,3 @@ func TestNewRedisCluster(t *testing.T) {
 	fmt.Println(v)
 	defer redisCluster.Singleton.Close()
 }
-
-
-

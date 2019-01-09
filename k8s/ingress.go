@@ -1,10 +1,11 @@
 package k8s
 
 import (
-	"kboard/k8s/resource"
-	"kboard/config"
-	"github.com/bitly/go-simplejson"
 	"fmt"
+	"kboard/config"
+	"kboard/k8s/resource"
+
+	"github.com/bitly/go-simplejson"
 )
 
 type IIngress interface {
@@ -33,7 +34,7 @@ func (l *Ingress) List(ns string) (*simplejson.Json, *HttpError) {
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)
-	if httpResult.Kind == l.Kind + "List" {
+	if httpResult.Kind == l.Kind+"List" {
 		err.Code = 200
 		err.Message = "Success"
 	} else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {
@@ -42,6 +43,3 @@ func (l *Ingress) List(ns string) (*simplejson.Json, *HttpError) {
 	}
 	return jsonData, err
 }
-
-
-

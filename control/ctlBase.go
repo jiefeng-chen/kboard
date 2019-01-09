@@ -1,13 +1,13 @@
 package control
 
 import (
-	"kboard/config"
 	"fmt"
-	"log"
-	"kboard/template"
+	"kboard/config"
 	"kboard/exception"
-	"net/http"
+	"kboard/template"
 	"kboard/utils"
+	"log"
+	"net/http"
 )
 
 type IControl interface {
@@ -19,29 +19,29 @@ type IControl interface {
 }
 
 type Control struct {
-	Config *config.Config
+	Config    *config.Config
 	TplEngine *template.TplEngine
-	Module string
+	Module    string
 	Namespace string
-	Actions map[string]func()
-	W http.ResponseWriter
-	R *http.Request
-	Header map[string]string
+	Actions   map[string]func()
+	W         http.ResponseWriter
+	R         *http.Request
+	Header    map[string]string
 }
 
 func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *Control {
 	return &Control{
-		Config: config,
+		Config:    config,
 		TplEngine: template.NewTplEngine(w, r),
-		Module: "base",
+		Module:    "base",
 		Namespace: "control",
-		Actions: map[string]func(){},
-		R: r,
-		W: w,
+		Actions:   map[string]func(){},
+		R:         r,
+		W:         w,
 		Header: map[string]string{
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "*",
-			"Access-Control-Allow-Headers": "Content-Type,Access-Token,X-Access-Token,X-Session-Token",
+			"Access-Control-Allow-Origin":   "*",
+			"Access-Control-Allow-Methods":  "*",
+			"Access-Control-Allow-Headers":  "Content-Type,Access-Token,X-Access-Token,X-Session-Token",
 			"Access-Control-Expose-Headers": "*",
 		},
 	}
@@ -74,7 +74,6 @@ func (c *Control) Register(action string, f func()) *Control {
 	return c
 }
 
-
 func (c *Control) Run(action string) {
 	// 注册全局变量
 	if c.TplEngine.TplData["GModule"] == nil || c.TplEngine.TplData["GModule"] == "" {
@@ -88,11 +87,11 @@ func (c *Control) Run(action string) {
 		if c.Actions["index"] == nil {
 			fmt.Fprintln(c.TplEngine.W, "404 page not found!")
 			log.Println("404")
-		}else{
+		} else {
 			c.TplEngine.TplData["GAction"] = "index"
 			c.Actions["index"]()
 		}
-	}else{
+	} else {
 		// run action
 		c.Actions[action]()
 	}
@@ -113,4 +112,3 @@ func (c *Control) Response(code int, result interface{}, message string) {
 func (c *Control) Display(tpl string) {
 	c.TplEngine.Display(tpl)
 }
-

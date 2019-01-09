@@ -19,7 +19,7 @@ func NewIUser(config *config.Config, w http.ResponseWriter, r *http.Request) *IU
 func (this *IUser) Index() {
 	result := map[string]string{
 		"email": "real_jf@163.com",
-		"name": "real_jf",
+		"name":  "real_jf",
 	}
 	this.ResponseWithHeader(100, result, "数据")
 }
@@ -32,5 +32,3 @@ func (this *IUser) Create() {
 // @todo 角色关联
 
 // @todo 用户注销
-
-

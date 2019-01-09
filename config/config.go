@@ -1,12 +1,13 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
-	"sync"
 	"fmt"
+	"io/ioutil"
 	"kboard/exception"
 	"kboard/utils"
-	"io/ioutil"
+	"sync"
+
+	"github.com/BurntSushi/toml"
 )
 
 type IConfig interface {
@@ -14,7 +15,7 @@ type IConfig interface {
 	SetTSL(tsl *ClusterTSL) error
 	GetTSL() *ClusterTSL
 	GetAddress() string
-	IsHttps() bool// 是否开启https
+	IsHttps() bool // 是否开启https
 	IsLog() bool
 	IsAuth() bool // 是否开启鉴权
 	IsHttp2() bool
@@ -42,19 +43,19 @@ type TomlConfigData struct {
 		Log         bool   // 日志记录
 		Auth        bool   // 鉴权
 		HttpVersion string `toml:"httpVersion"` // 1.0, 1.1, 2.0
-		Openssl		bool	// https
+		Openssl     bool   // https
 		TLS         struct {
 			Cert string
 			Key  string
 		}
 	}
 	Mysql struct {
-		Host     string
-		Port     int
-		Username string
-		Password string
-		Dbname   string
-		Charset  string
+		Host         string
+		Port         int
+		Username     string
+		Password     string
+		Dbname       string
+		Charset      string
 		MaxOpenConns int `toml:"maxOpenConns"`
 	}
 	Memcache struct {
@@ -62,8 +63,8 @@ type TomlConfigData struct {
 		Port int
 	}
 	Redis struct {
-		Host string
-		Port int
+		Host    string
+		Port    int
 		Timeout int
 	}
 	Kubernetes struct {
@@ -104,7 +105,6 @@ func (c *Config) LoadConfigFile(path string) *Config {
 			exception.CheckError(err, 1001)
 		}
 	})
-
 
 	return c
 }
@@ -181,7 +181,6 @@ func (c *Config) GetK8sHostName() string {
 func (c *Config) GetK8sPort() int {
 	return c.Data.Kubernetes.Port
 }
-
 
 func (c *Config) GetHttpVersion() string {
 	var httpVersion string

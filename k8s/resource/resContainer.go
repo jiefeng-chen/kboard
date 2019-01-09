@@ -31,7 +31,7 @@ type Container struct {
 	VolumeMounts    []map[string]interface{} `yaml:"volumeMounts"` // 挂载卷
 	Resources       *Resource
 	Env             []Env
-	Ports           []Port        // 端口号
+	Ports           []Port         // 端口号
 	LivenessProbe   *LivenessProbe `yaml:"livenessProbe"`
 	SecurityContext struct {
 		Privileged bool // true-容器运行在特权模式
@@ -92,7 +92,6 @@ type ResourceFieldRef struct {
 }
 
 type ValueFromHandler interface {
-
 }
 
 func NewEnv() Env {

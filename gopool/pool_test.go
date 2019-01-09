@@ -1,8 +1,8 @@
 package gopool
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestNewPool(t *testing.T) {
@@ -19,7 +19,7 @@ func TestNewPool(t *testing.T) {
 	pool := NewPool(100)
 
 	go func() {
-		for i := 0; i < 100000; i++{
+		for i := 0; i < 100000; i++ {
 			pool.AddTask(NewTask(taskFunc, callbackFunc, i))
 		}
 	}()
