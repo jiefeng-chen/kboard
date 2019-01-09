@@ -21,7 +21,7 @@ type ResCronJob struct {
 	}
 }
 
-func NewCronJob() ICronJob {
+func NewCronJob() *ResCronJob {
 	return &ResCronJob{
 		Kind:       RESOURCE_CRON_JOB,
 		ApiVersion: "extensions/v1beta1",

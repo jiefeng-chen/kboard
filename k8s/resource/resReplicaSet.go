@@ -42,7 +42,7 @@ type ReplicaSetTemplate struct {
 	}
 }
 
-func NewResReplicaSet() IResReplicaSet {
+func NewResReplicaSet() *ResReplicaSet {
 	return &ResReplicaSet{
 		ApiVersion: "apps/v1",
 		Kind:       RESOURCE_REPLICASET,

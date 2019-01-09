@@ -33,7 +33,7 @@ type ResStorageClass struct {
 	Parameters           interface{}
 }
 
-func NewStorageClass() IResStorageClass {
+func NewStorageClass() *ResStorageClass {
 	return &ResStorageClass{
 		Kind:                 RESOURCE_STORAGE_CLASS,
 		ApiVersion:           "storage.k8s.io/v1",

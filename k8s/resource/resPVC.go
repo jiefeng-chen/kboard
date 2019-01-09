@@ -32,7 +32,7 @@ type PVCRequest struct {
 	Storage string
 }
 
-func NewPersistentVolumeClaim() IResPersistentVolumeClaim {
+func NewPersistentVolumeClaim() *ResPersistentVolumeClaim {
 	return &ResPersistentVolumeClaim{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_PERSISTENT_VOLUME_CLAIM,

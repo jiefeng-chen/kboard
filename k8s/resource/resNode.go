@@ -117,7 +117,7 @@ type DaemonEndpoint struct {
 type Conditions struct {
 }
 
-func NewResNode(name string) IResNode {
+func NewResNode(name string) *ResNode {
 	return &ResNode{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_NODE,

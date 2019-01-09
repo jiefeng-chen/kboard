@@ -38,7 +38,7 @@ type Container struct {
 	} `yaml:"securityContext"`
 }
 
-func NewContainer(name string, image string) IContainer {
+func NewContainer(name string, image string) *Container {
 	return &Container{
 		Name:          name,
 		Image:         image,

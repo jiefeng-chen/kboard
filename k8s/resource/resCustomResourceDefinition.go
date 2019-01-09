@@ -46,7 +46,7 @@ type CrdVersion struct {
 	Storage bool // One and only one version must be marked as the storage version
 }
 
-func NewCustomResourceDefinition() IResCustomResourceDefinition {
+func NewCustomResourceDefinition() *ResCustomResourceDefinition {
 	return &ResCustomResourceDefinition{
 		ApiVersion: "apiextensions.k8s.io/v1beta1",
 		Kind:       RESOURCE_CUSTOM_RESOURCE_DEFINITION,

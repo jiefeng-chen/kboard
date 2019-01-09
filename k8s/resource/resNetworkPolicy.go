@@ -75,7 +75,7 @@ type NetPolicyPort struct {
 	Port     int
 }
 
-func NewResNetworkPolicy() IResNetworkPolicy {
+func NewResNetworkPolicy() *ResNetworkPolicy {
 	return &ResNetworkPolicy{
 		ApiVersion: "networking.k8s.io/v1",
 		Kind:       RESOURCE_NETWORK_POLICY,

@@ -24,7 +24,7 @@ type ResNamespace struct {
 	}
 }
 
-func NewResNamespace() IResNamespace {
+func NewResNamespace() *ResNamespace {
 	return &ResNamespace{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_NAMESPACE,

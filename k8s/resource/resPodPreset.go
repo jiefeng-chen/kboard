@@ -35,7 +35,7 @@ type ResPodPresetSpec struct {
 	Volumes          []*Volume
 }
 
-func NewResPodPreset(name string) IResPodPreset {
+func NewResPodPreset(name string) *ResPodPreset {
 	return &ResPodPreset{
 		ApiVersion: "settings.k8s.io/v1alpha1",
 		Kind:       RESOURCE_POD_PRESET,

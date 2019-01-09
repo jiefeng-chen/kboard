@@ -60,7 +60,7 @@ const (
 	ANNOTATIONS_WHITELIST_SOURCE_RANGE    = "traefik.ingress.kubernetes.io/whitelist-source-range" // ip白名单列表
 )
 
-func NewIngress() IResIngress {
+func NewIngress() *ResIngress {
 	return &ResIngress{
 		Kind:       RESOURCE_INGRESS,
 		ApiVersion: "extensions/v1beta1",

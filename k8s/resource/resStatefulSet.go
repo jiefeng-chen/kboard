@@ -64,7 +64,7 @@ type VolumeClaimTemplateSpec struct {
 	}
 }
 
-func NewResStatefulSet() IResStatefulSet {
+func NewResStatefulSet() *ResStatefulSet {
 	return &ResStatefulSet{
 		Kind:       RESOURCE_STATEFULE_SET,
 		ApiVersion: "apps/v1",

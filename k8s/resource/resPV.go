@@ -56,7 +56,7 @@ type Rbd struct {
 	Keyring  string `yaml:"keyring"`
 }
 
-func NewPersistentVolume() IResPersistentVolume {
+func NewPersistentVolume() *ResPersistentVolume {
 	return &ResPersistentVolume{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_PERSISTENT_VOLUME,

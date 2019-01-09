@@ -76,7 +76,7 @@ type MetricObjectTarget struct {
 	Name       string
 }
 
-func NewResHorizontalPodAutoscaler() IResHorizontalPodAutoscaler {
+func NewResHorizontalPodAutoscaler() *ResHorizontalPodAutoscaler {
 	return &ResHorizontalPodAutoscaler{
 		ApiVersion: "autoscaling/v2beta1", // k8s>=v1.7
 		Kind:       RESOURCE_HORIZONTAL_POD_AUTOSCALER,

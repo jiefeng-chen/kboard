@@ -27,7 +27,7 @@ type ResSecret struct {
 	Data map[string]string
 }
 
-func NewSecret() IResSecret {
+func NewSecret() *ResSecret {
 	return &ResSecret{
 		Kind:       RESOURCE_SECRET,
 		ApiVersion: "v1",

@@ -37,7 +37,7 @@ type ResDeployment struct {
 	}
 }
 
-func NewResDeployment() IResDeployment {
+func NewResDeployment() *ResDeployment {
 	return &ResDeployment{
 		ApiVersion: "extensions/v1beta1",
 		Kind:       RESOURCE_DEPLOYMENT,

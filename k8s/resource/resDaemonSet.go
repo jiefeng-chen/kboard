@@ -30,7 +30,7 @@ type ResDaemonSet struct {
 	Spec *DaemonSetSpec
 }
 
-func NewResDaemonSet() IResDaemonSet {
+func NewResDaemonSet() *ResDaemonSet {
 	return &ResDaemonSet{
 		ApiVersion: "extensions/v1beta1",
 		Kind:       RESOURCE_DAEMONSET,

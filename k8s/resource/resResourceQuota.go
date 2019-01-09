@@ -46,7 +46,7 @@ type Request struct {
 	Memory string
 }
 
-func NewResResourceQuota() IResResourceQuota {
+func NewResResourceQuota() *ResResourceQuota {
 	return &ResResourceQuota{
 		Kind:       RESOURCE_RESOURCE_QUOTA,
 		ApiVersion: "v1",

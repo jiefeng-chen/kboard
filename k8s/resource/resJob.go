@@ -43,7 +43,7 @@ type JobTemplateSpec struct {
 	RestartPolicy string `yaml:"restartPolicy"`
 }
 
-func NewJob() IJob {
+func NewJob() *ResJob {
 	return &ResJob{
 		Kind:       RESOURCE_JOB,
 		ApiVersion: "batch/v1",

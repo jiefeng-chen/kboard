@@ -42,7 +42,7 @@ type LimitContainer struct {
 	LimitPod
 }
 
-func NewResLimitRange() IResLimitRange {
+func NewResLimitRange() *ResLimitRange {
 	return &ResLimitRange{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_LIMIT_RANGE,

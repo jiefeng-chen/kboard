@@ -30,7 +30,7 @@ type ResPod struct {
 	Spec *ResPodSpec
 }
 
-func NewResPod(name string) IResPod {
+func NewResPod(name string) *ResPod {
 	return &ResPod{
 		ApiVersion: "v1",
 		Kind:       RESOURCE_POD,
