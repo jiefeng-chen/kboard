@@ -29,7 +29,6 @@ type ThreadSafeMap struct {
 }
 
 func (t *ThreadSafeMap) Add(key string, item interface{}) error {
-	// LRU实现
 	if key == "" || item == nil {
 		return exception.NewError("set value error: key or value is empty")
 	}
