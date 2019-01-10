@@ -39,6 +39,8 @@ type IK8sCore interface {
 	Read(string, string) (*simplejson.Json, *HttpError)
 	Delete(string, string) (err *HttpError)
 	WriteToEtcd(string, string, []byte) *HttpError
+	List(string, string) ([]interface{}, *HttpError)
+	Watch(string, string)
 }
 
 type K8sCore struct {
@@ -54,6 +56,14 @@ func (k *K8sCore) baseApi() string {
 		exception.CheckError(exception.NewError("kubernetes host is empty"), -1)
 	}
 	return url
+}
+
+func (l *K8sCore) List(ns string, name string) ([]interface{}, *HttpError) {
+
+}
+
+func (l *K8sCore) Watch(string, string) {
+
 }
 
 func (l *K8sCore) Create(ns string, data []byte) *HttpError {
@@ -230,6 +240,8 @@ func (k *K8sCore) patch(url string, data []byte) *simplejson.Json {
 type Urls struct {
 	Read   string
 	Create string
+	List   string
+	Watch  string
 }
 
 type HttpError struct {

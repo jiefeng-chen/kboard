@@ -13,8 +13,9 @@ type INamespace interface {
 	Create([]byte) *HttpError
 	Replace(string, []byte) *HttpError
 	Read(string) (*simplejson.Json, *HttpError)
-	List(string) (*simplejson.Json, *HttpError)
 	Delete(string) *HttpError
+	List() (*simplejson.Json, *HttpError)
+	Watch(ns string) (*simplejson.Json, *HttpError)
 }
 
 type Namespace struct {
@@ -29,6 +30,8 @@ func NewNamespace(Config *config.Config) INamespace {
 			Urls: Urls{
 				Read:   "/api/v1/namespaces/%s",
 				Create: "/api/v1/namespaces",
+				List: "/api/v1/namespaces",
+				Watch: "/api/v1/watch/namespaces/%s",
 			},
 		},
 	}
@@ -120,8 +123,23 @@ func (l *Namespace) Delete(name string) *HttpError {
 	return err
 }
 
-func (l *Namespace) List(ns string) (*simplejson.Json, *HttpError) {
-	url := fmt.Sprintf(l.Urls.Read, ns)
+func (l *Namespace) List() (*simplejson.Json, *HttpError) {
+	url := fmt.Sprintf(l.Urls.List)
+	jsonData := l.get(url)
+	httpResult := GetHttpCode(jsonData)
+	err := GetHttpErr(httpResult)
+	if httpResult.Kind == l.Kind {
+		err.Code = 200
+		err.Message = "Success"
+	} else if httpResult.Code == 200 || httpResult.Status == STATUS_SUCCESS {
+		err.Code = 200
+		err.Message = httpResult.Status + ":" + httpResult.Message
+	}
+	return jsonData, err
+}
+
+func (l *Namespace) Watch(ns string) (*simplejson.Json, *HttpError) {
+	url := fmt.Sprintf(l.Urls.Watch, ns)
 	jsonData := l.get(url)
 	httpResult := GetHttpCode(jsonData)
 	err := GetHttpErr(httpResult)

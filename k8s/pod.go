@@ -12,7 +12,11 @@ import (
 )
 
 type IPod interface {
-	IK8sCore
+	Create(string, []byte) (err *HttpError)
+	Replace(string, string, []byte) (err *HttpError)
+	Read(string, string) (*simplejson.Json, *HttpError)
+	Delete(string, string) (err *HttpError)
+	WriteToEtcd(string, string, []byte) *HttpError
 	List(string) (*simplejson.Json, *HttpError)
 	Log(string, string) []byte
 }
@@ -29,6 +33,8 @@ func NewPod(Config *config.Config) IPod {
 			Urls: Urls{
 				Read:   "/api/v1/namespaces/%s/pods/%s",
 				Create: "/api/v1/namespaces/%s/pods",
+				List: "/api/v1/namespaces/%s/pods",
+				Watch: "/apis/batch/v1/watch/namespaces/%s/jobs/%s",
 			},
 		},
 	}

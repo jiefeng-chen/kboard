@@ -5,15 +5,16 @@ import (
 	"net/url"
 )
 
-type IHttpClient interface {
+type IRESTClient interface {
 	Get()
 	Post()
 	Put()
 	Delete()
 	Patch()
+	Do()
 }
 
-type HttpClient struct {
+type RESTClient struct {
 	baseUrl *url.URL
 
 	header *http.Header
@@ -21,30 +22,39 @@ type HttpClient struct {
 	Client *http.Client
 }
 
-func (c *HttpClient) Get() {
+func (c *RESTClient) getUrl() string {
+
+	return ""
+}
+
+func (c *RESTClient) Get() {
 
 }
 
-func (c *HttpClient) Post() {
+func (c *RESTClient) Post() {
 
 }
 
-func (c *HttpClient) Delete() {
+func (c *RESTClient) Delete() {
 
 }
 
-func (c *HttpClient) Put() {
+func (c *RESTClient) Put() {
 
 }
 
-func (c *HttpClient) Patch() {
+func (c *RESTClient) Patch() {
 
 }
 
-func NewHttpClient(url *url.URL, client *http.Client, header *http.Header) IHttpClient {
-	return &HttpClient{
+func (c *RESTClient) Do() {
+
+}
+
+func NewHttpClient(url *url.URL, header *http.Header) IRESTClient {
+	return &RESTClient{
 		baseUrl: url,
 		header:  header,
-		Client:  client,
+		Client:  &http.Client{},
 	}
 }

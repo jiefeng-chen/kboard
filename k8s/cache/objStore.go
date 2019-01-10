@@ -6,10 +6,11 @@ type IObjStore interface {
 }
 
 type ObjStore struct {
-	resourceType string // 资源类型
-
+	cache map[interface{}]IThreadSafeMap
 }
 
 func NewObjStore() IObjStore {
-	return &ObjStore{}
+	return &ObjStore{
+		cache: make(map[interface{}]IThreadSafeMap),
+	}
 }
