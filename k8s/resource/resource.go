@@ -4,6 +4,11 @@ type IResource interface {
 	ToYamlFile() ([]byte, error)
 }
 
+type Resource struct {
+	ApiVersion string `yaml:"apiVersion"`
+	Kind string
+}
+
 // 资源类型
 const (
 	RESOURCE_CONFIG_MAP                 = "ConfigMap"

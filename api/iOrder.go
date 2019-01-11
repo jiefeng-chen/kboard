@@ -48,7 +48,7 @@ func (this *IOrder) List() {
 	})
 
 	container := resource.NewContainer("mycontainer", "image")
-	container.SetResource(resource.Resource{
+	container.SetResource(resource.ContainerResources{
 		Limits: resource.Limits{
 			Cpu:    "0.5",
 			Memory: "100Mi",

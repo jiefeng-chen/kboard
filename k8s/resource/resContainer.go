@@ -13,7 +13,7 @@ type IContainer interface {
 	SetArgs([]string) error
 	SetWorkDir(string) error
 	SetVolumeMount(map[string]interface{}) error
-	SetResource(Resource) error
+	SetResource(ContainerResources) error
 	SetEnv(Env) error
 	SetPort(Port) error
 	SetLivenessProbe(LivenessProbe) error
@@ -29,7 +29,7 @@ type Container struct {
 	Args            []string
 	WorkingDir      string                   `yaml:"workingDir"`   // 当前工作目录
 	VolumeMounts    []map[string]interface{} `yaml:"volumeMounts"` // 挂载卷
-	Resources       *Resource
+	Resources       *ContainerResources
 	Env             []Env
 	Ports           []Port         // 端口号
 	LivenessProbe   *LivenessProbe `yaml:"livenessProbe"`
@@ -234,7 +234,7 @@ func (r *Container) SetReadinessProbe(readiness ReadinessProbe) error {
 	return nil
 }
 
-func (r *Container) SetResource(res Resource) error {
+func (r *Container) SetResource(res ContainerResources) error {
 	if res.Requests.Cpu == "" || res.Requests.Memory == "" {
 		return errors.New("request cpu or memory is empty")
 	}
@@ -295,14 +295,14 @@ type Secret struct {
 	Items      []map[string]string // [key:string, path:string]
 }
 
-func NewResource() *Resource {
-	return &Resource{
+func NewResource() *ContainerResources {
+	return &ContainerResources{
 		Limits:   Limits{Cpu: "", Memory: ""},
 		Requests: Request{Cpu: "", Memory: ""},
 	}
 }
 
-type Resource struct {
+type ContainerResources struct {
 	Limits   Limits
 	Requests Request
 }

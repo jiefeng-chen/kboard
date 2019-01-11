@@ -9,7 +9,12 @@ import (
 )
 
 type IIngress interface {
-	IK8sCore
+	Create(string, []byte) (err *HttpError)
+	Replace(string, string, []byte) (err *HttpError)
+	Read(string, string) (*simplejson.Json, *HttpError)
+	Delete(string, string) (err *HttpError)
+	WriteToEtcd(string, string, []byte) *HttpError
+	List(ns string) (*simplejson.Json, *HttpError)
 }
 
 type Ingress struct {

@@ -9,7 +9,12 @@ import (
 )
 
 type IReplicationController interface {
-	IK8sCore
+	Create(string, []byte) (err *HttpError)
+	Replace(string, string, []byte) (err *HttpError)
+	Read(string, string) (*simplejson.Json, *HttpError)
+	Delete(string, string) (err *HttpError)
+	WriteToEtcd(string, string, []byte) *HttpError
+
 	List(string) (*simplejson.Json, *HttpError)
 	Scale(string, string, int) *HttpError
 	Patch(string, string, []byte) *simplejson.Json

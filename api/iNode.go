@@ -44,7 +44,7 @@ func (this *INode) Scale() {
 	statefulSet.SetNamespace("myapp")
 	statefulSet.SetReplicas(3)
 	container := resource.NewContainer("mycontainer", "image")
-	container.SetResource(resource.Resource{
+	container.SetResource(resource.ContainerResources{
 		Limits: resource.Limits{
 			Cpu:    "0.5",
 			Memory: "100Mi",

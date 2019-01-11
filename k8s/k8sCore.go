@@ -59,7 +59,7 @@ func (k *K8sCore) baseApi() string {
 }
 
 func (l *K8sCore) List(ns string, name string) ([]interface{}, *HttpError) {
-
+	return nil, nil
 }
 
 func (l *K8sCore) Watch(string, string) {
