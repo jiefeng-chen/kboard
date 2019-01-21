@@ -82,17 +82,17 @@ func (i *IApi) Run(action string) {
 		i.TplEngine.TplData["GAction"] = action
 	}
 	// 检查action方法是否存在
-	if i.Actions[action] == nil {
-		if i.Actions["index"] == nil {
+	if f, ok := i.Actions[action]; !ok {
+		if defaultFunc, ok1 := i.Actions["index"]; !ok1 {
 			fmt.Fprintln(i.TplEngine.W, "404 page not found!")
 			log.Println("404")
 		} else {
 			i.TplEngine.TplData["GAction"] = "index"
-			i.Actions["index"]()
+			defaultFunc()
 		}
 	} else {
 		// run action
-		i.Actions[action]()
+		f()
 	}
 }
 

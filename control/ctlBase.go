@@ -83,17 +83,17 @@ func (c *Control) Run(action string) {
 		c.TplEngine.TplData["GAction"] = action
 	}
 	// 检查action方法是否存在
-	if c.Actions[action] == nil {
-		if c.Actions["index"] == nil {
+	if f, ok := c.Actions[action]; !ok {
+		if defaultFunc, ok1 := c.Actions["index"]; !ok1 {
 			fmt.Fprintln(c.TplEngine.W, "404 page not found!")
 			log.Println("404")
 		} else {
 			c.TplEngine.TplData["GAction"] = "index"
-			c.Actions["index"]()
+			defaultFunc()
 		}
 	} else {
 		// run action
-		c.Actions[action]()
+		f()
 	}
 }
 
