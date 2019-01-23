@@ -4,9 +4,9 @@ import (
 	"sync"
 	"kboard/exception"
 	"kboard/utils"
-	"github.com/BurntSushi/toml"
 	"fmt"
 	"io/ioutil"
+	"gopkg.in/yaml.v2"
 )
 
 type ConfigYaml struct {
@@ -36,9 +36,9 @@ func (c *ConfigYaml) LoadConfigFile(path string) IConfig {
 		// 检查文件是否存在
 		fileData, err := ioutil.ReadFile(path)
 		if err != nil || len(fileData) <= 0 {
-			exception.CheckError(exception.NewError("read config file error"), 0)
+			exception.CheckError(exception.NewError("read yaml config file error"), 0)
 		}
-		if _, err := toml.DecodeFile(path, &c.Data); err != nil {
+		if err := yaml.Unmarshal(fileData, &c.Data); err != nil {
 			exception.CheckError(err, 1001)
 		}
 	})
@@ -54,7 +54,11 @@ func (c *ConfigYaml) ReloadConfigFile() {
 	c.Once.Do(func() {
 		c.Lock.Lock()
 		defer c.Lock.Unlock()
-		if _, err := toml.DecodeFile(c.Path, &c.Data); err != nil {
+		fileData, err := ioutil.ReadFile(c.Path)
+		if err != nil || len(fileData) <= 0 {
+			exception.CheckError(exception.NewError("read yaml config file error"), 0)
+		}
+		if err := yaml.Unmarshal(fileData, &c.Data); err != nil {
 			exception.CheckError(err, 1001)
 		}
 	})

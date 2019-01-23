@@ -100,7 +100,7 @@ func (c *Config) LoadConfigFile(path string) IConfig {
 		// 检查文件是否存在
 		fileData, err := ioutil.ReadFile(path)
 		if err != nil || len(fileData) <= 0 {
-			exception.CheckError(exception.NewError("read config file error"), 0)
+			exception.CheckError(exception.NewError("read toml config file error"), 0)
 		}
 		if _, err := toml.DecodeFile(path, &c.Data); err != nil {
 			exception.CheckError(err, 1001)
