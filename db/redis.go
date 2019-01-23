@@ -12,7 +12,7 @@ type RedisCluster struct {
 	Singleton *redis.Cluster
 }
 
-func NewRedisCluster(config *config.Config) *RedisCluster {
+func NewRedisCluster(config config.IConfig) *RedisCluster {
 	clusterConn, err := redis.NewCluster(&redis.Options{
 		StartNodes: []string{
 			"192.168.37.150:8001",

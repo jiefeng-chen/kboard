@@ -20,7 +20,7 @@ type Node struct {
 	K8sCore
 }
 
-func NewNode(Config *config.Config) INode {
+func NewNode(Config config.IConfig) INode {
 	return &Node{
 		K8sCore{
 			Config: Config,

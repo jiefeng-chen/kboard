@@ -13,7 +13,7 @@ type DaemonSet struct {
 	K8sCore
 }
 
-func NewDaemonSet(Config *config.Config) IDaemonSet {
+func NewDaemonSet(Config config.IConfig) IDaemonSet {
 	return &DaemonSet{
 		K8sCore{
 			Config: Config,

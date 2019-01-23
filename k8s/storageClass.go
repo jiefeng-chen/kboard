@@ -20,7 +20,7 @@ type StorageClass struct {
 	K8sCore
 }
 
-func NewStorageClass(Config *config.Config) IStorageClass {
+func NewStorageClass(Config config.IConfig) IStorageClass {
 	return &StorageClass{
 		K8sCore{
 			Config: Config,

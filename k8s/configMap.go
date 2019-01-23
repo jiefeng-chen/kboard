@@ -13,7 +13,7 @@ type ConfigMap struct {
 	K8sCore
 }
 
-func NewConfigMap(Config *config.Config) IConfigMap {
+func NewConfigMap(Config config.IConfig) IConfigMap {
 	return &ConfigMap{
 		K8sCore{
 			Config: Config,

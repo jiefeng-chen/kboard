@@ -1,87 +1,24 @@
 package config
 
 import (
-	"fmt"
-	"io/ioutil"
+	"sync"
 	"kboard/exception"
 	"kboard/utils"
-	"sync"
-
 	"github.com/BurntSushi/toml"
+	"fmt"
+	"io/ioutil"
 )
 
-type IConfig interface {
-	LoadConfigFile(path string) IConfig
-	ReloadConfigFile()
-	SetTSL(tsl *ClusterTSL) error
-	GetTSL() *ClusterTSL
-	GetAddress() string
-	IsHttps() bool // 是否开启https
-	IsLog() bool
-	IsAuth() bool // 是否开启鉴权
-	IsHttp2() bool
-	GetHttpVersion() string
-	GetK8sHostName() string
-	GetK8sPort() int
-}
-
-type ClusterTSL struct {
-	Cert string
-	Key  string
-}
-
-type Config struct {
+type ConfigYaml struct {
 	Path string
 	Data TomlConfigData
 	Once sync.Once // 实现单例模式
 	Lock sync.RWMutex
 }
 
-type TomlConfigData struct {
-	Cluster struct {
-		Host        string
-		Port        int
-		Log         bool   // 日志记录
-		Auth        bool   // 鉴权
-		HttpVersion string `toml:"httpVersion"` // 1.0, 1.1, 2.0
-		Openssl     bool   // https
-		TLS         struct {
-			Cert string
-			Key  string
-		}
-	}
-	Mysql struct {
-		Host         string
-		Port         int
-		Username     string
-		Password     string
-		Dbname       string
-		Charset      string
-		MaxOpenConns int `toml:"maxOpenConns"`
-	}
-	Memcache struct {
-		Host string
-		Port int
-	}
-	Redis struct {
-		Host    string
-		Port    int
-		Timeout int
-	}
-	Kubernetes struct {
-		Host string
-		Port int
-	}
-	Etcd struct {
-		Host string
-		Port int
-	}
-}
 
-// load config file
-// singleton
-func NewConfig() IConfig {
-	return &Config{
+func NewConfigYaml() IConfig {
+	return &ConfigYaml{
 		Path: "",
 		Data: TomlConfigData{},
 		Once: sync.Once{},
@@ -89,8 +26,7 @@ func NewConfig() IConfig {
 	}
 }
 
-// error code 1000 ~ 1200
-func (c *Config) LoadConfigFile(path string) IConfig {
+func (c *ConfigYaml) LoadConfigFile(path string) IConfig {
 	fmt.Println("loading config file [path: ", path, "]")
 	c.Once.Do(func() {
 		if path == "" {
@@ -111,7 +47,7 @@ func (c *Config) LoadConfigFile(path string) IConfig {
 }
 
 // 重新加载配置文件
-func (c *Config) ReloadConfigFile() {
+func (c *ConfigYaml) ReloadConfigFile() {
 	fmt.Println("reloading config file...")
 	c.Lock.RLock()
 	defer c.Lock.RUnlock()
@@ -124,7 +60,7 @@ func (c *Config) ReloadConfigFile() {
 	})
 }
 
-func (c *Config) SetTSL(tsl *ClusterTSL) error {
+func (c *ConfigYaml) SetTSL(tsl *ClusterTSL) error {
 	if tsl.Cert == "" || tsl.Key == "" {
 		return exception.NewError("server tsl contain invalid value")
 	}
@@ -133,7 +69,7 @@ func (c *Config) SetTSL(tsl *ClusterTSL) error {
 	return nil
 }
 
-func (c *Config) GetAddress() string {
+func (c *ConfigYaml) GetAddress() string {
 	if c.Data.Cluster.Host == "" {
 		exception.CheckError(exception.NewError("server host is empty"), 1004)
 	}
@@ -144,7 +80,7 @@ func (c *Config) GetAddress() string {
 	return c.Data.Cluster.Host + ":" + utils.ToString(port)
 }
 
-func (c *Config) GetTSL() *ClusterTSL {
+func (c *ConfigYaml) GetTSL() *ClusterTSL {
 	cert := c.Data.Cluster.TLS.Cert
 	key := c.Data.Cluster.TLS.Key
 	if cert == "" || key == "" {
@@ -156,34 +92,34 @@ func (c *Config) GetTSL() *ClusterTSL {
 	}
 }
 
-func (c *Config) IsHttps() bool {
+func (c *ConfigYaml) IsHttps() bool {
 	return c.Data.Cluster.Openssl
 }
 
-func (c *Config) IsLog() bool {
+func (c *ConfigYaml) IsLog() bool {
 	return c.Data.Cluster.Log
 }
 
-func (c *Config) IsAuth() bool {
+func (c *ConfigYaml) IsAuth() bool {
 	return c.Data.Cluster.Auth
 }
 
-func (c *Config) IsHttp2() bool {
+func (c *ConfigYaml) IsHttp2() bool {
 	if c.Data.Cluster.HttpVersion == "2.0" {
 		return true
 	}
 	return false
 }
 
-func (c *Config) GetK8sHostName() string {
+func (c *ConfigYaml) GetK8sHostName() string {
 	return c.Data.Kubernetes.Host
 }
 
-func (c *Config) GetK8sPort() int {
+func (c *ConfigYaml) GetK8sPort() int {
 	return c.Data.Kubernetes.Port
 }
 
-func (c *Config) GetHttpVersion() string {
+func (c *ConfigYaml) GetHttpVersion() string {
 	var httpVersion string
 	switch c.Data.Cluster.HttpVersion {
 	case "1.0":
@@ -197,3 +133,4 @@ func (c *Config) GetHttpVersion() string {
 	}
 	return "HTTP/" + httpVersion
 }
+

@@ -10,7 +10,7 @@ type CtlIndex struct {
 	Control
 }
 
-func NewCtlIndex(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlIndex {
+func NewCtlIndex(config config.IConfig, w http.ResponseWriter, r *http.Request) *CtlIndex {
 	return &CtlIndex{
 		Control{
 			Config:    config,

@@ -15,7 +15,7 @@ type IPersistentVolumeClaim interface {
 	Patch(ns string, name string, data []byte) *HttpError
 }
 
-func NewPersistentVolumeClaim(Config *config.Config) IPersistentVolumeClaim {
+func NewPersistentVolumeClaim(Config config.IConfig) IPersistentVolumeClaim {
 	return &PersistentVolumeClaim{
 		K8sCore{
 			Config: Config,

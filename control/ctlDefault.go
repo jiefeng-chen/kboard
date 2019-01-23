@@ -10,7 +10,7 @@ type CtlDefault struct {
 	Control
 }
 
-func NewCtlDefault(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlDefault {
+func NewCtlDefault(config config.IConfig, w http.ResponseWriter, r *http.Request) *CtlDefault {
 	return &CtlDefault{
 		Control{
 			Config:    config,

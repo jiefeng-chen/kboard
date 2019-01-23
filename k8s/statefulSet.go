@@ -15,7 +15,7 @@ type StatefulSet struct {
 	K8sCore
 }
 
-func NewStatefulSet(Config *config.Config) IStatefulSet {
+func NewStatefulSet(Config config.IConfig) IStatefulSet {
 	return &StatefulSet{
 		K8sCore{
 			Config: Config,

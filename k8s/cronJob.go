@@ -13,7 +13,7 @@ type CronJob struct {
 	K8sCore
 }
 
-func NewCronJob(Config *config.Config) ICronJob {
+func NewCronJob(Config config.IConfig) ICronJob {
 	return &CronJob{
 		K8sCore{
 			Config: Config,

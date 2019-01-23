@@ -10,7 +10,7 @@ type CtlLogin struct {
 	Control
 }
 
-func NewCtlLogin(config *config.Config, w http.ResponseWriter, r *http.Request) *CtlLogin {
+func NewCtlLogin(config config.IConfig, w http.ResponseWriter, r *http.Request) *CtlLogin {
 	return &CtlLogin{
 		Control{
 			Config:    config,

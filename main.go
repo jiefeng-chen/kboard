@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	Config             *config.Config
+	Config             config.IConfig
 	NotifyReloadConfig chan int
 
 	// flag启动参数

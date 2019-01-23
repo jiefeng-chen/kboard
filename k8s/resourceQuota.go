@@ -20,7 +20,7 @@ type ResourceQuota struct {
 	MetaName string
 }
 
-func NewResourceQuota(Config *config.Config) IResourceQuota {
+func NewResourceQuota(Config config.IConfig) IResourceQuota {
 	return &ResourceQuota{
 		MetaName: "quota-v1",
 		K8sCore: K8sCore{

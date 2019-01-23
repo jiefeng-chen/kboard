@@ -18,7 +18,7 @@ type iApi interface {
 }
 
 type IApi struct {
-	Config    *config.Config
+	Config    config.IConfig
 	TplEngine *template.TplEngine
 	Module    string
 	Actions   map[string]func()
@@ -28,7 +28,7 @@ type IApi struct {
 	Namespace string
 }
 
-func NewIApi(config *config.Config, w http.ResponseWriter, r *http.Request) *IApi {
+func NewIApi(config config.IConfig, w http.ResponseWriter, r *http.Request) *IApi {
 	return &IApi{
 		Config:    config,
 		TplEngine: template.NewTplEngine(w, r),
@@ -105,7 +105,7 @@ type IBase struct {
 	IApi
 }
 
-func NewIBase(config *config.Config, w http.ResponseWriter, r *http.Request) *IBase {
+func NewIBase(config config.IConfig, w http.ResponseWriter, r *http.Request) *IBase {
 	base := &IBase{
 		IApi: *NewIApi(config, w, r),
 	}

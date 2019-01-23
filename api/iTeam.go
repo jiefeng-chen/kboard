@@ -13,7 +13,7 @@ type ITeam struct {
 	IApi
 }
 
-func NewITeam(config *config.Config, w http.ResponseWriter, r *http.Request) *ITeam {
+func NewITeam(config config.IConfig, w http.ResponseWriter, r *http.Request) *ITeam {
 	team := &ITeam{
 		IApi: *NewIApi(config, w, r),
 	}

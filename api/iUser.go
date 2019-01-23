@@ -9,7 +9,7 @@ type IUser struct {
 	IApi
 }
 
-func NewIUser(config *config.Config, w http.ResponseWriter, r *http.Request) *IUser {
+func NewIUser(config config.IConfig, w http.ResponseWriter, r *http.Request) *IUser {
 	user := &IUser{
 		IApi: *NewIApi(config, w, r)}
 	user.Module = "user"

@@ -22,7 +22,7 @@ type Namespace struct {
 	K8sCore
 }
 
-func NewNamespace(Config *config.Config) INamespace {
+func NewNamespace(Config config.IConfig) INamespace {
 	return &Namespace{
 		K8sCore{
 			Config: Config,

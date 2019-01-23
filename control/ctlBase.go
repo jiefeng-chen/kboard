@@ -19,7 +19,7 @@ type IControl interface {
 }
 
 type Control struct {
-	Config    *config.Config
+	Config    config.IConfig
 	TplEngine *template.TplEngine
 	Module    string
 	Namespace string
@@ -29,7 +29,7 @@ type Control struct {
 	Header    map[string]string
 }
 
-func NewControl(config *config.Config, w http.ResponseWriter, r *http.Request) *Control {
+func NewControl(config config.IConfig, w http.ResponseWriter, r *http.Request) *Control {
 	return &Control{
 		Config:    config,
 		TplEngine: template.NewTplEngine(w, r),

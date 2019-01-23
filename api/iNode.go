@@ -12,7 +12,7 @@ type INode struct {
 	IApi
 }
 
-func NewINode(config *config.Config, w http.ResponseWriter, r *http.Request) *INode {
+func NewINode(config config.IConfig, w http.ResponseWriter, r *http.Request) *INode {
 	node := &INode{
 		IApi: *NewIApi(config, w, r),
 	}

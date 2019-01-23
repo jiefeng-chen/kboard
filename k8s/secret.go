@@ -13,7 +13,7 @@ type Secret struct {
 	K8sCore
 }
 
-func NewSecret(Config *config.Config) ISecret {
+func NewSecret(Config config.IConfig) ISecret {
 	return &Secret{
 		K8sCore{
 			Config: Config,

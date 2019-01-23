@@ -44,7 +44,7 @@ type IK8sCore interface {
 }
 
 type K8sCore struct {
-	Config *config.Config
+	Config config.IConfig
 	Kind   string
 	Urls   Urls
 }

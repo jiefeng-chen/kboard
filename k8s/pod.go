@@ -25,7 +25,7 @@ type Pod struct {
 	K8sCore
 }
 
-func NewPod(Config *config.Config) IPod {
+func NewPod(Config config.IConfig) IPod {
 	return &Pod{
 		K8sCore{
 			Config: Config,

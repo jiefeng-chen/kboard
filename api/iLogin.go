@@ -9,7 +9,7 @@ type ILogin struct {
 	IApi
 }
 
-func NewILogin(config *config.Config, w http.ResponseWriter, r *http.Request) *ILogin {
+func NewILogin(config config.IConfig, w http.ResponseWriter, r *http.Request) *ILogin {
 	order := &ILogin{
 		IApi: *NewIApi(config, w, r),
 	}

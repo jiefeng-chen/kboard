@@ -11,7 +11,7 @@ type IOrder struct {
 	IApi
 }
 
-func NewIOrder(config *config.Config, w http.ResponseWriter, r *http.Request) *IOrder {
+func NewIOrder(config config.IConfig, w http.ResponseWriter, r *http.Request) *IOrder {
 	order := &IOrder{
 		IApi: *NewIApi(config, w, r),
 	}

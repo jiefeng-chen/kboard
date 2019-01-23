@@ -13,7 +13,7 @@ type Job struct {
 	K8sCore
 }
 
-func NewJob(Config *config.Config) IJob {
+func NewJob(Config config.IConfig) IJob {
 	return &Job{
 		K8sCore{
 			Config: Config,

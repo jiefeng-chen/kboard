@@ -27,7 +27,7 @@ func UrlRegister(r *Router) {
 }
 
 // api下的路由处理handler在此处理
-func I_UserHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func I_UserHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewIUser(c, w, r)
@@ -37,7 +37,7 @@ func I_UserHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)
 	return handler
 }
 
-func I_NodeHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func I_NodeHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewINode(c, w, r)
@@ -48,7 +48,7 @@ func I_NodeHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)
 	return handler
 }
 
-func I_OrderHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func I_OrderHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewIOrder(c, w, r)
@@ -59,7 +59,7 @@ func I_OrderHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 	return handler
 }
 
-func I_TeamHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func I_TeamHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewITeam(c, w, r)
@@ -70,7 +70,7 @@ func I_TeamHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)
 	return handler
 }
 
-func I_LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func I_LoginHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		i := api.NewILogin(c, w, r)
@@ -82,7 +82,7 @@ func I_LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 }
 
 // control下的路由处理handler在此处理
-func C_LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func C_LoginHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		c := control.NewCtlLogin(c, w, r)
@@ -92,7 +92,7 @@ func C_LoginHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 	return handler
 }
 
-func C_IndexHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func C_IndexHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		c := control.NewCtlIndex(c, w, r)
@@ -102,7 +102,7 @@ func C_IndexHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request
 	return handler
 }
 
-func C_DefaultHandler(c *config.Config) (f func(http.ResponseWriter, *http.Request)) {
+func C_DefaultHandler(c config.IConfig) (f func(http.ResponseWriter, *http.Request)) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		action := mux.Vars(r)["action"]
 		c := control.NewCtlDefault(c, w, r)

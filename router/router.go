@@ -11,10 +11,10 @@ import (
 
 type Router struct {
 	Router *mux.Router
-	Config *config.Config
+	Config config.IConfig
 }
 
-func NewRouter(Config *config.Config) *Router {
+func NewRouter(Config config.IConfig) *Router {
 	return &Router{
 		Router: mux.NewRouter(),
 		Config: Config,
