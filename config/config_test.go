@@ -5,6 +5,6 @@ import (
 )
 
 func TestConfig_LoadConfigFile(t *testing.T) {
-	conf := NewConfig().LoadConfigFile("../config/conf.toml")
-	t.Errorf("%+v", conf.Data)
+	conf := NewConfig().LoadConfigFile("./conf.toml")
+	t.Errorf("%+v", conf.GetConfigData())
 }

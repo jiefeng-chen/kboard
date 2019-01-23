@@ -11,7 +11,7 @@ import (
 
 type ConfigYaml struct {
 	Path string
-	Data TomlConfigData
+	Data ConfigData
 	Once sync.Once // 实现单例模式
 	Lock sync.RWMutex
 }
@@ -20,7 +20,7 @@ type ConfigYaml struct {
 func NewConfigYaml() IConfig {
 	return &ConfigYaml{
 		Path: "",
-		Data: TomlConfigData{},
+		Data: ConfigData{},
 		Once: sync.Once{},
 		Lock: sync.RWMutex{},
 	}
@@ -44,6 +44,11 @@ func (c *ConfigYaml) LoadConfigFile(path string) IConfig {
 	})
 
 	return c
+}
+
+
+func (c *ConfigYaml) GetConfigData() ConfigData {
+	return c.Data
 }
 
 // 重新加载配置文件

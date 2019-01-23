@@ -23,6 +23,7 @@ type IConfig interface {
 	GetHttpVersion() string
 	GetK8sHostName() string
 	GetK8sPort() int
+	GetConfigData() ConfigData
 }
 
 type ClusterTSL struct {
@@ -32,18 +33,18 @@ type ClusterTSL struct {
 
 type Config struct {
 	Path string
-	Data TomlConfigData
+	Data ConfigData
 	Once sync.Once // 实现单例模式
 	Lock sync.RWMutex
 }
 
-type TomlConfigData struct {
+type ConfigData struct {
 	Cluster struct {
 		Host        string
 		Port        int
 		Log         bool   // 日志记录
 		Auth        bool   // 鉴权
-		HttpVersion string `toml:"httpVersion"` // 1.0, 1.1, 2.0
+		HttpVersion string `toml:"httpVersion",yaml:"httpVersion"` // 1.0, 1.1, 2.0
 		Openssl     bool   // https
 		TLS         struct {
 			Cert string
@@ -57,7 +58,7 @@ type TomlConfigData struct {
 		Password     string
 		Dbname       string
 		Charset      string
-		MaxOpenConns int `toml:"maxOpenConns"`
+		MaxOpenConns int `toml:"maxOpenConns",yaml:"maxOpenConns"`
 	}
 	Memcache struct {
 		Host string
@@ -83,7 +84,7 @@ type TomlConfigData struct {
 func NewConfig() IConfig {
 	return &Config{
 		Path: "",
-		Data: TomlConfigData{},
+		Data: ConfigData{},
 		Once: sync.Once{},
 		Lock: sync.RWMutex{},
 	}
@@ -108,6 +109,10 @@ func (c *Config) LoadConfigFile(path string) IConfig {
 	})
 
 	return c
+}
+
+func (c *Config) GetConfigData() ConfigData {
+	return c.Data
 }
 
 // 重新加载配置文件
