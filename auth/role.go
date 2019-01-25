@@ -23,7 +23,8 @@ type Role struct {
 	SREFlag  bool     // 是否SRE团队成员
 }
 
-func GetRoleName(id Identity) string {
+// 获取角色名称
+func getRoleName(id Identity) string {
 	roleNames := map[Identity]string{
 		ROLE_IDENTIDY_SUPER: "系统管理员",
 		ROLE_IDENTIDY_PRO: "项目管理员",
@@ -40,7 +41,7 @@ func GetRoleName(id Identity) string {
 }
 
 // SRE 标志
-func GetSREFlag(id Identity) bool {
+func getSreFlag(id Identity) bool {
 	roleNames := map[Identity]bool{
 		ROLE_IDENTIDY_SUPER: true,
 		ROLE_IDENTIDY_PRO: true,
@@ -59,8 +60,8 @@ func GetSREFlag(id Identity) bool {
 func NewRole(identity Identity) role {
 	return &Role{
 		Identity: identity,
-		Name: GetRoleName(identity),
-		SREFlag: GetSREFlag(identity),
+		Name: getRoleName(identity),
+		SREFlag: getSreFlag(identity),
 	}
 }
 
