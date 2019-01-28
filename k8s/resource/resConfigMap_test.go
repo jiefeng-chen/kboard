@@ -7,7 +7,7 @@ func TestResConfigMap_SetData(t *testing.T) {
 		{"key": "1", "val": "1"},
 		{"key": "2", "val": "2"},
 	}
-	confMap := NewConfigMap()
+	confMap := NewResConfigMap()
 	confMap.SetData(data)
 	confMap.SetNamespace("helle")
 	confMap.SetMetadataName("132413")

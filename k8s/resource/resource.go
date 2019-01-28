@@ -35,6 +35,11 @@ const (
 	RESOURCE_NETWORK_POLICY             = "NetworkPolicy"
 	RESOURCE_POD_PRESET                 = "PodPreset"
 	RESOURCE_CUSTOM_RESOURCE_DEFINITION = "CustomResourceDefinition"
+
+	RESOURCE_ROLE                       = "Role"
+	RESOURCE_CLUSTER_ROLE               = "ClusterRole"
+	RESOURCE_ROLE_BINDING               = "RoleBinding"
+	RESOURCE_CLUSTER_ROLE_BINDING       = "ClusterRoleBinding"
 )
 
 // 显示名称
@@ -64,6 +69,10 @@ func GetKinds() map[string]string {
 		RESOURCE_NETWORK_POLICY:             "NetworkPolicy",
 		RESOURCE_POD_PRESET:                 "PodPreset",
 		RESOURCE_CUSTOM_RESOURCE_DEFINITION: "CustomResourceDefinition",
+		RESOURCE_ROLE:                       "Role",
+		RESOURCE_CLUSTER_ROLE:               "ClusterRole",
+		RESOURCE_ROLE_BINDING:               "RoleBinding",
+		RESOURCE_CLUSTER_ROLE_BINDING:       "ClusterRoleBinding",
 	}
 }
 
