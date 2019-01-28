@@ -8,11 +8,11 @@ type role interface {
 
 const (
 	// 角色身份
-	ROLE_IDENTIDY_SUPER = iota + 1 // SRE - 系统管理员
-	ROLE_IDENTIDY_PRO   // SRE - 项目管理员
-	ROLE_IDENTIDY_OPS   // SRE - 运维工程师
-	ROLE_IDENTIDY_DEV   // 研发工程师
-	ROLE_IDENTIDY_TEST  // 测试工程师
+	ROLE_IDENTITY_SUPER = iota + 1 // SRE - 系统管理员
+	ROLE_IDENTITY_PRO   // SRE - 项目管理员
+	ROLE_IDENTITY_OPS   // SRE - 运维工程师
+	ROLE_IDENTITY_DEV   // 研发工程师
+	ROLE_IDENTITY_TEST  // 测试工程师
 )
 
 type Identity int
@@ -26,11 +26,11 @@ type Role struct {
 // 获取角色名称
 func getRoleName(id Identity) string {
 	roleNames := map[Identity]string{
-		ROLE_IDENTIDY_SUPER: "系统管理员",
-		ROLE_IDENTIDY_PRO: "项目管理员",
-		ROLE_IDENTIDY_OPS: "运维工程师",
-		ROLE_IDENTIDY_DEV: "研发工程师",
-		ROLE_IDENTIDY_TEST: "测试工程师",
+		ROLE_IDENTITY_SUPER: "系统管理员",
+		ROLE_IDENTITY_PRO: "项目管理员",
+		ROLE_IDENTITY_OPS: "运维工程师",
+		ROLE_IDENTITY_DEV: "研发工程师",
+		ROLE_IDENTITY_TEST: "测试工程师",
 	}
 
 	if name, ok := roleNames[id]; ok {
@@ -43,11 +43,11 @@ func getRoleName(id Identity) string {
 // SRE 标志
 func getSreFlag(id Identity) bool {
 	roleNames := map[Identity]bool{
-		ROLE_IDENTIDY_SUPER: true,
-		ROLE_IDENTIDY_PRO: true,
-		ROLE_IDENTIDY_OPS: true,
-		ROLE_IDENTIDY_DEV: false,
-		ROLE_IDENTIDY_TEST: false,
+		ROLE_IDENTITY_SUPER: true,
+		ROLE_IDENTITY_PRO: true,
+		ROLE_IDENTITY_OPS: true,
+		ROLE_IDENTITY_DEV: false,
+		ROLE_IDENTITY_TEST: false,
 	}
 
 	if flag, ok := roleNames[id]; ok {
