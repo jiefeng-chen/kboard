@@ -12,12 +12,14 @@ import (
 type Router struct {
 	Router *mux.Router
 	Config config.IConfig
+	Logger *middleware.Log
 }
 
-func NewRouter(Config config.IConfig) *Router {
+func NewRouter(Config config.IConfig, Logger *middleware.Log) *Router {
 	return &Router{
 		Router: mux.NewRouter(),
 		Config: Config,
+		Logger: Logger,
 	}
 }
 
