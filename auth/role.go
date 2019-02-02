@@ -4,7 +4,17 @@ type role interface {
 	Create() error
 	Delete() error
 	Grant() error
+	AssociateOp(Perm) error
+	AssociateUser(string) error
 }
+
+
+// user, roles, operations, and sessions
+// role/operation m:n
+// user/role  m:n
+// user/session 1:m
+// session/role 1:1
+
 
 const (
 	// 角色身份
@@ -13,6 +23,8 @@ const (
 	ROLE_IDENTITY_OPS   // SRE - 运维工程师
 	ROLE_IDENTITY_DEV   // 研发工程师
 	ROLE_IDENTITY_TEST  // 测试工程师
+
+	ROLE_IDENTITY_PRO_ADMIN // 团队管理员
 )
 
 type Identity int
@@ -31,6 +43,7 @@ func getRoleName(id Identity) string {
 		ROLE_IDENTITY_OPS: "运维工程师",
 		ROLE_IDENTITY_DEV: "研发工程师",
 		ROLE_IDENTITY_TEST: "测试工程师",
+		ROLE_IDENTITY_PRO_ADMIN: "团队管理员",
 	}
 
 	if name, ok := roleNames[id]; ok {
@@ -48,6 +61,7 @@ func getSreFlag(id Identity) bool {
 		ROLE_IDENTITY_OPS: true,
 		ROLE_IDENTITY_DEV: false,
 		ROLE_IDENTITY_TEST: false,
+		ROLE_IDENTITY_PRO_ADMIN: false,
 	}
 
 	if flag, ok := roleNames[id]; ok {
@@ -76,3 +90,16 @@ func (r *Role) Delete() error {
 func (r *Role) Grant() error {
 	return nil
 }
+
+func (r *Role) AssociateOp(perm Perm) error {
+
+	return nil
+}
+
+func (r *Role) AssociateUser(user string) error  {
+
+	return nil
+}
+
+
+
