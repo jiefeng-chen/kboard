@@ -21,15 +21,13 @@ type IThreadSafeMap interface {
 	Delete(string) error
 	Update(string, interface{}) error
 	List() []interface{}
+	Cap() int
 }
 
 type ThreadSafeMap struct {
 	lock sync.RWMutex
 
 	items map[string]interface{}
-
-	// 队列
-
 
 	cap int
 
@@ -44,7 +42,7 @@ func NewThreadSafeMap(cap int) IThreadSafeMap {
 		cap: cap,
 		len:   0,
 		lock:  sync.RWMutex{},
-		items: make(map[string]interface{}),
+		items: make(map[string]interface{}, cap),
 	}
 }
 
@@ -55,7 +53,7 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 	}
 
 	// 判断长度是否超过限制
-	if t.Len() >= THREAD_SAFE_MAP_MAX_CAP {
+	if t.Len() > THREAD_SAFE_MAP_MAX_CAP {
 		// 删除最近最少访问的
 	}
 
@@ -84,6 +82,7 @@ func (t *ThreadSafeMap) Get(key string) (interface{}, error) {
 	if ele, ok := t.items[key]; ok {
 		return ele, nil
 	}
+
 	return nil, errors.New(key + " not found")
 }
 
@@ -168,4 +167,8 @@ func (t *ThreadSafeMap) Len() int {
 	return t.len
 }
 
+func (t *ThreadSafeMap) Cap() int {
+	cap := len(t.items)
+	return cap
+}
 
