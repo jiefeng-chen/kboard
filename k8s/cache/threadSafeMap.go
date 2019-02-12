@@ -1,36 +1,62 @@
 package cache
 
 import (
-	"kboard/exception"
 	"sync"
+	"errors"
+)
+
+const (
+	THREAD_SAFE_MAP_MAX_CAP = 1000
 )
 
 // thread safe map
 type IThreadSafeMap interface {
 	Add(string, interface{}) error
-	Get(string) (interface{}, bool)
+	Get(string) (interface{}, error)
 
 	CleanAll() error
 	Exist(string) bool
-	Size() int
+	Len() int
 
 	Delete(string) error
 	Update(string, interface{}) error
-	Replace(string, interface{}) error
 	List() []interface{}
 }
 
 type ThreadSafeMap struct {
 	lock sync.RWMutex
 
-	items map[string]interface{} // 资源链表
+	items map[string]interface{}
 
-	len int // 当前长度
+	// 队列
+
+
+	cap int
+
+	len int
 }
+
+func NewThreadSafeMap(cap int) IThreadSafeMap {
+	if cap <= 0 || cap > THREAD_SAFE_MAP_MAX_CAP {
+		cap = THREAD_SAFE_MAP_MAX_CAP
+	}
+	return &ThreadSafeMap{
+		cap: cap,
+		len:   0,
+		lock:  sync.RWMutex{},
+		items: make(map[string]interface{}),
+	}
+}
+
 
 func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 	if key == "" || item == nil {
-		return exception.NewError("set value error: key or value is empty")
+		return errors.New("set value error: key or value is empty")
+	}
+
+	// 判断长度是否超过限制
+	if t.Len() >= THREAD_SAFE_MAP_MAX_CAP {
+		// 删除最近最少访问的
 	}
 
 	t.lock.Lock()
@@ -38,24 +64,27 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 
 	// 判断是否存在
 	t.items[key] = item
+	t.len++
 
 	return nil
 }
 
-func (t *ThreadSafeMap) Get(key string) (interface{}, bool) {
+func (t *ThreadSafeMap) Get(key string) (interface{}, error) {
 	if key == "" {
-		return nil, false
+		return nil, errors.New("key is empty")
 	}
 
-	if t.Size() <= 0 {
-		return nil, false
+	if t.Len() <= 0 {
+		return nil, errors.New("size is empty")
 	}
 
 	t.lock.RLock()
 	defer t.lock.RUnlock()
 
-	ele, ok := t.items[key]
-	return ele, ok
+	if ele, ok := t.items[key]; ok {
+		return ele, nil
+	}
+	return nil, errors.New(key + " not found")
 }
 
 func (t *ThreadSafeMap) List() []interface{} {
@@ -73,7 +102,7 @@ func (t *ThreadSafeMap) List() []interface{} {
 
 // 清理
 func (t *ThreadSafeMap) CleanAll() error {
-	if t.Size() <= 0 {
+	if t.Len() <= 0 {
 		return nil
 	}
 
@@ -101,10 +130,10 @@ func (t *ThreadSafeMap) Exist(key string) bool {
 
 func (t *ThreadSafeMap) Delete(key string) error {
 	if key == "" {
-		return exception.NewError("key is empty")
+		return errors.New("key is empty")
 	}
-	if t.Size() <= 0 {
-		return exception.NewError("list is empty")
+	if t.Len() <= 0 {
+		return errors.New("list is empty")
 	}
 	t.lock.Lock()
 	defer t.lock.Unlock()
@@ -117,13 +146,13 @@ func (t *ThreadSafeMap) Delete(key string) error {
 
 func (t *ThreadSafeMap) Update(key string, item interface{}) error {
 	if key == "" {
-		return exception.NewError("key is empty")
+		return errors.New("key is empty")
 	}
 	t.lock.Lock()
 	defer t.lock.Unlock()
 
-	if !t.Exist(key) {
-		return exception.NewError("key[%s] not exist", key)
+	if _, ok := t.items[key]; !ok {
+		return errors.New("key[" + key + "] not exist")
 	}
 
 	t.items[key] = item
@@ -132,33 +161,11 @@ func (t *ThreadSafeMap) Update(key string, item interface{}) error {
 }
 
 
-func (t *ThreadSafeMap) Replace(key string, item interface{}) error {
-	if key == "" {
-		return exception.NewError("key is empty")
-	}
-	t.lock.Lock()
-	defer t.lock.Unlock()
-
-	if !t.Exist(key) {
-		return exception.NewError("key[%s] not exist", key)
-	}
-
-	t.items[key] = item
-
-	return nil
-}
-
-func (t *ThreadSafeMap) Size() int {
+func (t *ThreadSafeMap) Len() int {
 	t.lock.RLock()
 	defer t.lock.RUnlock()
 
 	return t.len
 }
 
-func NewThreadSafeMap() IThreadSafeMap {
-	return &ThreadSafeMap{
-		len:   0,
-		lock:  sync.RWMutex{},
-		items: make(map[string]interface{}),
-	}
-}
+
