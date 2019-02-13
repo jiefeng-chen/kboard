@@ -25,6 +25,9 @@ func TestNewThreadSafeMap(t *testing.T) {
 
 	data, _ := threadMap.Get("3")
 
+	threadMap.Add("1002", 1002)
+	data, _ = threadMap.Get("4")
+
 	t.Fatal(threadMap.List(), threadMap.Len(), data)
 }
 

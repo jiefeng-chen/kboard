@@ -22,7 +22,6 @@ type IThreadSafeMap interface {
 	Delete(string) error
 	Update(string, interface{}) error
 	List() []interface{}
-	Cap() int
 }
 
 type ThreadSafeMap struct {
@@ -209,11 +208,4 @@ func (t *ThreadSafeMap) Len() int {
 	defer t.lock.RUnlock()
 
 	return t.len
-}
-
-func (t *ThreadSafeMap) Cap() int {
-	t.lock.RLock()
-	defer t.lock.RUnlock()
-
-	return t.cap
 }
