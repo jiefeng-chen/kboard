@@ -58,9 +58,17 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 
 	// 判断长度是否超过限制
 	if t.Len() >= THREAD_SAFE_MAP_MAX_CAP {
-		// 删除最近最少访问的
 		lastEle := t.keys.Remove(t.keys.Back()).(string)
-		delete(t.items, lastEle)
+		tempMap := map[string]interface{}{}
+		// 删除最近最少访问数据
+		for k, v := range t.items {
+			if k == lastEle {
+				t.len--
+				continue
+			}
+			tempMap[k] = v
+		}
+		t.items = tempMap
 	}
 
 	t.lock.Lock()

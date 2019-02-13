@@ -29,6 +29,8 @@ func (p *permissionCode) Check(code PermCode) error {
 	if _, ok := p.codes[code]; !ok {
 		return errors.New("permission code not found")
 	}
+
+
 	return nil
 }
 
