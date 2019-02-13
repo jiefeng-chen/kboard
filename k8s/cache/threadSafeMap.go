@@ -3,6 +3,7 @@ package cache
 import (
 	"sync"
 	"errors"
+	"container/list"
 )
 
 const (
@@ -21,13 +22,15 @@ type IThreadSafeMap interface {
 	Delete(string) error
 	Update(string, interface{}) error
 	List() []interface{}
-	Cap() int
 }
 
 type ThreadSafeMap struct {
 	lock sync.RWMutex
 
 	items map[string]interface{}
+
+	// 队列
+	keys *list.List
 
 	cap int
 
@@ -43,6 +46,7 @@ func NewThreadSafeMap(cap int) IThreadSafeMap {
 		len:   0,
 		lock:  sync.RWMutex{},
 		items: make(map[string]interface{}, cap),
+		keys: list.New(),
 	}
 }
 
@@ -53,8 +57,10 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 	}
 
 	// 判断长度是否超过限制
-	if t.Len() > THREAD_SAFE_MAP_MAX_CAP {
+	if t.Len() >= THREAD_SAFE_MAP_MAX_CAP {
 		// 删除最近最少访问的
+		lastEle := t.keys.Remove(t.keys.Back()).(string)
+		delete(t.items, lastEle)
 	}
 
 	t.lock.Lock()
@@ -64,8 +70,21 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 	t.items[key] = item
 	t.len++
 
+	t.keys.PushFront(key)
+
 	return nil
 }
+
+func (l *ThreadSafeMap) exist(key string) (bool, *list.Element) {
+	for v := l.keys.Front(); v != nil; v = v.Next() {
+		if key == v.Value.(string) {
+			return true, v
+		}
+	}
+
+	return false, nil
+}
+
 
 func (t *ThreadSafeMap) Get(key string) (interface{}, error) {
 	if key == "" {
@@ -80,6 +99,11 @@ func (t *ThreadSafeMap) Get(key string) (interface{}, error) {
 	defer t.lock.RUnlock()
 
 	if ele, ok := t.items[key]; ok {
+		if ok, item := t.exist(key); ok {
+			// 数据访问则把数据移动到头部
+			t.keys.MoveToFront(item)
+		}
+
 		return ele, nil
 	}
 
@@ -113,6 +137,8 @@ func (t *ThreadSafeMap) CleanAll() error {
 		t.len--
 	}
 
+	t.keys = list.New()
+
 	return nil
 }
 
@@ -140,6 +166,10 @@ func (t *ThreadSafeMap) Delete(key string) error {
 	delete(t.items, key)
 	t.len--
 
+	if ok, data := t.exist(key); ok {
+		t.keys.Remove(data)
+	}
+
 	return nil
 }
 
@@ -156,6 +186,11 @@ func (t *ThreadSafeMap) Update(key string, item interface{}) error {
 
 	t.items[key] = item
 
+	if ok, item := t.exist(key); ok {
+		// 数据访问则把数据移动到头部
+		t.keys.MoveToFront(item)
+	}
+
 	return nil
 }
 
@@ -167,8 +202,4 @@ func (t *ThreadSafeMap) Len() int {
 	return t.len
 }
 
-func (t *ThreadSafeMap) Cap() int {
-	cap := len(t.items)
-	return cap
-}
 

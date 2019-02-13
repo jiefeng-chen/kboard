@@ -10,7 +10,7 @@ func TestNewThreadSafeMap(t *testing.T) {
 
 	threadMap = NewThreadSafeMap(100)
 
-	for i:= 0; i < 1000; i++ {
+	for i:= 1; i <= 1000; i++ {
 		threadMap.Add(strconv.Itoa(i), i)
 	}
 
@@ -24,7 +24,8 @@ func TestNewThreadSafeMap(t *testing.T) {
 	}
 
 	data, _ := threadMap.Get("3")
-	t.Fatal(threadMap.List(), threadMap.Len(), data, threadMap.Cap())
+
+	t.Fatal(threadMap.List(), threadMap.Len(), data)
 }
 
 
