@@ -22,6 +22,7 @@ type IThreadSafeMap interface {
 	Delete(string) error
 	Update(string, interface{}) error
 	List() []interface{}
+	Cap() int
 }
 
 type ThreadSafeMap struct {
@@ -83,8 +84,8 @@ func (t *ThreadSafeMap) Add(key string, item interface{}) error {
 	return nil
 }
 
-func (l *ThreadSafeMap) exist(key string) (bool, *list.Element) {
-	for v := l.keys.Front(); v != nil; v = v.Next() {
+func (t *ThreadSafeMap) exist(key string) (bool, *list.Element) {
+	for v := t.keys.Front(); v != nil; v = v.Next() {
 		if key == v.Value.(string) {
 			return true, v
 		}
@@ -210,4 +211,9 @@ func (t *ThreadSafeMap) Len() int {
 	return t.len
 }
 
+func (t *ThreadSafeMap) Cap() int {
+	t.lock.RLock()
+	defer t.lock.RUnlock()
 
+	return t.cap
+}
