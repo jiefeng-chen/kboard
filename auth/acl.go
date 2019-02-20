@@ -6,9 +6,9 @@ package auth
 //
 
 const (
-	ACL_R = 1
-	ACL_W = 2
-	ACL_X = 4
+	ACL_R = 1 // 可读，可以查看，可以列出目录内容
+	ACL_W = 2 // 可写，可以修改文件的内容
+	ACL_X = 4 // 可执行，可以执行文件，可以进入目录
 )
 
 type acl interface {
@@ -17,13 +17,21 @@ type acl interface {
 }
 
 type Acl struct {
-
+	ResourceName string
+	Owner string
+	Group string
+	Other string
 }
 
-func NewAcl( string) *Acl {
+func NewAcl(resName string) *Acl {
 	return &Acl{
-
+		ResourceName: resName,
 	}
+}
+
+func (a *Acl) Init() {
+	// 加载初始化参数
+
 }
 
 func (a *Acl) SetAcl() {

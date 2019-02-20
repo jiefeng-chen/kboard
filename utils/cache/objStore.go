@@ -42,6 +42,7 @@ func NewObjStore(cap int) IObjStore {
 		cap: cap,
 		len: 0,
 		lock: sync.RWMutex{},
+		keys: list.New(),
 	}
 }
 
