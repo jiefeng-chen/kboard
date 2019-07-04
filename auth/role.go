@@ -4,7 +4,7 @@ type role interface {
 	Create() error
 	Delete() error
 	Grant() error
-	AssociateOp(Perm) error
+	AssociateOp(PermCode) error
 	AssociateUser(string) error
 }
 
@@ -91,7 +91,7 @@ func (r *Role) Grant() error {
 	return nil
 }
 
-func (r *Role) AssociateOp(perm Perm) error {
+func (r *Role) AssociateOp(perm PermCode) error {
 
 	return nil
 }
