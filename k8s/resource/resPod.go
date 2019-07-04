@@ -3,7 +3,7 @@ package resource
 import (
 	"kboard/exception"
 
-	"github.com/golang/go/src/pkg/errors"
+	"errors"
 	"gopkg.in/yaml.v2"
 )
 
