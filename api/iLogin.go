@@ -22,6 +22,7 @@ func (this *ILogin) Index() {
 	password := this.PostString("password")
 	if email == "" || password == "" {
 		this.ResponseWithHeader(101, "", "缺少数据")
+		return
 	}
 	result := map[string]string{
 		"email":    email,
