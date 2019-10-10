@@ -3,10 +3,9 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
-	"kboard/exception"
-	"kboard/utils"
+	"kboard/utils/exception"
 	"sync"
-
+	"kboard/utils"
 	"github.com/BurntSushi/toml"
 )
 
