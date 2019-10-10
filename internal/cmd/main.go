@@ -8,7 +8,6 @@ import (
 	"kboard/internal/router"
 	"kboard/utils/exception"
 	"kboard/utils/middleware"
-	"log"
 	"net/http"
 	"time"
 )
@@ -49,12 +48,13 @@ func init() {
 	Log = middleware.NewLogger().Init()
 
 	// init db、cache、control and so on
-	db.NewMysql(Config).Init()
+	//db.NewMysql(Config).Init()
+	db.NewSQLite().Init("../data/kboard.db")
 }
 
 func main() {
 	r := router.NewRouter(Config, Log).InitRouter()
-	log.Println("Listen On", Config.GetAddress())
+	Log.Logger.Info("Listen On", Config.GetAddress())
 	server := http.Server{
 		Addr:         Config.GetAddress(),
 		Handler:      r.Router,

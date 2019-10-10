@@ -23,7 +23,7 @@ func NewSQLite() *SQLite {
 
 func (s *SQLite) Init(dbPath string) {
 	if dbPath == "" {
-		panic("db path error")
+		panic("sqlite db path error")
 	}
 
 	var err error
