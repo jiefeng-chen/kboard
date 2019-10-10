@@ -23,15 +23,16 @@ type Mysql struct {
 	Timeout      int
 }
 
-func NewMysql(config *config.Config) *Mysql {
+func NewMysql(config config.IConfig) *Mysql {
+	configData := config.GetConfigData()
 	return &Mysql{
-		User:         config.Data.Mysql.Username,
-		Passwd:       config.Data.Mysql.Password,
-		Host:         config.Data.Mysql.Host,
-		Port:         utils.ToString(config.Data.Mysql.Port),
-		Dbname:       config.Data.Mysql.Dbname,
-		Charset:      config.Data.Mysql.Charset,
-		MaxOpenConns: config.Data.Mysql.MaxOpenConns,
+		User:         configData.Mysql.Username,
+		Passwd:       configData.Mysql.Password,
+		Host:         configData.Mysql.Host,
+		Port:         utils.ToString(configData.Mysql.Port),
+		Dbname:       configData.Mysql.Dbname,
+		Charset:      configData.Mysql.Charset,
+		MaxOpenConns: configData.Mysql.MaxOpenConns,
 		Timeout:      60,
 	}
 }

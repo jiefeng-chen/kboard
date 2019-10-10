@@ -4,6 +4,7 @@ import (
 	"flag"
 	"golang.org/x/net/http2"
 	"kboard/config"
+	"kboard/internal/db"
 	"kboard/internal/router"
 	"kboard/utils/exception"
 	"kboard/utils/middleware"
@@ -48,7 +49,7 @@ func init() {
 	Log = middleware.NewLogger().Init()
 
 	// init db、cache、control and so on
-
+	db.NewMysql(Config).Init()
 }
 
 func main() {

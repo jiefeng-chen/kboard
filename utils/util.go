@@ -28,7 +28,7 @@ func createDir(path string) error {
 	return nil
 }
 
-func Addslashes(v string) string {
+func AddSlashes(v string) string {
 	pos := 0
 	buf := make([]byte, len(v)*2)
 	for i := 0; i < len(v); i++ {
@@ -445,4 +445,30 @@ func LcFirst(str string) string {
 		return string(unicode.ToLower(v)) + str[i+1:]
 	}
 	return ""
+}
+
+func Implode(list interface{}, seq string) string {
+	listValue := reflect.Indirect(reflect.ValueOf(list))
+	if listValue.Kind() != reflect.Slice {
+		return ""
+	}
+	count := listValue.Len()
+	listStr := make([]string, 0, count)
+	for i := 0; i < count; i++ {
+		v := listValue.Index(i)
+		if str, err := getValue(v); err == nil {
+			listStr = append(listStr, str)
+		}
+	}
+	return strings.Join(listStr, seq)
+}
+
+func getValue(value reflect.Value) (res string, err error) {
+	switch value.Kind() {
+	case reflect.Ptr:
+		res, err = getValue(value.Elem())
+	default:
+		res = fmt.Sprint(value.Interface())
+	}
+	return
 }
